@@ -1,5 +1,5 @@
 import { db, hasDatabase } from "@/lib/db";
-import { createEmbedding, isAzureOpenAIConfigured } from "@/lib/azure-openai";
+import { createEmbedding, isEmbeddingConfigured } from "@/lib/llm";
 
 export type ToolCitation = {
   name: string;
@@ -109,9 +109,12 @@ export async function getToolChunks(): Promise<ToolChunk[]> {
     text: buildChunkText(tool),
   }));
 
-  if (isAzureOpenAIConfigured()) {
+  if (isEmbeddingConfigured()) {
     for (const chunk of chunks) {
-      chunk.embedding = await createEmbedding(chunk.text);
+      const embedding = await createEmbedding(chunk.text);
+      if (embedding.length > 0) {
+        chunk.embedding = embedding;
+      }
     }
   }
 
@@ -130,18 +133,20 @@ export async function retrieveRelevantChunks(
   const chunks = await getToolChunks();
   if (chunks.length === 0) return [];
 
-  if (isAzureOpenAIConfigured()) {
+  if (isEmbeddingConfigured()) {
     const queryEmbedding = await createEmbedding(query);
-    return [...chunks]
-      .map((chunk) => ({
-        chunk,
-        score: chunk.embedding
-          ? cosineSimilarity(chunk.embedding, queryEmbedding)
-          : 0,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, topK)
-      .map((item) => item.chunk);
+    if (queryEmbedding.length > 0) {
+      return [...chunks]
+        .map((chunk) => ({
+          chunk,
+          score: chunk.embedding
+            ? cosineSimilarity(chunk.embedding, queryEmbedding)
+            : keywordScore(chunk.text, query),
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, topK)
+        .map((item) => item.chunk);
+    }
   }
 
   return [...chunks]
@@ -178,5 +183,5 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
   }
 
   const primary = chunks[0]!;
-  return `Based on the AI Hub catalog, **${primary.name}** may be relevant to your question.\n\n${primary.text.split("\n").slice(2, 5).join("\n")}\n\nView full details at /tools/${primary.slug}. For more help, contact ${primary.pocName} (${primary.pocEmail}).\n\n*(Azure OpenAI is not configured — showing catalog search results for: "${query}")*`;
+  return `Based on the AI Hub catalog, **${primary.name}** may be relevant to your question.\n\n${primary.text.split("\n").slice(2, 5).join("\n")}\n\nView full details at /tools/${primary.slug}. For more help, contact ${primary.pocName} (${primary.pocEmail}).\n\n*(LLM not configured — showing catalog search results. Set GROQ_API_KEY or Azure OpenAI vars for AI answers.)*`;
 }

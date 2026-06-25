@@ -6,7 +6,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 | Field | Value |
 |---|---|
-| **Current version** | 0.5.0 |
+| **Current version** | 0.5.1 |
 | **Last updated** | 2026-06-25 |
 
 ---
@@ -27,6 +27,22 @@ Living changelog and roadmap. **All implementation agents must update this file*
 ### Planned
 
 - Phase 5: Azure AD SSO + Unilever Azure production deployment
+
+---
+
+## [0.5.1] — 2026-06-25 — Groq Prototype LLM Provider
+
+### Added
+
+- `LLM_PROVIDER` env switch: `auto` | `groq` | `azure` | `fallback`
+- **Groq** integration (OpenAI-compatible) for free chat prototyping on Vercel
+- Groq embeddings for RAG when Azure embeddings unavailable
+- Unified `@/lib/llm` provider layer — swap to Azure with one env change
+
+### Environment
+
+- `GROQ_API_KEY`, `GROQ_MODEL`, `GROQ_EMBEDDING_MODEL`
+- Set `LLM_PROVIDER=azure` when Unilever Azure OpenAI access is ready
 
 ---
 

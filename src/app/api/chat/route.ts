@@ -1,10 +1,11 @@
 import {
   CHAT_SYSTEM_PROMPT,
   createChatCompletion,
-  getAzureOpenAIConfigError,
-  isAzureOpenAIConfigured,
+  getLlmConfigNotice,
+  isLlmChatConfigured,
+  resolveLlmProvider,
   streamChatCompletion,
-} from "@/lib/azure-openai";
+} from "@/lib/llm";
 import {
   buildContextBlock,
   buildFallbackAnswer,
@@ -18,13 +19,13 @@ function sseEvent(event: string, data: unknown): string {
   return `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
 }
 
-async function pipeAzureStream(
-  azureStream: ReadableStream<Uint8Array>,
+async function pipeOpenAIStream(
+  llmStream: ReadableStream<Uint8Array>,
   citations: ToolCitation[],
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
 ) {
-  const reader = azureStream.getReader();
+  const reader = llmStream.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
 
@@ -76,16 +77,18 @@ export async function POST(request: Request) {
     const citations = chunksToCitations(chunks);
     const context = buildContextBlock(chunks);
 
-    if (!isAzureOpenAIConfigured()) {
-      const configError = getAzureOpenAIConfigError();
+    if (!isLlmChatConfigured()) {
+      const notice = getLlmConfigNotice();
       const answer = buildFallbackAnswer(message, chunks);
       return Response.json({
         answer,
         citations,
         mode: "fallback",
-        notice: configError,
+        notice,
       });
     }
+
+    const provider = resolveLlmProvider();
 
     const messages = [
       {
@@ -103,12 +106,12 @@ export async function POST(request: Request) {
     const wantsStream = accept.includes("text/event-stream");
 
     if (wantsStream) {
-      const azureStream = await streamChatCompletion(messages);
+      const llmStream = await streamChatCompletion(messages);
       const encoder = new TextEncoder();
       const stream = new ReadableStream({
         async start(controller) {
           try {
-            await pipeAzureStream(azureStream, citations, controller, encoder);
+            await pipeOpenAIStream(llmStream, citations, controller, encoder);
             controller.close();
           } catch (error) {
             console.error("Chat stream error:", error);
@@ -134,7 +137,12 @@ export async function POST(request: Request) {
     }
 
     const answer = await createChatCompletion(messages);
-    return Response.json({ answer, citations, mode: "azure" });
+    return Response.json({
+      answer,
+      citations,
+      mode: provider,
+      notice: getLlmConfigNotice(),
+    });
   } catch (error) {
     console.error("Chat API error:", error);
     return Response.json({ error: "Failed to process chat request" }, { status: 500 });
