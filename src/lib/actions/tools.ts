@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/auth/admin";
 import { db } from "@/lib/db";
+import { invalidateToolChunkCache } from "@/lib/rag";
 import {
   parseTagsInput,
   parseTrainingDocsJson,
@@ -98,6 +99,7 @@ export async function createToolAction(
     revalidatePath("/");
     revalidatePath("/admin/tools");
     revalidatePath(`/tools/${tool.slug}`);
+    invalidateToolChunkCache();
     redirect(`/admin/tools/${tool.id}/edit?created=1`);
   } catch (error) {
     console.error("createToolAction:", error);
@@ -155,6 +157,7 @@ export async function updateToolAction(
     revalidatePath("/admin/tools");
     revalidatePath(`/tools/${existing.slug}`);
     revalidatePath(`/tools/${tool.slug}`);
+    invalidateToolChunkCache();
     return {};
   } catch (error) {
     console.error("updateToolAction:", error);
@@ -173,6 +176,7 @@ export async function deprecateToolAction(toolId: string): Promise<ActionState> 
     revalidatePath("/");
     revalidatePath("/admin/tools");
     revalidatePath(`/tools/${tool.slug}`);
+    invalidateToolChunkCache();
     return {};
   } catch (error) {
     console.error("deprecateToolAction:", error);

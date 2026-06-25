@@ -1,14 +1,16 @@
 "use client";
 
-import { Calendar } from "lucide-react";
+import { Calendar, MessageCircle } from "lucide-react";
 import { useBooking, type BookingTool } from "@/components/booking/BookingProvider";
+import { useChat } from "@/components/chat/ChatProvider";
 
 export function ToolDetailActions({
   tool,
 }: {
-  tool: BookingTool & { toolUrl: string; hasToolUrl: boolean };
+  tool: BookingTool & { toolUrl: string; hasToolUrl: boolean; name: string };
 }) {
   const { openBooking } = useBooking();
+  const { openChat } = useChat();
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,6 +35,14 @@ export function ToolDetailActions({
       >
         <Calendar className="h-4 w-4" />
         Book Training
+      </button>
+      <button
+        type="button"
+        onClick={() => openChat(`What is ${tool.name} and when should I use it?`)}
+        className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-white px-4 py-3 text-sm font-semibold text-brand transition hover:bg-brand/5"
+      >
+        <MessageCircle className="h-4 w-4" />
+        Ask Chatbot
       </button>
     </div>
   );

@@ -6,7 +6,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 | Field | Value |
 |---|---|
-| **Current version** | 0.4.0 |
+| **Current version** | 0.5.0 |
 | **Last updated** | 2026-06-25 |
 
 ---
@@ -26,8 +26,26 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 ### Planned
 
-- Phase 4: Azure OpenAI chatbot (RAG)
 - Phase 5: Azure AD SSO + Unilever Azure production deployment
+
+---
+
+## [0.5.0] — 2026-06-25 — AI Hub Chatbot (RAG)
+
+### Added
+
+- Floating **ChatWidget** on all public pages (bottom-right)
+- `POST /api/chat` — RAG over tool catalog with Azure OpenAI streaming (SSE)
+- Keyword-search **fallback** when Azure OpenAI env vars are not set
+- **Ask Chatbot** CTA on tool detail pages (pre-fills tool question)
+- Citation chips linking to `/tools/[slug]` in assistant responses
+- RAG corpus cache invalidates when admins update tools
+
+### Environment
+
+- `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`
+- `AZURE_OPENAI_DEPLOYMENT` (chat), `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`
+- Optional: `AZURE_OPENAI_API_VERSION` (default `2024-08-01-preview`)
 
 ---
 
@@ -133,7 +151,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 | **0.3.0** | 3 | Training booking UI + Resend email + brand animations | **Complete** |
 | **0.3.1** | — | AI Hub about page + HUL imagery | **Complete** |
 | **0.4.0** | 2 | Admin CMS (CRUD tools/categories) | **Complete** |
-| **0.5.0** | 4 | Floating chatbot widget, Azure OpenAI RAG integration | Planned |
+| **0.5.0** | 4 | Floating chatbot widget, Azure OpenAI RAG integration | **Complete** |
 | **1.0.0** | 5 | Azure AD SSO, production deploy (Unilever Azure), optional Graph calendar | Future |
 
 ---

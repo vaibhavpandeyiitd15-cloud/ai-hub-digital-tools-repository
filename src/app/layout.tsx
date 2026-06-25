@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Barlow, Inter } from "next/font/google";
 import { BookingProvider } from "@/components/booking/BookingProvider";
+import { ChatProvider } from "@/components/chat/ChatProvider";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { VitalityStrip } from "@/components/ui/VitalityStrip";
@@ -56,10 +58,13 @@ export default async function RootLayout({
     <html lang="en" className={`${barlow.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col antialiased">
         <BookingProvider allTools={bookingTools}>
-          <SiteHeader />
-          <VitalityStrip />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <ChatProvider>
+            <SiteHeader />
+            <VitalityStrip />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+            <ChatWidget />
+          </ChatProvider>
         </BookingProvider>
       </body>
     </html>
