@@ -1,12 +1,13 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import { getDatabaseUrl } from "@/lib/env";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 function makePrisma() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = getDatabaseUrl();
   if (!connectionString) {
     return null;
   }
@@ -15,7 +16,7 @@ function makePrisma() {
 }
 
 function getPrisma(): PrismaClient | null {
-  if (!process.env.DATABASE_URL) {
+  if (!getDatabaseUrl()) {
     return null;
   }
   if (!globalForPrisma.prisma) {
@@ -28,7 +29,9 @@ export const db = new Proxy({} as PrismaClient, {
   get(_target, prop) {
     const client = getPrisma();
     if (!client) {
-      throw new Error("DATABASE_URL environment variable is not set");
+      throw new Error(
+        "Database URL not set. Add POSTGRES_PRISMA_URL or DATABASE_URL from Vercel Supabase integration.",
+      );
     }
     const value = client[prop as keyof PrismaClient];
     return typeof value === "function" ? value.bind(client) : value;
@@ -36,5 +39,5 @@ export const db = new Proxy({} as PrismaClient, {
 });
 
 export function hasDatabase() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(getDatabaseUrl());
 }

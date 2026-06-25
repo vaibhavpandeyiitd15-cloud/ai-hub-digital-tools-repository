@@ -1,6 +1,11 @@
 import { PrismaClient, ToolStatus } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
+const connectionString =
+  process.env.POSTGRES_URL_NON_POOLING ||
+  process.env.DATABASE_URL ||
+  process.env.POSTGRES_URL;
+
 const categories = [
   {
     name: "Consumer Insights (CMI)",

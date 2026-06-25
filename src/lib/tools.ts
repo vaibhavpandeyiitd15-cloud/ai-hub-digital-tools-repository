@@ -1,5 +1,5 @@
 import type { ToolStatus } from "@prisma/client";
-import { db } from "@/lib/db";
+import { db, hasDatabase } from "@/lib/db";
 
 export type ToolWithCategory = {
   id: string;
@@ -28,7 +28,7 @@ export type ToolWithCategory = {
 };
 
 async function withDb<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  if (!process.env.DATABASE_URL) {
+  if (!hasDatabase()) {
     return fallback;
   }
   try {

@@ -4,10 +4,9 @@ export function DatabaseSetupBanner() {
       <p className="font-semibold">Database not connected</p>
       <p className="mt-1">
         Copy <code className="rounded bg-amber-100 px-1">.env.example</code> to{" "}
-        <code className="rounded bg-amber-100 px-1">.env.local</code>, set{" "}
-        <code className="rounded bg-amber-100 px-1">DATABASE_URL</code>, then run{" "}
-        <code className="rounded bg-amber-100 px-1">npm run db:setup</code> (requires
-        PostgreSQL — use Docker or a Neon/Vercel Postgres URL).
+        <code className="rounded bg-amber-100 px-1">.env.local</code> or run{" "}
+        <code className="rounded bg-amber-100 px-1">npx vercel env pull .env.local</code>
+        , then run <code className="rounded bg-amber-100 px-1">npm run db:setup</code>.
       </p>
     </div>
   );

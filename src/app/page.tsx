@@ -1,6 +1,7 @@
 import { CategoryFilter } from "@/components/catalog/CategoryFilter";
 import { DatabaseSetupBanner } from "@/components/catalog/DatabaseSetupBanner";
 import { ToolGrid } from "@/components/catalog/ToolGrid";
+import { hasDatabase } from "@/lib/db";
 import { getActiveTools, getCategories } from "@/lib/tools";
 
 type HomePageProps = {
@@ -17,11 +18,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const query = q?.trim().toLowerCase() ?? "";
   const categorySlug = category?.trim() ?? "";
 
-  const showDbBanner = !process.env.DATABASE_URL;
+  const showDbBanner = !hasDatabase();
   const showSeedBanner =
-    Boolean(process.env.DATABASE_URL) &&
-    tools.length === 0 &&
-    categories.length === 0;
+    hasDatabase() && tools.length === 0 && categories.length === 0;
 
   const filtered = tools.filter((tool) => {
     const matchesCategory =
