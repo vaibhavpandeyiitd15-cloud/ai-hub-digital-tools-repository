@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aihub
+      POSTGRES_PASSWORD: aihub
+      POSTGRES_DB: aihub_tool_guide
+    ports:
+      - "5433:5432"
+    volumes:
+      - aihub_pg_data:/var/lib/postgresql/data
+
+volumes:
+  aihub_pg_data:
