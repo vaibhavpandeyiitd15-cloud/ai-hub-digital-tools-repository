@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Barlow, Inter } from "next/font/google";
+import { BookingProvider } from "@/components/booking/BookingProvider";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { VitalityStrip } from "@/components/ui/VitalityStrip";
+import { getActiveTools } from "@/lib/tools";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -22,17 +25,29 @@ export const metadata: Metadata = {
     "Discover, learn, and get support for every digital tool at the Unilever Head Office AI Hub.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const tools = await getActiveTools();
+  const bookingTools = tools.map((t) => ({
+    id: t.id,
+    name: t.name,
+    slug: t.slug,
+    pocName: t.pocName,
+    pocEmail: t.pocEmail,
+  }));
+
   return (
     <html lang="en" className={`${barlow.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col antialiased">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        <BookingProvider allTools={bookingTools}>
+          <SiteHeader />
+          <VitalityStrip />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </BookingProvider>
       </body>
     </html>
   );

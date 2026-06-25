@@ -1,6 +1,8 @@
 import { CategoryFilter } from "@/components/catalog/CategoryFilter";
 import { DatabaseSetupBanner } from "@/components/catalog/DatabaseSetupBanner";
 import { ToolGrid } from "@/components/catalog/ToolGrid";
+import { HeroSection } from "@/components/home/HeroSection";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { hasDatabase } from "@/lib/db";
 import { getActiveTools, getCategories } from "@/lib/tools";
 
@@ -38,31 +40,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   return (
     <div>
-      <section className="border-b border-[var(--border)] bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 text-center">
-          <h1 className="font-[family-name:var(--font-barlow)] text-3xl font-bold text-brand sm:text-4xl">
-            AI Hub Digital Tools
-          </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-[var(--text-secondary)]">
-            Discover, learn, and get support for every tool at Unilever Head
-            Office AI Hub.
-          </p>
-          <form className="mx-auto mt-8 max-w-xl" action="/" method="get">
-            {categorySlug ? (
-              <input type="hidden" name="category" value={categorySlug} />
-            ) : null}
-            <input
-              type="search"
-              name="q"
-              defaultValue={q ?? ""}
-              placeholder="Search tools by name, purpose, or tag…"
-              className="w-full rounded-lg border border-[var(--border)] px-4 py-3 text-sm shadow-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
-            />
-          </form>
-        </div>
-      </section>
+      <HeroSection categorySlug={categorySlug || undefined} defaultQuery={q} />
 
-      <section className="mx-auto max-w-7xl px-6 py-8">
+      <section className="mx-auto max-w-7xl px-6 py-10">
         {showDbBanner ? <DatabaseSetupBanner /> : null}
         {showSeedBanner ? (
           <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
@@ -72,15 +52,19 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </div>
         ) : null}
 
-        <CategoryFilter
-          categories={categories}
-          activeSlug={categorySlug || undefined}
-          searchQuery={q}
-        />
+        <ScrollReveal>
+          <CategoryFilter
+            categories={categories}
+            activeSlug={categorySlug || undefined}
+            searchQuery={q}
+          />
+        </ScrollReveal>
 
-        <p className="mb-6 text-sm text-[var(--text-secondary)]">
-          {filtered.length} tool{filtered.length === 1 ? "" : "s"}
-        </p>
+        <ScrollReveal delay={100}>
+          <p className="mb-6 text-sm text-[var(--text-secondary)]">
+            {filtered.length} tool{filtered.length === 1 ? "" : "s"}
+          </p>
+        </ScrollReveal>
 
         <ToolGrid tools={filtered} />
       </section>

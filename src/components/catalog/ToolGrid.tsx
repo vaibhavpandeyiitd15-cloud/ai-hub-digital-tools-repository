@@ -4,7 +4,7 @@ import type { ToolWithCategory } from "@/lib/tools";
 export function ToolGrid({ tools }: { tools: ToolWithCategory[] }) {
   if (tools.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-[var(--border)] bg-white px-6 py-16 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-6 py-16 text-center">
         <p className="font-[family-name:var(--font-barlow)] text-lg font-semibold text-[var(--text-primary)]">
           No tools found
         </p>
@@ -16,9 +16,9 @@ export function ToolGrid({ tools }: { tools: ToolWithCategory[] }) {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {tools.map((tool) => (
-        <ToolCard key={tool.id} tool={tool} />
+    <div className="tool-grid-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {tools.map((tool, index) => (
+        <ToolCard key={tool.id} tool={tool} index={index} />
       ))}
     </div>
   );

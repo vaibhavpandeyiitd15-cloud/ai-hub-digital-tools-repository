@@ -1,6 +1,6 @@
-import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { getDatabaseUrl } from "@/lib/env";
+import { createPgAdapter } from "@/lib/pg-adapter";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -11,7 +11,7 @@ function makePrisma() {
   if (!connectionString) {
     return null;
   }
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = createPgAdapter(connectionString);
   return new PrismaClient({ adapter });
 }
 

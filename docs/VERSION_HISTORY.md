@@ -6,7 +6,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 | Field | Value |
 |---|---|
-| **Current version** | 0.2.0 |
+| **Current version** | 0.3.1 |
 | **Last updated** | 2026-06-25 |
 
 ---
@@ -27,9 +27,33 @@ Living changelog and roadmap. **All implementation agents must update this file*
 ### Planned
 
 - Phase 2: Admin CMS (tool CRUD, category management)
-- Phase 3: Training booking mock + Resend email notifications
 - Phase 4: Azure OpenAI chatbot (RAG)
 - Phase 5: Azure AD SSO + Unilever Azure production deployment
+
+---
+
+## [0.3.1] — 2026-06-25 — AI Hub About Page
+
+### Added
+
+- `/ai-hub` — About AI Hub 2.0 page (content adapted from HUL News, Jan 2026)
+- HUL article imagery in `public/assets/ai-hub/` (hero, workspace, innovation, Mumbai campus)
+- Parallax image sections, capability cards, masonry gallery
+- **About AI Hub** nav link in header; home hero link to AI Hub page
+- Source attribution link to [HUL News article](https://www.hul.co.in/news/news-search/2026/ai-hub-2-0-powering-huls-next-era-of-innovation/)
+
+---
+
+## [0.3.0] — 2026-06-25 — Training Booking + Brand Motion
+
+### Added
+
+- Outlook-style **Book Training** modal with calendar, time slots, duration picker
+- `POST /api/bookings` — saves to DB, emails POC via Resend
+- Book button on every tool card, tool detail page, and site header
+- Unilever **Vitality** motif strip (nature/life icons inspired by U logo)
+- Animated wave hero, scroll-reveal cards, floating brand orbs
+- Sticky glass header, gradient tool detail hero band
 
 ---
 
@@ -94,8 +118,8 @@ Living changelog and roadmap. **All implementation agents must update this file*
 |---|---|---|---|
 | **0.1.1** | 0 | Product configuration (name, tools, categories, Vercel, Resend) | **Complete** |
 | **0.2.0** | 1 | Next.js scaffold, Prisma DB, Unilever theme, catalog pages | **Complete** |
-| **0.3.0** | 2 | Admin CMS (CRUD tools/categories) | Planned |
-| **0.4.0** | 3 | Outlook-style booking modal, email to POC, admin booking inbox | Planned |
+| **0.3.0** | 3 | Training booking UI + Resend email + brand animations | **Complete** |
+| **0.4.0** | 2 | Admin CMS (CRUD tools/categories) | Planned |
 | **0.5.0** | 4 | Floating chatbot widget, Azure OpenAI RAG integration | Planned |
 | **1.0.0** | 5 | Azure AD SSO, production deploy (Unilever Azure), optional Graph calendar | Future |
 

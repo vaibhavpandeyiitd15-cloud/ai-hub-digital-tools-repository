@@ -1,10 +1,5 @@
 import { PrismaClient, ToolStatus } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-
-const connectionString =
-  process.env.POSTGRES_URL_NON_POOLING ||
-  process.env.DATABASE_URL ||
-  process.env.POSTGRES_URL;
+import { createPgAdapter } from "../src/lib/pg-adapter";
 
 const categories = [
   {
@@ -97,12 +92,17 @@ const tools = [
 ] as const;
 
 async function main() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString =
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL;
   if (!connectionString) {
-    throw new Error("DATABASE_URL is not set");
+    throw new Error(
+      "Database URL not set. Add POSTGRES_URL_NON_POOLING to .env.local",
+    );
   }
 
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = createPgAdapter(connectionString);
   const prisma = new PrismaClient({ adapter });
 
   for (const category of categories) {

@@ -22,6 +22,10 @@
   --border: #e2e8f0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-inter), system-ui, sans-serif;
   color: var(--text-primary);
@@ -33,4 +37,172 @@ h2,
 h3,
 h4 {
   font-family: var(--font-barlow), system-ui, sans-serif;
+}
+
+/* Buttons */
+.btn-primary {
+  @apply rounded-lg bg-brand px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-brand-light hover:shadow-lg active:scale-[0.98];
+}
+
+.btn-outline {
+  @apply rounded-lg border-2 border-brand bg-white px-4 py-3 text-sm font-semibold text-brand transition hover:bg-brand/5 active:scale-[0.98];
+}
+
+/* Animations */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wave-drift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-orb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(12px, -16px) scale(1.05);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.wave-layer-1 {
+  animation: wave-drift 18s linear infinite;
+}
+
+.wave-layer-2 {
+  animation: wave-drift 24s linear infinite reverse;
+  opacity: 0.7;
+}
+
+.vitality-marquee {
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.vitality-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: float-orb 8s ease-in-out infinite;
+}
+
+.vitality-orb-1 {
+  top: 10%;
+  left: 15%;
+  width: 120px;
+  height: 120px;
+  background: rgba(0, 166, 81, 0.15);
+}
+
+.vitality-orb-2 {
+  top: 30%;
+  right: 20%;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.08);
+  animation-delay: -3s;
+}
+
+.vitality-orb-3 {
+  bottom: 20%;
+  left: 40%;
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 51, 160, 0.2);
+  animation-delay: -5s;
+}
+
+/* Stagger children in tool grid */
+.tool-grid-stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.tool-grid-stagger > *:nth-child(2) {
+  animation-delay: 80ms;
+}
+.tool-grid-stagger > *:nth-child(3) {
+  animation-delay: 160ms;
+}
+.tool-grid-stagger > *:nth-child(4) {
+  animation-delay: 240ms;
+}
+.tool-grid-stagger > *:nth-child(5) {
+  animation-delay: 320ms;
+}
+.tool-grid-stagger > *:nth-child(6) {
+  animation-delay: 400ms;
+}
+.tool-grid-stagger > *:nth-child(7) {
+  animation-delay: 480ms;
+}
+.tool-grid-stagger > *:nth-child(8) {
+  animation-delay: 560ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
