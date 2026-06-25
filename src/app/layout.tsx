@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Barlow, Inter } from "next/font/google";
 import { BookingProvider } from "@/components/booking/BookingProvider";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -30,6 +31,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isAdmin = pathname.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <html lang="en" className={`${barlow.variable} ${inter.variable} h-full`}>
+        <body className="min-h-full antialiased">{children}</body>
+      </html>
+    );
+  }
+
   const tools = await getActiveTools();
   const bookingTools = tools.map((t) => ({
     id: t.id,

@@ -6,7 +6,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 | Field | Value |
 |---|---|
-| **Current version** | 0.3.1 |
+| **Current version** | 0.4.0 |
 | **Last updated** | 2026-06-25 |
 
 ---
@@ -26,9 +26,21 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 ### Planned
 
-- Phase 2: Admin CMS (tool CRUD, category management)
 - Phase 4: Azure OpenAI chatbot (RAG)
 - Phase 5: Azure AD SSO + Unilever Azure production deployment
+
+---
+
+## [0.4.0] — 2026-06-25 — Admin CMS
+
+### Added
+
+- Password-protected **`/admin`** CMS (`ADMIN_PASSWORD` env var)
+- **Tools CRUD** — create, edit, deprecate; slug auto-generation; training docs
+- **Categories CRUD** — add, edit, delete (when empty)
+- **Bookings inbox** — filter by status, update PENDING → CONTACTED → COMPLETED / CANCELLED
+- Admin sidebar layout; public site chrome hidden on admin routes
+- Footer link to CMS
 
 ---
 
@@ -119,7 +131,8 @@ Living changelog and roadmap. **All implementation agents must update this file*
 | **0.1.1** | 0 | Product configuration (name, tools, categories, Vercel, Resend) | **Complete** |
 | **0.2.0** | 1 | Next.js scaffold, Prisma DB, Unilever theme, catalog pages | **Complete** |
 | **0.3.0** | 3 | Training booking UI + Resend email + brand animations | **Complete** |
-| **0.4.0** | 2 | Admin CMS (CRUD tools/categories) | Planned |
+| **0.3.1** | — | AI Hub about page + HUL imagery | **Complete** |
+| **0.4.0** | 2 | Admin CMS (CRUD tools/categories) | **Complete** |
 | **0.5.0** | 4 | Floating chatbot widget, Azure OpenAI RAG integration | Planned |
 | **1.0.0** | 5 | Azure AD SSO, production deploy (Unilever Azure), optional Graph calendar | Future |
 
