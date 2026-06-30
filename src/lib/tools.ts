@@ -1,4 +1,4 @@
-import type { ToolStatus } from "@prisma/client";
+import type { LabType, ToolStatus } from "@prisma/client";
 import { db, hasDatabase } from "@/lib/db";
 
 export type ToolWithCategory = {
@@ -22,6 +22,7 @@ export type ToolWithCategory = {
     name: string;
     slug: string;
     description: string | null;
+    lab: LabType;
     sortOrder: number;
     createdAt: Date;
   };
@@ -49,6 +50,22 @@ export async function getActiveTools() {
         include: {
           category: true,
         },
+        orderBy: { name: "asc" },
+      }),
+    [],
+  );
+}
+
+export async function getToolsByCategorySlugs(categorySlugs: string[]) {
+  if (categorySlugs.length === 0) return [];
+  return withDb(
+    () =>
+      db.tool.findMany({
+        where: {
+          status: { in: ["ACTIVE", "BETA"] },
+          category: { slug: { in: categorySlugs } },
+        },
+        include: { category: true },
         orderBy: { name: "asc" },
       }),
     [],

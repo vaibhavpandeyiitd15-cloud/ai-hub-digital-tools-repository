@@ -27,11 +27,17 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum LabType {
+  CONSUMER
+  SCIENCE
+}
+
 model Category {
   id          String   @id @default(cuid())
   name        String
   slug        String   @unique
   description String?
+  lab         LabType  @default(CONSUMER)
   sortOrder   Int      @default(0)
   tools       Tool[]
   createdAt   DateTime @default(now())

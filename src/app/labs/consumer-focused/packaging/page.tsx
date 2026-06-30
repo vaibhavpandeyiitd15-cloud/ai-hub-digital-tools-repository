@@ -2,18 +2,15 @@ import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { LabToolList } from "@/components/labs/LabToolList";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { breadcrumbs, packagingToolSlugs, SITE_NAME } from "@/lib/content/desire-lab";
-import { getToolsBySlugs, orderToolsBySlugs } from "@/lib/tools";
+import { breadcrumbs, SITE_NAME } from "@/lib/content/desire-lab";
+import { getToolsByCategorySlugs } from "@/lib/tools";
 
 export const metadata = {
   title: `Packaging | Consumer Focused Lab | ${SITE_NAME}`,
 };
 
 export default async function PackagingSectionPage() {
-  const tools = orderToolsBySlugs(
-    await getToolsBySlugs([...packagingToolSlugs]),
-    [...packagingToolSlugs],
-  );
+  const tools = await getToolsByCategorySlugs(["packaging"]);
 
   return (
     <div>
@@ -33,7 +30,7 @@ export default async function PackagingSectionPage() {
 
         <ScrollReveal>
           <p className="mb-8 text-sm text-[var(--text-secondary)]">
-            Pack Explorer and Image to Model Conversion tools
+            {tools.length} tool{tools.length === 1 ? "" : "s"}
           </p>
         </ScrollReveal>
 

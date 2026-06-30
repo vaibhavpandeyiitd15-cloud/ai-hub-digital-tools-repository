@@ -93,6 +93,19 @@ function CategoryEditRow({ category }: { category: CategoryRow }) {
             className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm"
           />
         </div>
+        <div className="lg:col-span-2">
+          <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
+            Lab
+          </label>
+          <select
+            name="lab"
+            defaultValue={category.lab}
+            className="w-full rounded-lg border border-[var(--border)] px-2 py-2 text-sm"
+          >
+            <option value="CONSUMER">Consumer</option>
+            <option value="SCIENCE">Science</option>
+          </select>
+        </div>
         <div className="lg:col-span-1">
           <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
             Order
@@ -169,7 +182,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
         <h2 className="font-[family-name:var(--font-barlow)] text-lg font-semibold text-brand">
           Add category
         </h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <div>
             <label className="mb-1 block text-xs font-medium">Name *</label>
             <input
@@ -201,6 +214,17 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
               name="description"
               className="w-full rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
             />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium">Lab</label>
+            <select
+              name="lab"
+              defaultValue="CONSUMER"
+              className="w-full rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
+            >
+              <option value="CONSUMER">Consumer</option>
+              <option value="SCIENCE">Science</option>
+            </select>
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium">Sort order</label>

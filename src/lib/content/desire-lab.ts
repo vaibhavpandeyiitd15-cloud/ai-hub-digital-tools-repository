@@ -4,6 +4,8 @@ export type LabSlug = "consumer-focused" | "science-focused";
 
 export type ConsumerSectionSlug = "insights" | "fragrance" | "packaging";
 
+export type ScienceSectionSlug = "explore" | "innovate" | "design" | "impact";
+
 export type LabBranch = {
   slug: LabSlug;
   name: string;
@@ -13,18 +15,11 @@ export type LabBranch = {
 };
 
 export type SectionCard = {
-  slug: ConsumerSectionSlug;
-  name: string;
-  description: string;
-  href: string;
-};
-
-export type SubsectionCard = {
   slug: string;
   name: string;
   description: string;
   href: string;
-  toolSlugs: string[];
+  categorySlugs?: string[];
 };
 
 export const labBranches: LabBranch[] = [
@@ -39,56 +34,72 @@ export const labBranches: LabBranch[] = [
   {
     slug: "science-focused",
     name: "Science Focused Lab",
-    description: "Formulation and science tools — coming in the next release.",
-    available: false,
+    description: "Explore, innovate, design, and measure impact across R&D.",
+    available: true,
     href: "/labs/science-focused",
   },
 ];
+
+/** Insights pulls all active tools from these DB categories (legacy AI Hub + new). */
+export const insightsCategorySlugs = [
+  "consumer-market-insights",
+  "consumer-insights-cmi",
+] as const;
 
 export const consumerSections: SectionCard[] = [
   {
     slug: "insights",
     name: "Insights",
-    description: "Consumer and market intelligence for concept development.",
-    href: "/labs/consumer-focused/insights",
+    description: "Consumer and market intelligence — includes legacy AI Hub tools.",
+    href: "/labs/consumer-focused/insights/consumer-market-insights",
+    categorySlugs: [...insightsCategorySlugs],
   },
   {
     slug: "fragrance",
     name: "Fragrance",
     description: "Explore and manage the fragrance knowledge library.",
     href: "/labs/consumer-focused/fragrance",
+    categorySlugs: ["fragrance"],
   },
   {
     slug: "packaging",
     name: "Packaging",
     description: "Pack exploration and image-to-model conversion workflows.",
     href: "/labs/consumer-focused/packaging",
+    categorySlugs: ["packaging"],
   },
 ];
 
-export const insightsSubsections: SubsectionCard[] = [
+export const scienceSections: SectionCard[] = [
   {
-    slug: "consumer-market-insights",
-    name: "Consumer and Market Insights",
-    description:
-      "AI-assisted concept development and social trend intelligence.",
-    href: "/labs/consumer-focused/insights/consumer-market-insights",
-    toolSlugs: ["concept-gpt", "trends-by-social-intelligence"],
+    slug: "explore",
+    name: "Explore",
+    description: "PatBase, R&D Assistant, Data Lab, and journals & publications.",
+    href: "/labs/science-focused/explore",
+    categorySlugs: ["explore"],
+  },
+  {
+    slug: "innovate",
+    name: "Innovate",
+    description: "Science innovation workflows — more tools coming soon.",
+    href: "/labs/science-focused/innovate",
+    categorySlugs: ["innovate"],
+  },
+  {
+    slug: "design",
+    name: "Design",
+    description: "Science-led design capabilities — more tools coming soon.",
+    href: "/labs/science-focused/design",
+    categorySlugs: ["design"],
+  },
+  {
+    slug: "impact",
+    name: "Impact",
+    description: "Measure and validate scientific impact — more tools coming soon.",
+    href: "/labs/science-focused/impact",
+    categorySlugs: ["impact"],
   },
 ];
-
-export const fragranceToolSlugs = ["fragrance-library"] as const;
-
-export const packagingToolSlugs = [
-  "pack-explorer",
-  "image-to-model-conversion",
-] as const;
-
-export const consumerToolSlugs = [
-  ...insightsSubsections.flatMap((s) => s.toolSlugs),
-  ...fragranceToolSlugs,
-  ...packagingToolSlugs,
-] as const;
 
 export type BreadcrumbItem = { label: string; href?: string };
 
@@ -96,22 +107,31 @@ export function breadcrumbs(...items: BreadcrumbItem[]): BreadcrumbItem[] {
   return [{ label: SITE_NAME, href: "/" }, ...items];
 }
 
-export function getSectionBySlug(slug: ConsumerSectionSlug): SectionCard | undefined {
+export function getConsumerSection(slug: string): SectionCard | undefined {
   return consumerSections.find((s) => s.slug === slug);
 }
 
-export function getInsightsSubsection(slug: string): SubsectionCard | undefined {
-  return insightsSubsections.find((s) => s.slug === slug);
+export function getScienceSection(slug: string): SectionCard | undefined {
+  return scienceSections.find((s) => s.slug === slug);
 }
 
 export function getLabPathForCategory(categorySlug: string): string {
+  if (insightsCategorySlugs.includes(categorySlug as (typeof insightsCategorySlugs)[number])) {
+    return "/labs/consumer-focused/insights/consumer-market-insights";
+  }
   switch (categorySlug) {
-    case "consumer-market-insights":
-      return "/labs/consumer-focused/insights/consumer-market-insights";
     case "fragrance":
       return "/labs/consumer-focused/fragrance";
     case "packaging":
       return "/labs/consumer-focused/packaging";
+    case "explore":
+      return "/labs/science-focused/explore";
+    case "innovate":
+      return "/labs/science-focused/innovate";
+    case "design":
+      return "/labs/science-focused/design";
+    case "impact":
+      return "/labs/science-focused/impact";
     default:
       return "/labs/consumer-focused";
   }

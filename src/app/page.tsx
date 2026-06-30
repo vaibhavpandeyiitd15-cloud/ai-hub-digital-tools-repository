@@ -12,21 +12,22 @@ export const metadata = {
 export default function HomePage() {
   return (
     <div>
-      <DesireLabHero />
+      <DesireLabHero
+        compact
+        subtitle="Choose a lab to explore innovation tools."
+      />
 
-      <section className="mx-auto max-w-7xl px-6 py-14">
+      <section className="mx-auto max-w-7xl px-6 py-10 sm:py-12">
         <ScrollReveal>
-          <h2 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
+          <h2 className="text-center font-[family-name:var(--font-barlow)] text-xl font-bold text-brand sm:text-2xl">
             Choose your lab
           </h2>
-          <p className="mt-2 max-w-2xl text-[var(--text-secondary)]">
-            Desire Lab organises digital tools into two major branches. Start with
-            Consumer Focused Lab for insights, fragrance, and packaging.
-          </p>
         </ScrollReveal>
 
-        <div className="mt-10">
+        <div className="mt-8">
           <HubCardGrid
+            featured
+            centered
             items={labBranches.map((lab) => ({
               title: lab.name,
               description: lab.description,
