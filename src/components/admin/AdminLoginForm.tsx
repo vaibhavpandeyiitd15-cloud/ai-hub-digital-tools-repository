@@ -29,8 +29,18 @@ export function AdminLoginForm({ passwordConfigured }: { passwordConfigured: boo
 
       {!passwordConfigured && (
         <div className="mb-4 rounded-lg border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-[var(--text-primary)]">
-          <strong>ADMIN_PASSWORD</strong> is not set. Configure it in Vercel or{" "}
-          <code className="text-xs">.env.local</code> to enable login.
+          <strong>ADMIN_PASSWORD</strong> is not set. Add it to{" "}
+          <code className="text-xs">.env.local</code> for local dev, or in the{" "}
+          <a
+            href="https://vercel.com/vaibhavpandeyiitd15-8555s-projects/desire-lab/settings/environment-variables"
+            className="font-medium text-brand underline"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Vercel project settings
+          </a>{" "}
+          (Production + Preview), then redeploy. Sync from Vercel with{" "}
+          <code className="text-xs">npx vercel env pull .env.local --environment=production</code>.
         </div>
       )}
 

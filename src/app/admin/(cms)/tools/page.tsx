@@ -6,7 +6,7 @@ import { getAllToolsForAdmin } from "@/lib/admin-data";
 import { hasDatabase } from "@/lib/db";
 
 export const metadata = {
-  title: "Tools | AI Hub CMS",
+  title: "Tools | Desire Lab CMS",
 };
 
 export default async function AdminToolsPage() {

@@ -4,7 +4,7 @@ import { AdminToolForm } from "@/components/admin/AdminToolForm";
 import { getAllCategoriesForAdmin, getToolForAdmin } from "@/lib/admin-data";
 
 export const metadata = {
-  title: "Edit Tool | AI Hub CMS",
+  title: "Edit Tool | Desire Lab CMS",
 };
 
 type PageProps = {

@@ -3,7 +3,7 @@ import { isAdminPasswordConfigured } from "@/lib/auth/admin";
 import { AdminLoginForm } from "@/components/admin/AdminLoginForm";
 
 export const metadata: Metadata = {
-  title: "Admin Sign In | AI Hub CMS",
+  title: "Admin Sign In | Desire Lab CMS",
   robots: { index: false, follow: false },
 };
 

@@ -184,9 +184,9 @@ export function BookingModal({
             </div>
             <div>
               <h2 id="booking-title" className="font-[family-name:var(--font-barlow)] text-lg font-semibold">
-                Book Training Session
+                Request a training session
               </h2>
-              <p className="text-xs text-white/80">Outlook-style scheduling request</p>
+              <p className="text-xs text-white/80">Send a training request to the tool POC</p>
             </div>
           </div>
           <button

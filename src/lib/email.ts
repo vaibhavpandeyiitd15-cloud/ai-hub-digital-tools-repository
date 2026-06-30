@@ -17,7 +17,7 @@ type BookingEmailPayload = {
 export async function sendBookingEmail(payload: BookingEmailPayload) {
   const apiKey = process.env.RESEND_API_KEY;
   const from =
-    process.env.RESEND_FROM_EMAIL ?? "AI Hub Tool Guide <onboarding@resend.dev>";
+    process.env.RESEND_FROM_EMAIL ?? "Desire Lab <onboarding@resend.dev>";
 
   const body = `
 Training session request — ${payload.toolName}
@@ -48,7 +48,7 @@ Please follow up via Outlook to confirm the session.
     from,
     to: payload.pocEmail,
     replyTo: payload.requesterEmail,
-    subject: `[AI Hub Training] ${payload.subject}`,
+    subject: `[Desire Lab Training] ${payload.subject}`,
     text: body,
   });
 

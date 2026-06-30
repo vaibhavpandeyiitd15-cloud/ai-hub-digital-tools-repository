@@ -3,7 +3,7 @@ import { AdminToolForm } from "@/components/admin/AdminToolForm";
 import { getAllCategoriesForAdmin } from "@/lib/admin-data";
 
 export const metadata = {
-  title: "New Tool | AI Hub CMS",
+  title: "New Tool | Desire Lab CMS",
 };
 
 export default async function NewToolPage() {

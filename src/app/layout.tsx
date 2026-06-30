@@ -6,7 +6,6 @@ import { ChatProvider } from "@/components/chat/ChatProvider";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { VitalityStrip } from "@/components/ui/VitalityStrip";
 import { getActiveTools } from "@/lib/tools";
 import "./globals.css";
 
@@ -60,7 +59,6 @@ export default async function RootLayout({
         <BookingProvider allTools={bookingTools}>
           <ChatProvider>
             <SiteHeader />
-            <VitalityStrip />
             <main className="flex-1">{children}</main>
             <SiteFooter />
             <ChatWidget />

@@ -58,7 +58,7 @@ export function ToolCard({ tool, index = 0 }: { tool: ToolWithCategory; index?: 
             className="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold text-brand transition hover:bg-brand/10"
           >
             <Calendar className="h-3.5 w-3.5" />
-            Book training
+            Request a training
           </button>
         </div>
       </article>

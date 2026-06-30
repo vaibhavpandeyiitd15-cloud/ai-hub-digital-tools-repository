@@ -34,7 +34,7 @@ export function ToolDetailActions({
         className="btn-outline inline-flex items-center justify-center gap-2"
       >
         <Calendar className="h-4 w-4" />
-        Book Training
+        Request a training
       </button>
       <button
         type="button"

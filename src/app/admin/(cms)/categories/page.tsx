@@ -2,7 +2,7 @@ import { CategoryManager } from "@/components/admin/CategoryManager";
 import { getAllCategoriesForAdmin } from "@/lib/admin-data";
 
 export const metadata = {
-  title: "Categories | AI Hub CMS",
+  title: "Categories | Desire Lab CMS",
 };
 
 export default async function AdminCategoriesPage() {

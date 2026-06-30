@@ -1,0 +1,253 @@
+{
+  "viewBox": 493,
+  "extractionMethod": "multi-scale template-match vs public/assets/unilever-logo.png (U crop)",
+  "clusterBounds": {
+    "x": -10.38,
+    "y": -23.36,
+    "width": 512.46,
+    "height": 541.01
+  },
+  "masterUCrop": "/assets/unilever-logo-u-white.png",
+  "icons": [
+    {
+      "id": "bee",
+      "src": "/logo-icons/bee.png",
+      "label": "Bee",
+      "finalX": 333.42,
+      "finalY": 341.21,
+      "finalRotation": -7.0,
+      "finalScale": 1.1477,
+      "matchScore": 0.4811
+    },
+    {
+      "id": "bowl",
+      "src": "/logo-icons/bowl.png",
+      "label": "Bowl",
+      "finalX": 136.22,
+      "finalY": 234.82,
+      "finalRotation": 2.0,
+      "finalScale": 1.0479,
+      "matchScore": 0.6022
+    },
+    {
+      "id": "clothes",
+      "src": "/logo-icons/clothes.png",
+      "label": "Clothes",
+      "finalX": 181.63,
+      "finalY": 254.28,
+      "finalRotation": 17.0,
+      "finalScale": 1.2974,
+      "matchScore": 0.5801
+    },
+    {
+      "id": "dna",
+      "src": "/logo-icons/dna.png",
+      "label": "Dna",
+      "finalX": 80.44,
+      "finalY": 334.72,
+      "finalRotation": 5.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.5904
+    },
+    {
+      "id": "dove",
+      "src": "/logo-icons/dove.png",
+      "label": "Dove",
+      "finalX": 450.19,
+      "finalY": 325.64,
+      "finalRotation": -25.0,
+      "finalScale": 1.3473,
+      "matchScore": 0.5615
+    },
+    {
+      "id": "fish",
+      "src": "/logo-icons/fish.png",
+      "label": "Fish",
+      "finalX": 164.77,
+      "finalY": 465.76,
+      "finalRotation": 2.0,
+      "finalScale": 1.0479,
+      "matchScore": 0.584
+    },
+    {
+      "id": "flower",
+      "src": "/logo-icons/flower.png",
+      "label": "Flower",
+      "finalX": 176.44,
+      "finalY": 303.58,
+      "finalRotation": 5.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.6731
+    },
+    {
+      "id": "hair",
+      "src": "/logo-icons/hair.png",
+      "label": "Hair",
+      "finalX": 254.28,
+      "finalY": 433.32,
+      "finalRotation": 5.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.4467
+    },
+    {
+      "id": "hand",
+      "src": "/logo-icons/hand.png",
+      "label": "Hand",
+      "finalX": 129.74,
+      "finalY": 337.32,
+      "finalRotation": -4.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.5927
+    },
+    {
+      "id": "heart",
+      "src": "/logo-icons/heart.png",
+      "label": "Heart",
+      "finalX": 79.14,
+      "finalY": 182.93,
+      "finalRotation": 2.0,
+      "finalScale": 1.0479,
+      "matchScore": 0.5571
+    },
+    {
+      "id": "icecream",
+      "src": "/logo-icons/icecream.png",
+      "label": "Icecream",
+      "finalX": 377.53,
+      "finalY": 364.56,
+      "finalRotation": -16.0,
+      "finalScale": 1.2475,
+      "matchScore": 0.6048
+    },
+    {
+      "id": "lips",
+      "src": "/logo-icons/lips.png",
+      "label": "Lips",
+      "finalX": 387.91,
+      "finalY": 112.87,
+      "finalRotation": 2.0,
+      "finalScale": 1.3473,
+      "matchScore": 0.727
+    },
+    {
+      "id": "packaging",
+      "src": "/logo-icons/packaging.png",
+      "label": "Packaging",
+      "finalX": 348.99,
+      "finalY": 442.4,
+      "finalRotation": -1.0,
+      "finalScale": 1.9461,
+      "matchScore": 0.7004
+    },
+    {
+      "id": "palm",
+      "src": "/logo-icons/palm.png",
+      "label": "Palm",
+      "finalX": 307.48,
+      "finalY": 273.74,
+      "finalRotation": -55.0,
+      "finalScale": 1.4471,
+      "matchScore": 0.5391
+    },
+    {
+      "id": "particles",
+      "src": "/logo-icons/particles.png",
+      "label": "Particles",
+      "finalX": 334.72,
+      "finalY": 189.42,
+      "finalRotation": 2.0,
+      "finalScale": 1.996,
+      "matchScore": 0.5927
+    },
+    {
+      "id": "pepper",
+      "src": "/logo-icons/pepper.png",
+      "label": "Pepper",
+      "finalX": 199.79,
+      "finalY": 417.75,
+      "finalRotation": -4.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.6806
+    },
+    {
+      "id": "plant",
+      "src": "/logo-icons/plant.png",
+      "label": "Plant",
+      "finalX": 428.13,
+      "finalY": 28.54,
+      "finalRotation": -4.0,
+      "finalScale": 1.0978,
+      "matchScore": 0.4922
+    },
+    {
+      "id": "spark",
+      "src": "/logo-icons/spark.png",
+      "label": "Spark",
+      "finalX": 185.52,
+      "finalY": 361.97,
+      "finalRotation": -13.0,
+      "finalScale": 1.2475,
+      "matchScore": 0.5601
+    },
+    {
+      "id": "spoon",
+      "src": "/logo-icons/spoon.png",
+      "label": "Spoon",
+      "finalX": 195.9,
+      "finalY": 206.28,
+      "finalRotation": 2.0,
+      "finalScale": 1.3473,
+      "matchScore": 0.5325
+    },
+    {
+      "id": "sun",
+      "src": "/logo-icons/sun.png",
+      "label": "Sun",
+      "finalX": 278.93,
+      "finalY": 333.42,
+      "finalRotation": 44.0,
+      "finalScale": 1.4471,
+      "matchScore": 0.5479
+    },
+    {
+      "id": "swirl",
+      "src": "/logo-icons/swirl.png",
+      "label": "Swirl",
+      "finalX": 105.09,
+      "finalY": 406.08,
+      "finalRotation": -1.0,
+      "finalScale": 1.9461,
+      "matchScore": 0.6873
+    },
+    {
+      "id": "transformation",
+      "src": "/logo-icons/transformation.png",
+      "label": "Transformation",
+      "finalX": 41.52,
+      "finalY": 363.26,
+      "finalRotation": -19.0,
+      "finalScale": 1.2974,
+      "matchScore": 0.4963
+    },
+    {
+      "id": "virtuous_cycle",
+      "src": "/logo-icons/virtuous_cycle.png",
+      "label": "Virtuous Cycle",
+      "finalX": 317.86,
+      "finalY": 123.25,
+      "finalRotation": -1.0,
+      "finalScale": 1.6467,
+      "matchScore": 0.8416
+    },
+    {
+      "id": "waves",
+      "src": "/logo-icons/waves.png",
+      "label": "Waves",
+      "finalX": 432.02,
+      "finalY": 387.91,
+      "finalRotation": 8.0,
+      "finalScale": 1.1477,
+      "matchScore": 0.5129
+    }
+  ]
+}

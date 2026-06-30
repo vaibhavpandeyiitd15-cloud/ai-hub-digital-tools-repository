@@ -202,7 +202,7 @@ export function ChatWidget() {
         <div
           className="fixed bottom-24 right-4 z-50 flex w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-2xl animate-scale-in sm:right-6"
           role="dialog"
-          aria-label="AI Hub Assistant chat"
+          aria-label="Desire Lab Assistant chat"
         >
           <header className="flex items-center justify-between bg-brand px-4 py-3 text-white">
             <div>
@@ -319,7 +319,7 @@ export function ChatWidget() {
           "fixed bottom-6 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-lg transition hover:scale-105 hover:bg-brand-light hover:shadow-xl sm:right-6",
           isOpen && "scale-95 opacity-90",
         )}
-        aria-label={isOpen ? "Close AI Hub Assistant" : "Open AI Hub Assistant"}
+        aria-label={isOpen ? "Close Desire Lab Assistant" : "Open Desire Lab Assistant"}
         aria-expanded={isOpen}
       >
         <MessageCircle className="h-6 w-6" />

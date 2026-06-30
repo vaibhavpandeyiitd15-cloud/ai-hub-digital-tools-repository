@@ -129,7 +129,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 </div>
               ) : (
                 <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white p-6 text-sm text-[var(--text-secondary)]">
-                  No training docs yet — book a session below to get started.
+                  No training docs yet — request a session below to get started.
                 </div>
               )}
             </ScrollReveal>

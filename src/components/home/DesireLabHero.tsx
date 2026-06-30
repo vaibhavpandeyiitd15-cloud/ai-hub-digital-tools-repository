@@ -1,5 +1,6 @@
 "use client";
 
+import { HeroLogoMarquee } from "@/components/home/HeroLogoMarquee";
 import { WaveBackground } from "@/components/ui/WaveBackground";
 import { cn } from "@/lib/utils";
 
@@ -20,41 +21,65 @@ export function DesireLabHero({
     <section className="relative overflow-hidden border-b border-brand/10 bg-gradient-to-br from-brand via-brand to-brand-light text-white">
       <WaveBackground />
       <div
-        className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full border-[3px] border-white/10"
+        className="pointer-events-none absolute -right-20 -top-20 z-[1] h-80 w-80 rounded-full border-[3px] border-white/10"
         aria-hidden
       />
+
       <div
         className={cn(
-          "relative mx-auto max-w-7xl px-6 text-center",
-          compact ? "py-8 sm:py-10" : "py-14 sm:py-18",
+          "relative",
+          compact ? "min-h-[190px] pt-7 pb-5 sm:pt-8" : "min-h-[240px] pt-10 pb-6 sm:pt-12 sm:pb-8",
         )}
       >
-        <p
+        <HeroLogoMarquee compact={compact} fullBleed />
+
+        <div
           className={cn(
-            "mb-2 inline-block animate-fade-up rounded-full border border-white/20 bg-white/10 px-4 py-1 font-medium tracking-widest uppercase backdrop-blur-sm",
-            compact ? "text-[10px]" : "text-xs",
+            "relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10",
           )}
         >
-          {eyebrow}
-        </p>
-        <h1
-          className={cn(
-            "animate-fade-up font-[family-name:var(--font-barlow)] font-bold tracking-tight [animation-delay:100ms]",
-            compact ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl",
-          )}
-        >
-          {title}
-        </h1>
-        <p
-          className={cn(
-            "mx-auto animate-fade-up text-white/85 [animation-delay:200ms]",
-            compact
-              ? "mt-2 max-w-xl text-sm sm:text-base"
-              : "mt-4 max-w-2xl text-base sm:text-lg",
-          )}
-        >
-          {subtitle}
-        </p>
+          <div className="relative text-center lg:text-left">
+            <div
+              className="pointer-events-none absolute -inset-x-4 -inset-y-6 -z-10 rounded-2xl bg-brand/50 backdrop-blur-[2px] lg:-inset-x-8 lg:bg-brand/35"
+              aria-hidden
+            />
+            <p
+              className={cn(
+                "mb-2 inline-block animate-fade-up rounded-full border border-white/20 bg-brand/40 px-4 py-1 font-medium tracking-widest uppercase backdrop-blur-sm",
+                compact ? "text-[10px]" : "text-xs",
+              )}
+            >
+              {eyebrow}
+            </p>
+            <h1
+              className={cn(
+                "animate-fade-up font-[family-name:var(--font-barlow)] font-bold tracking-tight drop-shadow-sm [animation-delay:100ms]",
+                compact ? "text-3xl sm:text-4xl" : "text-4xl sm:text-5xl",
+              )}
+            >
+              {title}
+            </h1>
+            <p
+              className={cn(
+                "mx-auto animate-fade-up text-white/90 drop-shadow-sm [animation-delay:200ms] lg:mx-0",
+                compact
+                  ? "mt-2 max-w-xl text-sm sm:text-base"
+                  : "mt-4 max-w-2xl text-base sm:text-lg",
+              )}
+            >
+              {subtitle}
+            </p>
+          </div>
+
+          {/* Reserves space for the logo reveal on the right */}
+          <div
+            className={cn(
+              "shrink-0",
+              compact ? "h-[170px] w-[170px]" : "h-[220px] w-[220px] sm:h-[240px] sm:w-[240px]",
+            )}
+            aria-hidden
+          />
+        </div>
       </div>
     </section>
   );

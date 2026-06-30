@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Bookings | AI Hub CMS",
+  title: "Bookings | Desire Lab CMS",
 };
 
 const filters = [
