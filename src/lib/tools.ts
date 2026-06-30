@@ -55,6 +55,21 @@ export async function getActiveTools() {
   );
 }
 
+export async function getToolsBySlugs(slugs: string[]) {
+  if (slugs.length === 0) return [];
+  return withDb(
+    () =>
+      db.tool.findMany({
+        where: {
+          slug: { in: slugs },
+          status: { in: ["ACTIVE", "BETA"] },
+        },
+        include: { category: true },
+      }),
+    [],
+  );
+}
+
 export async function getCategories() {
   return withDb(
     () =>
@@ -88,4 +103,12 @@ export function statusLabel(status: ToolStatus) {
     case "DEPRECATED":
       return "Deprecated";
   }
+}
+
+export function orderToolsBySlugs<T extends { slug: string }>(
+  tools: T[],
+  slugs: string[],
+): T[] {
+  const map = new Map(tools.map((t) => [t.slug, t]));
+  return slugs.map((slug) => map.get(slug)).filter(Boolean) as T[];
 }

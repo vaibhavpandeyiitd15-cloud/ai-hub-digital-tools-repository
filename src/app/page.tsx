@@ -1,72 +1,41 @@
-import { CategoryFilter } from "@/components/catalog/CategoryFilter";
-import { DatabaseSetupBanner } from "@/components/catalog/DatabaseSetupBanner";
-import { ToolGrid } from "@/components/catalog/ToolGrid";
-import { HeroSection } from "@/components/home/HeroSection";
+import { HubCardGrid } from "@/components/labs/HubCardGrid";
+import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { hasDatabase } from "@/lib/db";
-import { getActiveTools, getCategories } from "@/lib/tools";
+import { labBranches, SITE_NAME } from "@/lib/content/desire-lab";
 
-type HomePageProps = {
-  searchParams: Promise<{ q?: string; category?: string }>;
+export const metadata = {
+  title: `${SITE_NAME} | Unilever`,
+  description:
+    "Desire Lab — Consumer Focused and Science Focused innovation tool branches at Unilever.",
 };
 
-export default async function HomePage({ searchParams }: HomePageProps) {
-  const { q, category } = await searchParams;
-  const [tools, categories] = await Promise.all([
-    getActiveTools(),
-    getCategories(),
-  ]);
-
-  const query = q?.trim().toLowerCase() ?? "";
-  const categorySlug = category?.trim() ?? "";
-
-  const showDbBanner = !hasDatabase();
-  const showSeedBanner =
-    hasDatabase() && tools.length === 0 && categories.length === 0;
-
-  const filtered = tools.filter((tool) => {
-    const matchesCategory =
-      !categorySlug || tool.category.slug === categorySlug;
-
-    const matchesQuery =
-      !query ||
-      tool.name.toLowerCase().includes(query) ||
-      tool.purpose.toLowerCase().includes(query) ||
-      tool.description.toLowerCase().includes(query) ||
-      tool.tags.some((tag) => tag.toLowerCase().includes(query));
-
-    return matchesCategory && matchesQuery;
-  });
-
+export default function HomePage() {
   return (
     <div>
-      <HeroSection categorySlug={categorySlug || undefined} defaultQuery={q} />
+      <DesireLabHero />
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
-        {showDbBanner ? <DatabaseSetupBanner /> : null}
-        {showSeedBanner ? (
-          <div className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
-            Database connected but empty. Run{" "}
-            <code className="rounded bg-blue-100 px-1">npm run db:setup</code> to
-            migrate and seed tools.
-          </div>
-        ) : null}
-
+      <section className="mx-auto max-w-7xl px-6 py-14">
         <ScrollReveal>
-          <CategoryFilter
-            categories={categories}
-            activeSlug={categorySlug || undefined}
-            searchQuery={q}
-          />
-        </ScrollReveal>
-
-        <ScrollReveal delay={100}>
-          <p className="mb-6 text-sm text-[var(--text-secondary)]">
-            {filtered.length} tool{filtered.length === 1 ? "" : "s"}
+          <h2 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
+            Choose your lab
+          </h2>
+          <p className="mt-2 max-w-2xl text-[var(--text-secondary)]">
+            Desire Lab organises digital tools into two major branches. Start with
+            Consumer Focused Lab for insights, fragrance, and packaging.
           </p>
         </ScrollReveal>
 
-        <ToolGrid tools={filtered} />
+        <div className="mt-10">
+          <HubCardGrid
+            items={labBranches.map((lab) => ({
+              title: lab.name,
+              description: lab.description,
+              href: lab.href,
+              available: lab.available,
+              badge: lab.available ? "Available" : undefined,
+            }))}
+          />
+        </div>
       </section>
     </div>
   );

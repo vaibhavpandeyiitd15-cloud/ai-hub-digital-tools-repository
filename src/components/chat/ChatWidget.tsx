@@ -62,7 +62,7 @@ export function ChatWidget() {
       id: "welcome",
       role: "assistant",
       content:
-        "Hi! I'm the AI Hub assistant. Ask me about any digital tool in our catalog — I'll cite the relevant tool pages.",
+        "Hi! I'm the Desire Lab assistant. Ask me about tools in the Consumer or Science labs — I'll cite the relevant tool pages.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -207,9 +207,9 @@ export function ChatWidget() {
           <header className="flex items-center justify-between bg-brand px-4 py-3 text-white">
             <div>
               <p className="font-[family-name:var(--font-barlow)] font-semibold">
-                AI Hub Assistant
+                Desire Lab Assistant
               </p>
-              <p className="text-xs text-white/70">Powered by AI Hub catalog</p>
+              <p className="text-xs text-white/70">Consumer & science tools</p>
             </div>
             <div className="flex gap-1">
               <button

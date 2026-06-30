@@ -20,7 +20,7 @@ export default async function AdminDashboardLayout({
       <div className="flex-1">
         <div className="border-b border-[var(--border)] bg-white px-6 py-4 lg:hidden">
           <p className="font-[family-name:var(--font-barlow)] text-sm font-bold text-brand">
-            AI Hub CMS
+            Desire Lab CMS
           </p>
         </div>
         <div className="mx-auto max-w-6xl px-6 py-8">{children}</div>

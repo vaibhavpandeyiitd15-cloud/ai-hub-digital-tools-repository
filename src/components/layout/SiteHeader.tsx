@@ -24,22 +24,22 @@ export function SiteHeader() {
             priority
           />
           <span className="hidden font-[family-name:var(--font-barlow)] text-sm font-semibold tracking-wide sm:inline">
-            AI Hub Tool Guide
+            Desire Lab
           </span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
           <Link
-            href="/"
+            href="/labs/consumer-focused"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >
-            Tools
+            Consumer Lab
           </Link>
           <Link
-            href="/ai-hub"
+            href="/labs/science-focused"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >
-            About AI Hub
+            Science Lab
           </Link>
         </nav>
 
@@ -55,8 +55,8 @@ export function SiteHeader() {
           <button
             type="button"
             className="rounded-full p-2 text-white/90 transition hover:bg-white/10 hover:text-white"
-            aria-label="Open AI assistant (coming soon)"
-            title="AI assistant — coming in Phase 4"
+            aria-label="AI assistant available via chat widget"
+            title="Open Desire Lab assistant"
           >
             <MessageCircle className="h-5 w-5" />
           </button>

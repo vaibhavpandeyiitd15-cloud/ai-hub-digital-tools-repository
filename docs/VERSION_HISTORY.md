@@ -6,7 +6,7 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 | Field | Value |
 |---|---|
-| **Current version** | 0.5.1 |
+| **Current version** | 0.6.0 |
 | **Last updated** | 2026-06-25 |
 
 ---
@@ -26,7 +26,25 @@ Living changelog and roadmap. **All implementation agents must update this file*
 
 ### Planned
 
+- Science Focused Lab sections and tools
 - Phase 5: Azure AD SSO + Unilever Azure production deployment
+
+---
+
+## [0.6.0] — 2026-06-25 — Desire Lab (Consumer Focused Lab)
+
+### Added
+
+- Rebrand **AI Hub** → **Desire Lab** with two lab branches
+- **Consumer Focused Lab**: Insights, Fragrance, Packaging sections
+- 5 tools: Concept GPT, Trends by Social Intelligence, Fragrance Library, Pack Explorer, Image to Model Conversion
+- Routes under `/labs/consumer-focused/...`; Science Lab placeholder
+- Rollback: git tag `v0.5.1-ai-hub`, [ROLLBACK.md](./ROLLBACK.md)
+
+### Changed
+
+- Home = lab branch picker; legacy 8 tools deprecated in seed
+- `/ai-hub` redirects home; chatbot and CMS rebranded
 
 ---
 

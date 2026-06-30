@@ -1,93 +1,83 @@
 import { PrismaClient, ToolStatus } from "@prisma/client";
 import { createPgAdapter } from "../src/lib/pg-adapter";
 
+const legacyToolSlugs = [
+  "innovation-navigator",
+  "boltchat-ai",
+  "convotrack",
+  "rview",
+  "insight-gpt",
+  "beauty-vault",
+  "trajaan-io",
+  "innoflex-gpt",
+] as const;
+
 const categories = [
   {
-    name: "Consumer Insights (CMI)",
-    slug: "consumer-insights-cmi",
-    description: "Tools for consumer and market insights",
+    name: "Consumer & Market Insights",
+    slug: "consumer-market-insights",
+    description: "Concept development and social trend intelligence",
     sortOrder: 1,
   },
   {
-    name: "Formulation",
-    slug: "formulation",
-    description: "Tools for formulation and product development",
+    name: "Fragrance",
+    slug: "fragrance",
+    description: "Fragrance knowledge and library tools",
     sortOrder: 2,
+  },
+  {
+    name: "Packaging",
+    slug: "packaging",
+    description: "Pack exploration and image-to-model workflows",
+    sortOrder: 3,
   },
 ] as const;
 
 const tools = [
   {
-    slug: "innovation-navigator",
-    name: "Innovation Navigator",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "Navigate innovation insights and opportunities",
+    slug: "concept-gpt",
+    name: "Concept GPT",
+    categorySlug: "consumer-market-insights",
+    purpose: "AI-assisted concept generation from consumer and market insights",
     description:
-      "Innovation Navigator helps teams discover and track innovation opportunities across consumer insights workflows.",
-    tags: ["innovation", "insights"],
+      "Concept GPT helps teams explore product concepts, test hypotheses, and develop consumer-backed ideas using AI-assisted workflows within the Desire Lab Consumer Focused Lab.",
+    tags: ["concept", "gpt", "insights", "consumer"],
   },
   {
-    slug: "boltchat-ai",
-    name: "Boltchat.AI",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "AI-powered conversational insights platform",
+    slug: "trends-by-social-intelligence",
+    name: "Trends by Social Intelligence",
+    categorySlug: "consumer-market-insights",
+    purpose: "Track emerging trends from social and market signals",
     description:
-      "Boltchat.AI enables conversational analysis and AI-assisted insights for consumer research teams.",
-    tags: ["ai", "conversational", "insights"],
+      "Trends by Social Intelligence surfaces emerging consumer and market trends from social data and intelligence feeds to inform innovation decisions.",
+    tags: ["trends", "social", "intelligence", "insights"],
   },
   {
-    slug: "convotrack",
-    name: "Convotrack",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "Track and analyze consumer conversations",
+    slug: "fragrance-library",
+    name: "Fragrance Library",
+    categorySlug: "fragrance",
+    purpose: "Central fragrance knowledge and reference library",
     description:
-      "Convotrack monitors and analyzes consumer conversations to surface trends and actionable insights.",
-    tags: ["social", "conversations", "tracking"],
+      "Fragrance Library provides a searchable repository of fragrance knowledge, references, and materials to support consumer-focused fragrance innovation.",
+    tags: ["fragrance", "library", "knowledge"],
   },
   {
-    slug: "rview",
-    name: "RView",
-    categorySlug: "formulation",
-    purpose: "Review and collaboration for formulation research",
+    slug: "pack-explorer",
+    name: "Pack Explorer",
+    categorySlug: "packaging",
+    purpose: "Explore packaging formats, designs, and benchmarks",
     description:
-      "RView supports review workflows and collaboration for formulation and R&D teams.",
-    tags: ["formulation", "review", "collaboration"],
+      "Pack Explorer helps teams discover packaging options, compare formats, and explore design directions for consumer packaging innovation.",
+    tags: ["packaging", "explorer", "design"],
   },
   {
-    slug: "insight-gpt",
-    name: "Insight GPT",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "GPT assistant for consumer insights workflows",
+    slug: "image-to-model-conversion",
+    name: "Image to Model Conversion",
+    categorySlug: "packaging",
+    purpose: "Convert packaging images into 3D model assets",
     description:
-      "Insight GPT provides an AI assistant tailored for consumer insights tasks and analysis.",
-    tags: ["gpt", "insights", "ai"],
-  },
-  {
-    slug: "beauty-vault",
-    name: "Beauty Vault",
-    categorySlug: "formulation",
-    purpose: "Knowledge repository for beauty and formulation",
-    description:
-      "Beauty Vault is a centralized knowledge base for beauty, personal care, and formulation expertise.",
-    tags: ["beauty", "formulation", "knowledge"],
-  },
-  {
-    slug: "trajaan-io",
-    name: "Trajaan.io",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "Market and consumer trend intelligence",
-    description:
-      "Trajaan.io delivers market intelligence and consumer trend tracking for strategic decision-making.",
-    tags: ["market", "trends", "intelligence"],
-  },
-  {
-    slug: "innoflex-gpt",
-    name: "Innoflex GPT",
-    categorySlug: "formulation",
-    purpose: "GPT assistant for formulation and innovation",
-    description:
-      "Innoflex GPT supports formulation scientists and innovators with AI-assisted research and development.",
-    tags: ["gpt", "formulation", "innovation"],
+      "Image to Model Conversion transforms packaging reference images into 3D model assets for rapid prototyping and visualisation in packaging workflows.",
+    tags: ["packaging", "3d", "conversion", "image"],
   },
 ] as const;
 
@@ -104,6 +94,13 @@ async function main() {
 
   const adapter = createPgAdapter(connectionString);
   const prisma = new PrismaClient({ adapter });
+
+  for (const slug of legacyToolSlugs) {
+    await prisma.tool.updateMany({
+      where: { slug },
+      data: { status: ToolStatus.DEPRECATED },
+    });
+  }
 
   for (const category of categories) {
     await prisma.category.upsert({
@@ -140,8 +137,6 @@ async function main() {
         description: tool.description,
         tags: [...tool.tags],
         status: ToolStatus.ACTIVE,
-        pocName: "TBD",
-        toolUrl: "#",
       },
       create: {
         slug: tool.slug,
@@ -152,14 +147,14 @@ async function main() {
         tags: [...tool.tags],
         status: ToolStatus.ACTIVE,
         pocName: "TBD",
-        pocEmail: "aihub@unilever.com",
+        pocEmail: "desirelab@unilever.com",
         toolUrl: "#",
       },
     });
   }
 
   await prisma.$disconnect();
-  console.log("Seed complete: 2 categories, 8 tools");
+  console.log("Seed complete: Desire Lab — 3 categories, 5 consumer tools (legacy tools deprecated)");
 }
 
 main().catch((error) => {

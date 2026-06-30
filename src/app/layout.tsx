@@ -23,9 +23,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Hub Tool Guide | Unilever",
+  title: "Desire Lab | Unilever",
   description:
-    "Discover, learn, and get support for every digital tool at the Unilever Head Office AI Hub.",
+    "Desire Lab — Consumer Focused and Science Focused innovation tools at Unilever Head Office.",
 };
 
 export default async function RootLayout({

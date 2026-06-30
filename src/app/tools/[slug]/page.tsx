@@ -4,6 +4,7 @@ import { Mail } from "lucide-react";
 import { ToolDetailActions } from "@/components/booking/ToolDetailActions";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { getLabPathForCategory } from "@/lib/content/desire-lab";
 import { getToolBySlug } from "@/lib/tools";
 
 type ToolPageProps = {
@@ -28,7 +29,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <StatusBadge status={tool.status} />
             <Link
-              href={`/?category=${tool.category.slug}`}
+              href={getLabPathForCategory(tool.category.slug)}
               className="rounded-full border border-white/30 bg-white/10 px-3 py-0.5 text-xs font-medium backdrop-blur-sm hover:bg-white/20"
             >
               {tool.category.name}

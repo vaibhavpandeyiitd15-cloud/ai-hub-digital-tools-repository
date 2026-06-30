@@ -10,9 +10,9 @@ export function SiteFooter() {
         }}
       />
       <div className="relative mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-6 py-8 text-sm text-white/80 sm:flex-row">
-        <p>&copy; {new Date().getFullYear()} Unilever AI Hub</p>
+        <p>&copy; {new Date().getFullYear()} Unilever Desire Lab</p>
         <p className="text-white/50">
-          AI Hub Tool Guide ·{" "}
+          Desire Lab ·{" "}
           <a href="/admin" className="text-white/40 hover:text-white/70">
             CMS
           </a>

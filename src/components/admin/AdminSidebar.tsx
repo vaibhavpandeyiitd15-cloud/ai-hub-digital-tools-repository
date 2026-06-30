@@ -39,7 +39,7 @@ export function AdminSidebar({ pendingBookings = 0 }: AdminSidebarProps) {
           />
           <div>
             <p className="font-[family-name:var(--font-barlow)] text-sm font-bold text-brand">
-              AI Hub CMS
+              Desire Lab CMS
             </p>
             <p className="text-xs text-[var(--text-secondary)]">Admin</p>
           </div>

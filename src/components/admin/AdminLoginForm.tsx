@@ -20,7 +20,7 @@ export function AdminLoginForm({ passwordConfigured }: { passwordConfigured: boo
           className="mx-auto h-12 w-12 object-contain"
         />
         <h1 className="mt-4 font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
-          AI Hub CMS
+          Desire Lab CMS
         </h1>
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
           Sign in to manage tools and bookings
