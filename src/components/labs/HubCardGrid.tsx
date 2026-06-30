@@ -33,8 +33,9 @@ export function HubCardGrid({
           {item.available === false ? (
             <div
               className={cn(
-                "relative flex h-full flex-col rounded-2xl border border-dashed border-[var(--border)] bg-white/60 opacity-80",
+                "hub-card relative flex h-full flex-col rounded-2xl opacity-80",
                 featured ? "min-h-[240px] p-8 sm:min-h-[280px] sm:p-10" : "p-6",
+                "border-dashed border-[var(--border)] bg-white/50",
               )}
             >
               <div className="mb-3 flex items-center justify-between">
@@ -69,7 +70,7 @@ export function HubCardGrid({
             <Link
               href={item.href}
               className={cn(
-                "group flex h-full flex-col rounded-2xl border border-[var(--border)] bg-white shadow-sm transition hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl",
+                "hub-card group flex h-full flex-col rounded-2xl transition hover:-translate-y-1",
                 featured ? "min-h-[240px] p-8 sm:min-h-[280px] sm:p-10" : "p-6 hover:shadow-lg",
               )}
             >

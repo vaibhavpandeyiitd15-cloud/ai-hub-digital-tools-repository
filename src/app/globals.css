@@ -8,6 +8,10 @@
   --color-success: #00a651;
   --color-warning: #f5a623;
   --color-danger: #d32f2f;
+  --color-u-coral: #ff6b4a;
+  --color-u-sun: #ffc72c;
+  --color-u-sky: #4da6ff;
+  --color-u-mint: #00c389;
   --font-heading: var(--font-barlow);
   --font-body: var(--font-inter);
 }
@@ -16,10 +20,15 @@
   --unilever-blue: #001e62;
   --unilever-blue-light: #0033a0;
   --unilever-blue-dark: #001448;
-  --surface: #f5f7fa;
+  --surface: #fafbf7;
   --text-primary: #1a1a1a;
   --text-secondary: #5c5c5c;
   --border: #e2e8f0;
+  --u-coral: #ff6b4a;
+  --u-sun: #ffc72c;
+  --u-sky: #4da6ff;
+  --u-mint: #00c389;
+  --u-cream: #fafbf7;
 }
 
 html {
@@ -131,25 +140,25 @@ h4 {
   --hero-marquee-gap: clamp(1.25rem, 3.5vw, 3rem);
 }
 
-/* Full-bleed strip: softer + blurred under the Desire Lab text (left), clearer toward the logo (right) */
+/* Full-bleed strip: softer under text (left), clearer toward the logo (right) */
 .hero-marquee-muted {
-  opacity: 0.5;
-  filter: blur(2px) grayscale(100%);
+  opacity: 0.82;
+  filter: blur(1px) grayscale(100%);
   -webkit-mask-image: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.18) 0%,
-    rgba(0, 0, 0, 0.22) 28%,
-    rgba(0, 0, 0, 0.45) 48%,
-    rgba(0, 0, 0, 0.72) 72%,
-    rgba(0, 0, 0, 0.85) 100%
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.45) 28%,
+    rgba(0, 0, 0, 0.65) 48%,
+    rgba(0, 0, 0, 0.85) 72%,
+    rgba(0, 0, 0, 0.95) 100%
   );
   mask-image: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.18) 0%,
-    rgba(0, 0, 0, 0.22) 28%,
-    rgba(0, 0, 0, 0.45) 48%,
-    rgba(0, 0, 0, 0.72) 72%,
-    rgba(0, 0, 0, 0.85) 100%
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.45) 28%,
+    rgba(0, 0, 0, 0.65) 48%,
+    rgba(0, 0, 0, 0.85) 72%,
+    rgba(0, 0, 0, 0.95) 100%
   );
 }
 
@@ -170,13 +179,33 @@ h4 {
 }
 
 .hero-marquee-icon {
-  opacity: 0.55;
-  filter: grayscale(100%);
+  opacity: 0.9;
 }
 
 .hero-marquee-icon-img {
   height: var(--hero-icon-size);
   width: auto;
+}
+
+/* Logo reveal fallback when JS/GSAP is still loading */
+.hero-logo-master {
+  opacity: 0;
+  transform: scale(0.95);
+  animation: hero-logo-reveal 1s ease forwards;
+  animation-delay: 4.5s;
+}
+
+.hero-logo-master.hero-logo-revealed {
+  animation: none;
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes hero-logo-reveal {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .animate-fade-up {
@@ -200,9 +229,9 @@ h4 {
   opacity: 0.7;
 }
 
-.vitality-marquee {
-  width: max-content;
-  animation: marquee 40s linear infinite;
+.wave-layer-3 {
+  animation: wave-drift 30s linear infinite;
+  opacity: 0.55;
 }
 
 .vitality-orb {
@@ -215,27 +244,323 @@ h4 {
 .vitality-orb-1 {
   top: 10%;
   left: 15%;
-  width: 120px;
-  height: 120px;
-  background: rgba(0, 166, 81, 0.15);
+  width: 140px;
+  height: 140px;
+  background: rgba(0, 195, 137, 0.22);
 }
 
 .vitality-orb-2 {
-  top: 30%;
-  right: 20%;
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.08);
+  top: 25%;
+  right: 18%;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 199, 44, 0.18);
   animation-delay: -3s;
 }
 
 .vitality-orb-3 {
-  bottom: 20%;
-  left: 40%;
-  width: 100px;
-  height: 100px;
-  background: rgba(0, 51, 160, 0.2);
+  bottom: 15%;
+  left: 35%;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 107, 74, 0.16);
   animation-delay: -5s;
+}
+
+/* —— Every U Does Good brand world (page backgrounds) —— */
+.brand-world-bg {
+  background: linear-gradient(
+    165deg,
+    var(--u-cream) 0%,
+    #f0f6fc 30%,
+    #e4f5ec 62%,
+    #fff0e0 82%,
+    #ffe8d4 100%
+  );
+}
+
+.brand-world-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 40%;
+  background:
+    radial-gradient(ellipse 55% 50% at 4% 95%, rgba(0, 195, 137, 0.28), transparent 58%),
+    radial-gradient(ellipse 55% 48% at 96% 92%, rgba(255, 107, 74, 0.24), transparent 55%),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 195, 137, 0.04) 35%,
+      rgba(255, 199, 44, 0.07) 70%,
+      rgba(255, 107, 74, 0.05) 100%
+    );
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 14%,
+    transparent 20%,
+    transparent 80%,
+    black 86%,
+    black 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 14%,
+    transparent 20%,
+    transparent 80%,
+    black 86%,
+    black 100%
+  );
+}
+
+/* Blobs, curves, icons — confined to side gutters (clear center for text) */
+.brand-world-decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 10%,
+    transparent 19%,
+    transparent 81%,
+    black 90%,
+    black 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 10%,
+    transparent 19%,
+    transparent 81%,
+    black 90%,
+    black 100%
+  );
+}
+
+.brand-world-bg-subtle .brand-world-icon,
+.brand-world-bg-subtle .brand-world-blob,
+.brand-world-bg-subtle .brand-world-curve {
+  opacity: 0.55;
+}
+
+.brand-world-bg-subtle::after {
+  opacity: 0.65;
+}
+
+.brand-world-bg-subtle .brand-world-decor {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 8%,
+    transparent 17%,
+    transparent 83%,
+    black 92%,
+    black 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 8%,
+    transparent 17%,
+    transparent 83%,
+    black 92%,
+    black 100%
+  );
+}
+
+.brand-world-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 50% 40% at 6% 18%, rgba(77, 166, 255, 0.14), transparent 55%),
+    radial-gradient(ellipse 48% 38% at 94% 14%, rgba(255, 107, 74, 0.12), transparent 50%),
+    radial-gradient(ellipse 55% 48% at 8% 88%, rgba(0, 195, 137, 0.2), transparent 52%),
+    radial-gradient(ellipse 52% 44% at 92% 86%, rgba(255, 199, 44, 0.18), transparent 48%);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 12%,
+    transparent 22%,
+    transparent 78%,
+    black 88%,
+    black 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    black 0%,
+    black 12%,
+    transparent 22%,
+    transparent 78%,
+    black 88%,
+    black 100%
+  );
+}
+
+.brand-world-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: brand-blob-float 14s ease-in-out infinite;
+}
+
+@keyframes brand-blob-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(5px, -6px) scale(1.02);
+  }
+}
+
+.brand-world-blob-coral {
+  top: -8%;
+  right: -12%;
+  width: min(38vw, 360px);
+  height: min(38vw, 360px);
+  background: rgba(255, 107, 74, 0.2);
+  animation-delay: -2s;
+}
+
+.brand-world-blob-green {
+  bottom: -6%;
+  left: -14%;
+  width: min(48vw, 460px);
+  height: min(48vw, 460px);
+  background: rgba(0, 195, 137, 0.28);
+  animation-delay: -6s;
+}
+
+.brand-world-blob-sun {
+  top: 38%;
+  left: -12%;
+  right: auto;
+  width: min(28vw, 260px);
+  height: min(28vw, 260px);
+  background: rgba(255, 199, 44, 0.14);
+  animation-delay: -4s;
+}
+
+.brand-world-blob-blue {
+  bottom: -4%;
+  right: -12%;
+  left: auto;
+  top: auto;
+  width: min(36vw, 340px);
+  height: min(36vw, 340px);
+  background: rgba(0, 51, 160, 0.16);
+  animation-delay: -8s;
+}
+
+.brand-world-curve {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.brand-world-curve-1 {
+  top: 8%;
+  right: -10%;
+  width: min(38vw, 320px);
+  height: auto;
+  animation: brand-blob-float 20s ease-in-out infinite;
+}
+
+.brand-world-curve-2 {
+  bottom: 2%;
+  left: -12%;
+  width: min(38vw, 300px);
+  height: auto;
+  opacity: 1;
+  animation: brand-blob-float 18s ease-in-out infinite reverse;
+  animation-delay: -5s;
+}
+
+.brand-world-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  animation: brand-icon-float 9s ease-in-out infinite;
+  opacity: 0.75;
+}
+
+.brand-world-icon-sun {
+  background: linear-gradient(135deg, rgba(255, 199, 44, 0.35), rgba(255, 199, 44, 0.12));
+  box-shadow: 0 8px 32px rgba(255, 199, 44, 0.15);
+}
+
+.brand-world-icon-coral {
+  background: linear-gradient(135deg, rgba(255, 107, 74, 0.32), rgba(255, 107, 74, 0.1));
+  box-shadow: 0 8px 32px rgba(255, 107, 74, 0.12);
+}
+
+.brand-world-icon-sky {
+  background: linear-gradient(135deg, rgba(77, 166, 255, 0.32), rgba(77, 166, 255, 0.1));
+  box-shadow: 0 8px 32px rgba(77, 166, 255, 0.12);
+}
+
+.brand-world-icon-mint {
+  background: linear-gradient(135deg, rgba(0, 195, 137, 0.32), rgba(0, 195, 137, 0.1));
+  box-shadow: 0 8px 32px rgba(0, 195, 137, 0.12);
+}
+
+.brand-world-icon-img {
+  width: 58%;
+  height: 58%;
+  object-fit: contain;
+  filter: grayscale(20%) brightness(0.95);
+  opacity: 0.9;
+}
+
+@keyframes brand-icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+}
+
+/* Hub cards — glass + campaign accent */
+.hub-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 24px rgba(0, 30, 98, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.hub-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--u-mint) 0%,
+    var(--unilever-blue-light) 45%,
+    var(--u-coral) 75%,
+    var(--u-sun) 100%
+  );
+  opacity: 0.85;
+}
+
+.hub-card:hover {
+  border-color: rgba(0, 51, 160, 0.2);
+  box-shadow:
+    0 12px 40px rgba(0, 30, 98, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
 }
 
 /* Stagger children in tool grid */
@@ -268,6 +593,19 @@ h4 {
   .hero-marquee-row-forward,
   .hero-marquee-row-reverse {
     animation: none !important;
+  }
+
+  .hero-logo-master {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .brand-world-icon,
+  .brand-world-blob,
+  .brand-world-curve {
+    animation: none !important;
+    transform: none !important;
   }
 
   *,

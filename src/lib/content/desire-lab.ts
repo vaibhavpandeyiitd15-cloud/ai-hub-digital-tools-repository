@@ -1,5 +1,8 @@
 export const SITE_NAME = "Desire Lab";
 
+/** Shown in metadata and assistant context — both India hubs */
+export const SITE_REGION = "Mumbai and Bangalore";
+
 export type LabSlug = "consumer-focused" | "science-focused";
 
 export type ConsumerSectionSlug = "insights" | "fragrance" | "packaging";

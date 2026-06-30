@@ -12,8 +12,8 @@ export function ToolCard({ tool, index = 0 }: { tool: ToolWithCategory; index?: 
 
   return (
     <ScrollReveal delay={index * 80}>
-      <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-xl">
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand via-brand-light to-success opacity-0 transition group-hover:opacity-100" />
+      <article className="hub-card group relative flex flex-col overflow-hidden rounded-2xl transition duration-300 hover:-translate-y-1">
+        <div className="absolute inset-x-0 top-[3px] h-0.5 bg-gradient-to-r from-u-mint via-brand-light to-u-coral opacity-0 transition group-hover:opacity-100" />
 
         <Link href={`/tools/${tool.slug}`} className="flex flex-1 flex-col p-5">
           <div className="mb-3 flex items-start justify-between gap-2">

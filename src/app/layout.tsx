@@ -6,7 +6,9 @@ import { ChatProvider } from "@/components/chat/ChatProvider";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { getActiveTools } from "@/lib/tools";
+import { SITE_REGION } from "@/lib/content/desire-lab";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -24,7 +26,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Desire Lab | Unilever",
   description:
-    "Desire Lab — Consumer Focused and Science Focused innovation tools at Unilever Head Office.",
+    `Desire Lab — Consumer Focused and Science Focused innovation tools for Unilever teams in ${SITE_REGION}.`,
 };
 
 export default async function RootLayout({
@@ -35,6 +37,7 @@ export default async function RootLayout({
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
+  const subtleBrandWorld = pathname.startsWith("/tools");
 
   if (isAdmin) {
     return (
@@ -59,7 +62,9 @@ export default async function RootLayout({
         <BookingProvider allTools={bookingTools}>
           <ChatProvider>
             <SiteHeader />
-            <main className="flex-1">{children}</main>
+            <main className="relative flex-1">
+              <PublicPageShell subtle={subtleBrandWorld}>{children}</PublicPageShell>
+            </main>
             <SiteFooter />
             <ChatWidget />
           </ChatProvider>

@@ -30,6 +30,12 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-6 md:flex">
           <Link
+            href="/about"
+            className="text-sm font-medium text-white/90 transition hover:text-white"
+          >
+            Our journey
+          </Link>
+          <Link
             href="/labs/consumer-focused"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >

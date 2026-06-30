@@ -99,6 +99,7 @@ export function HeroLogoMarquee({
       return;
     }
 
+    try {
     const slowDuration1 = HERO_MARQUEE_ROW1_DURATION * 3;
     const slowDuration2 = HERO_MARQUEE_ROW2_DURATION * 3;
 
@@ -151,14 +152,17 @@ export function HeroLogoMarquee({
       },
       0,
     );
+    } catch {
+      gsap.set(marquee, { display: "none", opacity: 0 });
+      gsap.set(master, { opacity: 1, scale: 1 });
+      setMarqueeHidden(true);
+      setLogoRevealed(true);
+    }
   }, []);
 
   useEffect(() => {
     const stage = stageRef.current;
-    const master = masterRef.current;
-    if (!stage || !master) return;
-
-    gsap.set(master, { opacity: 0, scale: 0.95 });
+    if (!stage) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
@@ -166,33 +170,8 @@ export function HeroLogoMarquee({
       return;
     }
 
-    let visibleSince: number | null = null;
-    let handoffTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const scheduleHandoff = () => {
-      if (handoffDoneRef.current || visibleSince === null) return;
-      const elapsed = Date.now() - visibleSince;
-      const remaining = Math.max(0, HERO_MARQUEE_PLAY_MS - elapsed);
-      if (handoffTimer) clearTimeout(handoffTimer);
-      handoffTimer = setTimeout(() => runHandoff(), remaining);
-    };
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (visibleSince === null) visibleSince = Date.now();
-          scheduleHandoff();
-        }
-      },
-      { threshold: 0.2 },
-    );
-
-    observer.observe(stage);
-
-    return () => {
-      observer.disconnect();
-      if (handoffTimer) clearTimeout(handoffTimer);
-    };
+    const handoffTimer = setTimeout(() => runHandoff(), HERO_MARQUEE_PLAY_MS);
+    return () => clearTimeout(handoffTimer);
   }, [runHandoff]);
 
   return (
@@ -232,9 +211,9 @@ export function HeroLogoMarquee({
         <div
           ref={masterRef}
           className={cn(
-            "flex shrink-0 items-center justify-center opacity-0",
+            "hero-logo-master flex shrink-0 items-center justify-center",
             compact ? "h-[170px] w-[170px]" : "h-[220px] w-[220px] sm:h-[240px] sm:w-[240px]",
-            logoRevealed && "opacity-100",
+            logoRevealed && "hero-logo-revealed",
           )}
         >
           <Image

@@ -21,6 +21,16 @@ export function WaveBackground() {
           d="M0,80 C320,40 640,100 960,60 C1200,28 1320,52 1440,72 L1440,120 L0,120 Z"
         />
       </svg>
+      <svg
+        className="wave-layer wave-layer-3 absolute -bottom-px left-0 w-[200%] text-[#FF6B4A]/12"
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          fill="currentColor"
+          d="M0,90 C400,50 800,110 1200,70 C1320,58 1380,85 1440,95 L1440,120 L0,120 Z"
+        />
+      </svg>
       <div className="vitality-orb vitality-orb-1" />
       <div className="vitality-orb vitality-orb-2" />
       <div className="vitality-orb vitality-orb-3" />
