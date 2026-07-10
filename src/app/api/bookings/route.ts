@@ -10,7 +10,11 @@ export async function POST(request: Request) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Validation failed", details: parsed.error.flatten() },
+        {
+          error: "Validation failed",
+          details: parsed.error.flatten(),
+          fieldErrors: parsed.error.flatten().fieldErrors,
+        },
         { status: 400 },
       );
     }

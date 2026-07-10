@@ -1,38 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  Calendar,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  X,
-} from "lucide-react";
+import { Calendar, CheckCircle2, Clock, X } from "lucide-react";
 import type { BookingTool } from "@/components/booking/BookingProvider";
+import {
+  getAvailableTrainingSlots,
+  groupTrainingSlotsByDate,
+  type TrainingSlot,
+} from "@/lib/content/training-slots";
 import { cn } from "@/lib/utils";
-
-const TIME_SLOTS = [
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-];
-
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 type BookingModalProps = {
   open: boolean;
@@ -41,35 +17,13 @@ type BookingModalProps = {
   tools?: BookingTool[];
 };
 
-function formatDateKey(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
-
-function buildCalendarDays(viewDate: Date) {
-  const year = viewDate.getFullYear();
-  const month = viewDate.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const startOffset = firstDay.getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells: (Date | null)[] = [];
-
-  for (let i = 0; i < startOffset; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) {
-    cells.push(new Date(year, month, d));
-  }
-  return cells;
-}
-
 export function BookingModal({
   open,
   onClose,
   tool: initialTool,
   tools = [],
 }: BookingModalProps) {
-  const [viewDate, setViewDate] = useState(() => new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState("");
-  const [duration, setDuration] = useState<30 | 60>(30);
+  const [selectedSlot, setSelectedSlot] = useState<TrainingSlot | null>(null);
   const [toolId, setToolId] = useState("");
   const [requesterName, setRequesterName] = useState("");
   const [requesterEmail, setRequesterEmail] = useState("");
@@ -83,6 +37,12 @@ export function BookingModal({
   const selectedTool =
     toolList.find((t) => t.id === toolId) ?? initialTool ?? toolList[0] ?? null;
 
+  const availableSlots = useMemo(() => getAvailableTrainingSlots(), [open]);
+  const slotGroups = useMemo(
+    () => groupTrainingSlotsByDate(availableSlots),
+    [availableSlots],
+  );
+
   useEffect(() => {
     if (!open) return;
     const t = initialTool ?? toolList[0];
@@ -90,6 +50,7 @@ export function BookingModal({
       setToolId(t.id);
       setSubject(`Training request: ${t.name}`);
     }
+    setSelectedSlot(null);
     setSuccessId(null);
     setError("");
   }, [open, initialTool, toolList]);
@@ -107,22 +68,14 @@ export function BookingModal({
     };
   }, [open, onClose]);
 
-  const today = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }, []);
-
-  const calendarDays = useMemo(() => buildCalendarDays(viewDate), [viewDate]);
-
   if (!open) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    if (!selectedTool || !selectedDate || !selectedTime) {
-      setError("Please select a tool, date, and time.");
+    if (!selectedTool || !selectedSlot) {
+      setError("Please select a tool and an available training slot.");
       return;
     }
 
@@ -135,9 +88,9 @@ export function BookingModal({
           toolId: selectedTool.id,
           requesterName,
           requesterEmail,
-          preferredDate: formatDateKey(selectedDate),
-          preferredTime: selectedTime,
-          durationMinutes: duration,
+          preferredDate: selectedSlot.date,
+          preferredTime: selectedSlot.time,
+          durationMinutes: selectedSlot.durationMinutes,
           subject,
           message: message || undefined,
         }),
@@ -156,11 +109,6 @@ export function BookingModal({
     }
   }
 
-  const monthLabel = viewDate.toLocaleDateString("en-GB", {
-    month: "long",
-    year: "numeric",
-  });
-
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -176,7 +124,6 @@ export function BookingModal({
       />
 
       <div className="relative max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl animate-scale-in">
-        {/* Outlook-style header bar */}
         <div className="flex items-center justify-between border-b border-[var(--border)] bg-gradient-to-r from-brand to-brand-light px-6 py-4 text-white">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15">
@@ -186,7 +133,9 @@ export function BookingModal({
               <h2 id="booking-title" className="font-[family-name:var(--font-barlow)] text-lg font-semibold">
                 Request a training session
               </h2>
-              <p className="text-xs text-white/80">Send a training request to the tool POC</p>
+              <p className="text-xs text-white/80">
+                Choose a predefined slot that suits your availability
+              </p>
             </div>
           </div>
           <button
@@ -207,7 +156,7 @@ export function BookingModal({
             </h3>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
               {selectedTool?.pocName} will follow up via email to confirm your
-              session.
+              session on {selectedSlot?.label}.
             </p>
             <p className="mt-4 rounded-lg bg-surface px-4 py-2 text-xs text-[var(--text-secondary)]">
               Reference: <span className="font-mono font-medium">{successId}</span>
@@ -223,102 +172,72 @@ export function BookingModal({
         ) : (
           <form onSubmit={handleSubmit} className="max-h-[calc(90vh-4rem)] overflow-y-auto">
             <div className="grid md:grid-cols-5">
-              {/* Calendar panel */}
               <div className="border-b border-[var(--border)] bg-surface p-5 md:col-span-2 md:border-b-0 md:border-r">
-                <div className="mb-4 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setViewDate(
-                        new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1),
-                      )
-                    }
-                    className="rounded-lg p-1.5 hover:bg-white"
-                  >
-                    <ChevronLeft className="h-4 w-4 text-brand" />
-                  </button>
-                  <span className="font-[family-name:var(--font-barlow)] text-sm font-semibold text-brand">
-                    {monthLabel}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setViewDate(
-                        new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1),
-                      )
-                    }
-                    className="rounded-lg p-1.5 hover:bg-white"
-                  >
-                    <ChevronRight className="h-4 w-4 text-brand" />
-                  </button>
-                </div>
+                <label className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+                  <Clock className="h-3.5 w-3.5" />
+                  Available training slots
+                </label>
+                <p className="mb-4 text-xs text-[var(--text-secondary)]">
+                  Select one date and time. Slots are offered on weekdays over the
+                  next four weeks.
+                </p>
 
-                <div className="grid grid-cols-7 gap-1 text-center text-xs font-medium text-[var(--text-secondary)]">
-                  {WEEKDAYS.map((d) => (
-                    <div key={d} className="py-1">
-                      {d}
+                <div className="max-h-[420px] space-y-4 overflow-y-auto pr-1">
+                  {slotGroups.map((group) => (
+                    <div key={group.date}>
+                      <p className="mb-2 text-xs font-semibold text-brand">
+                        {group.weekdayLabel}
+                      </p>
+                      <div className="space-y-2">
+                        {group.slots.map((slot) => {
+                          const isSelected = selectedSlot?.id === slot.id;
+                          return (
+                            <button
+                              key={slot.id}
+                              type="button"
+                              onClick={() => setSelectedSlot(slot)}
+                              className={cn(
+                                "flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-left text-sm transition",
+                                isSelected
+                                  ? "border-brand bg-brand text-white"
+                                  : "border-[var(--border)] bg-white hover:border-brand/40 hover:bg-brand/5",
+                              )}
+                            >
+                              <span className="font-medium">{slot.time}</span>
+                              <span
+                                className={cn(
+                                  "text-xs",
+                                  isSelected ? "text-white/80" : "text-[var(--text-secondary)]",
+                                )}
+                              >
+                                {slot.durationMinutes} min
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   ))}
                 </div>
-
-                <div className="mt-1 grid grid-cols-7 gap-1">
-                  {calendarDays.map((day, i) => {
-                    if (!day) {
-                      return <div key={`empty-${i}`} />;
-                    }
-                    const isPast = day < today;
-                    const isSelected =
-                      selectedDate &&
-                      formatDateKey(day) === formatDateKey(selectedDate);
-                    const isToday = formatDateKey(day) === formatDateKey(today);
-
-                    return (
-                      <button
-                        key={formatDateKey(day)}
-                        type="button"
-                        disabled={isPast}
-                        onClick={() => setSelectedDate(day)}
-                        className={cn(
-                          "aspect-square rounded-lg text-sm transition",
-                          isPast && "cursor-not-allowed text-gray-300",
-                          !isPast && "hover:bg-brand/10 hover:text-brand",
-                          isSelected &&
-                            "bg-brand font-semibold text-white hover:bg-brand",
-                          isToday && !isSelected && "ring-1 ring-brand/40",
-                        )}
-                      >
-                        {day.getDate()}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-5">
-                  <label className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                    <Clock className="h-3.5 w-3.5" /> Time
-                  </label>
-                  <div className="grid max-h-32 grid-cols-3 gap-1.5 overflow-y-auto">
-                    {TIME_SLOTS.map((slot) => (
-                      <button
-                        key={slot}
-                        type="button"
-                        onClick={() => setSelectedTime(slot)}
-                        className={cn(
-                          "rounded-md border px-2 py-1.5 text-xs transition",
-                          selectedTime === slot
-                            ? "border-brand bg-brand text-white"
-                            : "border-[var(--border)] bg-white hover:border-brand/40",
-                        )}
-                      >
-                        {slot}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
 
-              {/* Form panel */}
               <div className="space-y-4 p-5 md:col-span-3">
+                {selectedSlot ? (
+                  <div className="rounded-lg border border-u-mint/30 bg-u-mint/10 px-4 py-3 text-sm">
+                    <p className="text-xs font-medium uppercase tracking-wide text-[var(--text-secondary)]">
+                      Selected slot
+                    </p>
+                    <p className="mt-1 font-semibold text-brand">{selectedSlot.label}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">
+                      Duration: {selectedSlot.durationMinutes} minutes
+                    </p>
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-dashed border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--text-secondary)]">
+                    Pick a training slot from the list on the left.
+                  </div>
+                )}
+
                 {toolList.length > 1 ? (
                   <div>
                     <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
@@ -382,22 +301,6 @@ export function BookingModal({
 
                 <div>
                   <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
-                    Duration *
-                  </label>
-                  <select
-                    value={duration}
-                    onChange={(e) =>
-                      setDuration(Number(e.target.value) as 30 | 60)
-                    }
-                    className="w-full rounded-lg border border-[var(--border)] px-3 py-2 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
-                  >
-                    <option value={30}>30 minutes</option>
-                    <option value={60}>60 minutes</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
                     Subject *
                   </label>
                   <input
@@ -422,9 +325,7 @@ export function BookingModal({
                   />
                 </div>
 
-                {error ? (
-                  <p className="text-sm text-danger">{error}</p>
-                ) : null}
+                {error ? <p className="text-sm text-danger">{error}</p> : null}
 
                 <div className="flex justify-end gap-3 border-t border-[var(--border)] pt-4">
                   <button
@@ -436,7 +337,7 @@ export function BookingModal({
                   </button>
                   <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !selectedSlot}
                     className="rounded-lg bg-brand px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-light disabled:opacity-60"
                   >
                     {submitting ? "Sending…" : "Send Request"}

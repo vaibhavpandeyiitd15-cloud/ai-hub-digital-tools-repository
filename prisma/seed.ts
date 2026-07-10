@@ -1,4 +1,5 @@
 import { PrismaClient, ToolStatus } from "@prisma/client";
+import { packLabToolDefinitions } from "../src/lib/content/pack-lab-tools";
 import { createPgAdapter } from "../src/lib/pg-adapter";
 
 const categories = [
@@ -46,89 +47,24 @@ const categories = [
   },
 ] as const;
 
-const tools = [
-  {
-    slug: "convotrack",
-    name: "Convotrack",
-    categorySlug: "pack-insight",
-    purpose: "Track and analyze consumer conversations",
-    description:
-      "Convotrack monitors and analyzes consumer conversations to surface trends and actionable packaging insights.",
-    tags: ["insight", "conversations", "consumer"],
-  },
-  {
-    slug: "vurvey",
-    name: "Vurvey",
-    categorySlug: "pack-insight",
-    purpose: "Video-based consumer research and insight platform",
-    description:
-      "Vurvey captures and analyzes video-based consumer feedback to inform packaging decisions.",
-    tags: ["insight", "video", "consumer", "research"],
-  },
-  {
-    slug: "boltchat-ai",
-    name: "Boltchat",
-    categorySlug: "pack-screening",
-    purpose: "AI-powered conversational screening platform",
-    description:
-      "Boltchat enables rapid screening and AI-assisted evaluation of packaging concepts and options.",
-    tags: ["screening", "ai", "conversational"],
-  },
-  {
-    slug: "pactinstant-ai",
-    name: "PactInstant AI",
-    categorySlug: "pack-screening",
-    purpose: "Instant AI-assisted packaging screening",
-    description:
-      "PactInstant AI accelerates early packaging screening with instant AI-driven analysis and recommendations.",
-    tags: ["screening", "ai", "packaging"],
-  },
-  {
-    slug: "kaedim",
-    name: "Kaedim",
-    categorySlug: "pack-prototyping",
-    purpose: "AI-powered 3D model generation from images",
-    description:
-      "Kaedim transforms packaging reference images into production-ready 3D models for rapid prototyping.",
-    tags: ["prototyping", "3d", "ai", "packaging"],
-  },
-  {
-    slug: "3dx-fea-simulator",
-    name: "3DX FEA Simulator",
-    categorySlug: "pack-simulation",
-    purpose: "Finite element analysis for packaging performance",
-    description:
-      "3DX FEA Simulator runs structural and performance simulations on packaging designs before physical testing.",
-    tags: ["simulation", "fea", "3d", "packaging"],
-  },
-  {
-    slug: "eln",
-    name: "ELN",
-    categorySlug: "pack-data-capture",
-    purpose: "Electronic laboratory notebook for packaging R&D",
-    description:
-      "ELN captures experiments, observations, and results in a structured electronic lab notebook for packaging teams.",
-    tags: ["data-capture", "eln", "lab"],
-  },
-  {
-    slug: "lims",
-    name: "LIMS",
-    categorySlug: "pack-data-capture",
-    purpose: "Laboratory information management system",
-    description:
-      "LIMS manages samples, tests, and lab workflows for packaging development and quality tracking.",
-    tags: ["data-capture", "lims", "lab"],
-  },
-  {
-    slug: "packaging-project-workflow",
-    name: "Packaging project management workflow",
-    categorySlug: "pack-workflow-dashboard",
-    purpose: "End-to-end packaging project management and dashboards",
-    description:
-      "Packaging project management workflow coordinates milestones, tools, and team dashboards across Pack Lab projects.",
-    tags: ["workflow", "dashboard", "project-management", "packaging"],
-  },
-] as const;
+const categorySlugBySection = {
+  insight: "pack-insight",
+  screening: "pack-screening",
+  prototyping: "pack-prototyping",
+  simulation: "pack-simulation",
+  "data-capture": "pack-data-capture",
+  "workflow-dashboard": "pack-workflow-dashboard",
+} as const;
+
+const tools = packLabToolDefinitions.map((tool) => ({
+  slug: tool.slug,
+  name: tool.name,
+  categorySlug: categorySlugBySection[tool.sectionSlug],
+  purpose: tool.purpose,
+  description: tool.description,
+  tags: [...tool.tags],
+  toolUrl: tool.toolUrl ?? "#",
+}));
 
 async function main() {
   const connectionString =
@@ -178,7 +114,8 @@ async function main() {
         categoryId,
         purpose: tool.purpose,
         description: tool.description,
-        tags: [...tool.tags],
+        tags: tool.tags,
+        toolUrl: tool.toolUrl,
         status: ToolStatus.ACTIVE,
       },
       create: {
@@ -187,11 +124,11 @@ async function main() {
         categoryId,
         purpose: tool.purpose,
         description: tool.description,
-        tags: [...tool.tags],
+        tags: tool.tags,
+        toolUrl: tool.toolUrl,
         status: ToolStatus.ACTIVE,
         pocName: "TBD",
         pocEmail: "desirelab@unilever.com",
-        toolUrl: "#",
       },
     });
   }
