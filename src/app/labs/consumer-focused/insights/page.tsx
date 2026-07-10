@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function InsightsSectionPage() {
-  redirect("/labs/consumer-focused/insights/consumer-market-insights");
+export default function ConsumerInsightsRedirect() {
+  redirect("/labs/pack-lab/insight");
 }

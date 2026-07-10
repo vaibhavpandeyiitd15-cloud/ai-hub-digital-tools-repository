@@ -3,192 +3,130 @@ import { createPgAdapter } from "../src/lib/pg-adapter";
 
 const categories = [
   {
-    name: "Consumer & Market Insights",
-    slug: "consumer-market-insights",
-    description: "Concept development and social trend intelligence",
-    lab: "CONSUMER" as const,
+    name: "Pack Lab — Insight",
+    slug: "pack-insight",
+    description: "Consumer and packaging intelligence",
+    lab: "PACK" as const,
     sortOrder: 1,
   },
   {
-    name: "Consumer Insights (CMI)",
-    slug: "consumer-insights-cmi",
-    description: "Legacy AI Hub consumer insights tools",
-    lab: "CONSUMER" as const,
+    name: "Pack Lab — Screening",
+    slug: "pack-screening",
+    description: "Rapid packaging screening and evaluation",
+    lab: "PACK" as const,
     sortOrder: 2,
   },
   {
-    name: "Fragrance",
-    slug: "fragrance",
-    description: "Fragrance knowledge and library tools",
-    lab: "CONSUMER" as const,
+    name: "Pack Lab — Prototyping",
+    slug: "pack-prototyping",
+    description: "3D prototyping and model generation",
+    lab: "PACK" as const,
     sortOrder: 3,
   },
   {
-    name: "Packaging",
-    slug: "packaging",
-    description: "Pack exploration and image-to-model workflows",
-    lab: "CONSUMER" as const,
+    name: "Pack Lab — Simulation",
+    slug: "pack-simulation",
+    description: "Structural and performance simulation",
+    lab: "PACK" as const,
     sortOrder: 4,
   },
   {
-    name: "Explore",
-    slug: "explore",
-    description: "Patents, R&D data, and scientific publications",
-    lab: "SCIENCE" as const,
-    sortOrder: 10,
+    name: "Pack Lab — Data capture",
+    slug: "pack-data-capture",
+    description: "Electronic lab records and sample management",
+    lab: "PACK" as const,
+    sortOrder: 5,
   },
   {
-    name: "Innovate",
-    slug: "innovate",
-    description: "Science innovation workflows",
-    lab: "SCIENCE" as const,
-    sortOrder: 11,
-  },
-  {
-    name: "Design",
-    slug: "design",
-    description: "Science-led design capabilities",
-    lab: "SCIENCE" as const,
-    sortOrder: 12,
-  },
-  {
-    name: "Impact",
-    slug: "impact",
-    description: "Measure and validate scientific impact",
-    lab: "SCIENCE" as const,
-    sortOrder: 13,
+    name: "Pack Lab — Workflow & dashboard",
+    slug: "pack-workflow-dashboard",
+    description: "Packaging project management workflow",
+    lab: "PACK" as const,
+    sortOrder: 6,
   },
 ] as const;
 
 const tools = [
-  // Consumer — new Desire Lab tools
-  {
-    slug: "concept-gpt",
-    name: "Concept GPT",
-    categorySlug: "consumer-market-insights",
-    purpose: "AI-assisted concept generation from consumer and market insights",
-    description:
-      "Concept GPT helps teams explore product concepts, test hypotheses, and develop consumer-backed ideas using AI-assisted workflows.",
-    tags: ["concept", "gpt", "insights", "consumer"],
-  },
-  {
-    slug: "trends-by-social-intelligence",
-    name: "Trends by Social Intelligence",
-    categorySlug: "consumer-market-insights",
-    purpose: "Track emerging trends from social and market signals",
-    description:
-      "Trends by Social Intelligence surfaces emerging consumer and market trends from social data and intelligence feeds.",
-    tags: ["trends", "social", "intelligence", "insights"],
-  },
-  {
-    slug: "fragrance-library",
-    name: "Fragrance Library",
-    categorySlug: "fragrance",
-    purpose: "Central fragrance knowledge and reference library",
-    description:
-      "Fragrance Library provides a searchable repository of fragrance knowledge, references, and materials.",
-    tags: ["fragrance", "library", "knowledge"],
-  },
-  {
-    slug: "pack-explorer",
-    name: "Pack Explorer",
-    categorySlug: "packaging",
-    purpose: "Explore packaging formats, designs, and benchmarks",
-    description:
-      "Pack Explorer helps teams discover packaging options, compare formats, and explore design directions.",
-    tags: ["packaging", "explorer", "design"],
-  },
-  {
-    slug: "image-to-model-conversion",
-    name: "Image to Model Conversion",
-    categorySlug: "packaging",
-    purpose: "Convert packaging images into 3D model assets",
-    description:
-      "Image to Model Conversion transforms packaging reference images into 3D model assets for rapid prototyping.",
-    tags: ["packaging", "3d", "conversion", "image"],
-  },
-  // Consumer — legacy AI Hub insights tools (admin can deprecate)
-  {
-    slug: "innovation-navigator",
-    name: "Innovation Navigator",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "Navigate innovation insights and opportunities",
-    description:
-      "Innovation Navigator helps teams discover and track innovation opportunities across consumer insights workflows.",
-    tags: ["innovation", "insights"],
-  },
-  {
-    slug: "boltchat-ai",
-    name: "Boltchat.AI",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "AI-powered conversational insights platform",
-    description:
-      "Boltchat.AI enables conversational analysis and AI-assisted insights for consumer research teams.",
-    tags: ["ai", "conversational", "insights"],
-  },
   {
     slug: "convotrack",
     name: "Convotrack",
-    categorySlug: "consumer-insights-cmi",
+    categorySlug: "pack-insight",
     purpose: "Track and analyze consumer conversations",
     description:
-      "Convotrack monitors and analyzes consumer conversations to surface trends and actionable insights.",
-    tags: ["social", "conversations", "tracking"],
+      "Convotrack monitors and analyzes consumer conversations to surface trends and actionable packaging insights.",
+    tags: ["insight", "conversations", "consumer"],
   },
   {
-    slug: "insight-gpt",
-    name: "Insight GPT",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "GPT assistant for consumer insights workflows",
+    slug: "vurvey",
+    name: "Vurvey",
+    categorySlug: "pack-insight",
+    purpose: "Video-based consumer research and insight platform",
     description:
-      "Insight GPT provides an AI assistant tailored for consumer insights tasks and analysis.",
-    tags: ["gpt", "insights", "ai"],
+      "Vurvey captures and analyzes video-based consumer feedback to inform packaging decisions.",
+    tags: ["insight", "video", "consumer", "research"],
   },
   {
-    slug: "trajaan-io",
-    name: "Trajaan.io",
-    categorySlug: "consumer-insights-cmi",
-    purpose: "Market and consumer trend intelligence",
+    slug: "boltchat-ai",
+    name: "Boltchat",
+    categorySlug: "pack-screening",
+    purpose: "AI-powered conversational screening platform",
     description:
-      "Trajaan.io delivers market intelligence and consumer trend tracking for strategic decision-making.",
-    tags: ["market", "trends", "intelligence"],
-  },
-  // Science — Explore
-  {
-    slug: "patbase",
-    name: "PatBase",
-    categorySlug: "explore",
-    purpose: "Patent search and landscape exploration",
-    description:
-      "PatBase supports patent discovery, landscape analysis, and competitive intelligence for R&D teams.",
-    tags: ["patents", "explore", "science"],
+      "Boltchat enables rapid screening and AI-assisted evaluation of packaging concepts and options.",
+    tags: ["screening", "ai", "conversational"],
   },
   {
-    slug: "rd-assistant",
-    name: "R&D Assistant",
-    categorySlug: "explore",
-    purpose: "AI assistant for R&D research workflows",
+    slug: "pactinstant-ai",
+    name: "PactInstant AI",
+    categorySlug: "pack-screening",
+    purpose: "Instant AI-assisted packaging screening",
     description:
-      "R&D Assistant helps scientists query research data, summarise findings, and accelerate literature review.",
-    tags: ["rd", "assistant", "ai", "science"],
+      "PactInstant AI accelerates early packaging screening with instant AI-driven analysis and recommendations.",
+    tags: ["screening", "ai", "packaging"],
   },
   {
-    slug: "data-lab",
-    name: "Data Lab",
-    categorySlug: "explore",
-    purpose: "Scientific data exploration and analysis workspace",
+    slug: "kaedim",
+    name: "Kaedim",
+    categorySlug: "pack-prototyping",
+    purpose: "AI-powered 3D model generation from images",
     description:
-      "Data Lab provides a workspace for exploring, visualising, and analysing R&D datasets.",
-    tags: ["data", "analysis", "science"],
+      "Kaedim transforms packaging reference images into production-ready 3D models for rapid prototyping.",
+    tags: ["prototyping", "3d", "ai", "packaging"],
   },
   {
-    slug: "journals-publications",
-    name: "Internal and External Journals and Publications",
-    categorySlug: "explore",
-    purpose: "Access internal and external scientific publications",
+    slug: "3dx-fea-simulator",
+    name: "3DX FEA Simulator",
+    categorySlug: "pack-simulation",
+    purpose: "Finite element analysis for packaging performance",
     description:
-      "Search and browse internal Unilever research and external journals to inform science-led innovation.",
-    tags: ["journals", "publications", "research"],
+      "3DX FEA Simulator runs structural and performance simulations on packaging designs before physical testing.",
+    tags: ["simulation", "fea", "3d", "packaging"],
+  },
+  {
+    slug: "eln",
+    name: "ELN",
+    categorySlug: "pack-data-capture",
+    purpose: "Electronic laboratory notebook for packaging R&D",
+    description:
+      "ELN captures experiments, observations, and results in a structured electronic lab notebook for packaging teams.",
+    tags: ["data-capture", "eln", "lab"],
+  },
+  {
+    slug: "lims",
+    name: "LIMS",
+    categorySlug: "pack-data-capture",
+    purpose: "Laboratory information management system",
+    description:
+      "LIMS manages samples, tests, and lab workflows for packaging development and quality tracking.",
+    tags: ["data-capture", "lims", "lab"],
+  },
+  {
+    slug: "packaging-project-workflow",
+    name: "Packaging project management workflow",
+    categorySlug: "pack-workflow-dashboard",
+    purpose: "End-to-end packaging project management and dashboards",
+    description:
+      "Packaging project management workflow coordinates milestones, tools, and team dashboards across Pack Lab projects.",
+    tags: ["workflow", "dashboard", "project-management", "packaging"],
   },
 ] as const;
 
@@ -260,7 +198,7 @@ async function main() {
 
   await prisma.$disconnect();
   console.log(
-    `Seed complete: ${categories.length} categories, ${tools.length} tools (consumer + science)`,
+    `Seed complete: ${categories.length} categories, ${tools.length} tools (Pack Lab)`,
   );
 }
 

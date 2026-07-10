@@ -28,8 +28,8 @@ enum BookingStatus {
 }
 
 enum LabType {
-  CONSUMER
-  SCIENCE
+  PACK
+  FORMULATION
 }
 
 model Category {
@@ -37,7 +37,7 @@ model Category {
   name        String
   slug        String   @unique
   description String?
-  lab         LabType  @default(CONSUMER)
+  lab         LabType  @default(PACK)
   sortOrder   Int      @default(0)
   tools       Tool[]
   createdAt   DateTime @default(now())

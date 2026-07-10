@@ -36,16 +36,16 @@ export function SiteHeader() {
             Our journey
           </Link>
           <Link
-            href="/labs/consumer-focused"
+            href="/labs/pack-lab"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >
-            Consumer Lab
+            Pack Lab
           </Link>
           <Link
-            href="/labs/science-focused"
+            href="/labs/formulation-lab"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >
-            Science Lab
+            Formulation Lab
           </Link>
         </nav>
 

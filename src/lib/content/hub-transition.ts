@@ -9,7 +9,7 @@ export const hubTransitionContent = {
   published: "15 January 2026",
   regions: SITE_REGION,
 
-  intro: `Desire Lab is the next chapter of our digital innovation story. We started with the Agile Innovation Hub and AI Hub 2.0 — bringing analytics, AI-assisted workflows, and collaboration to teams in ${SITE_REGION}. Desire Lab keeps that foundation and organises it around how you actually work: Consumer Focused and Science Focused labs, with every tool still requestable and supported.`,
+  intro: `Desire Lab is the next chapter of our digital innovation story. We started with the Agile Innovation Hub and AI Hub 2.0 — bringing analytics, AI-assisted workflows, and collaboration to teams in ${SITE_REGION}. Desire Lab keeps that foundation and organises it around how you actually work: Pack Lab and Formulation Lab, with every tool still requestable and supported.`,
 
   legacy: {
     name: "AI Hub 2.0 · Agile Innovation Hub",
@@ -28,10 +28,10 @@ export const hubTransitionContent = {
   today: {
     name: SITE_NAME,
     tagline: "Every U does good — organised by lab",
-    summary: `Desire Lab restructures the same tool portfolio into two innovation branches. Consumer Focused Lab covers insights, fragrance, and packaging. Science Focused Lab spans explore, innovate, design, and impact. Legacy AI Hub tools live on inside Insights — managed in the CMS, bookable as before.`,
+    summary: `Desire Lab restructures the tool portfolio into two innovation branches. Pack Lab covers packaging — insight, screening, prototyping, simulation, data capture, and project workflow. Formulation Lab for R&D formulation tools is coming soon. Legacy AI Hub tools carry forward where relevant — managed in the CMS, bookable as before.`,
     highlights: [
-      "Consumer Focused Lab — insights, fragrance, packaging",
-      "Science Focused Lab — explore, innovate, design, impact",
+      "Pack Lab — insight, screening, prototyping, simulation, data capture, workflow",
+      "Formulation Lab — formulation R&D (coming soon)",
       "Desire Lab assistant with catalog-grounded answers",
       "Admin CMS for POCs, tools, and training requests",
     ],
@@ -56,7 +56,7 @@ export const hubTransitionContent = {
       year: "2026",
       quarter: "Mid",
       title: "Desire Lab restructure",
-      body: "The catalog evolves into Desire Lab — Consumer and Science labs with clearer navigation and room to grow.",
+      body: "The catalog evolves into Desire Lab — Pack Lab and Formulation Lab with clearer navigation and room to grow.",
     },
     {
       year: "Today",

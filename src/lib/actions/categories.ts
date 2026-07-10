@@ -27,7 +27,7 @@ export async function createCategoryAction(
     name: formData.get("name"),
     slug: formData.get("slug"),
     description: formData.get("description") || undefined,
-    lab: formData.get("lab") ?? "CONSUMER",
+    lab: formData.get("lab") ?? "PACK",
     sortOrder: formData.get("sortOrder") ?? 0,
   });
 
@@ -64,7 +64,7 @@ export async function updateCategoryAction(
     name: formData.get("name"),
     slug: formData.get("slug"),
     description: formData.get("description") || undefined,
-    lab: formData.get("lab") ?? "CONSUMER",
+    lab: formData.get("lab") ?? "PACK",
     sortOrder: formData.get("sortOrder") ?? 0,
   });
 

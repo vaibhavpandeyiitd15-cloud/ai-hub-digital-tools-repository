@@ -102,8 +102,8 @@ function CategoryEditRow({ category }: { category: CategoryRow }) {
             defaultValue={category.lab}
             className="w-full rounded-lg border border-[var(--border)] px-2 py-2 text-sm"
           >
-            <option value="CONSUMER">Consumer</option>
-            <option value="SCIENCE">Science</option>
+            <option value="PACK">Pack Lab</option>
+            <option value="FORMULATION">Formulation Lab</option>
           </select>
         </div>
         <div className="lg:col-span-1">
@@ -219,11 +219,11 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
             <label className="mb-1 block text-xs font-medium">Lab</label>
             <select
               name="lab"
-              defaultValue="CONSUMER"
+              defaultValue="PACK"
               className="w-full rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-sm"
             >
-              <option value="CONSUMER">Consumer</option>
-              <option value="SCIENCE">Science</option>
+              <option value="PACK">Pack Lab</option>
+              <option value="FORMULATION">Formulation Lab</option>
             </select>
           </div>
           <div>

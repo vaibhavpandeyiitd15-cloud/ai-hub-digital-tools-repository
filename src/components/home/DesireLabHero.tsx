@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { HeroLogoMarquee } from "@/components/home/HeroLogoMarquee";
 import { WaveBackground } from "@/components/ui/WaveBackground";
 import { cn } from "@/lib/utils";
@@ -11,14 +12,17 @@ type DesireLabHeroProps = {
   compact?: boolean;
   /** Larger title — used on the home page hero */
   largeTitle?: boolean;
+  /** Optional action rendered top-right (e.g. Pack Lab “Start a new project”) */
+  topAction?: ReactNode;
 };
 
 export function DesireLabHero({
   eyebrow,
   title = "Desire Lab",
-  subtitle = "Consumer and science innovation tools — organised by lab, section, and capability.",
+  subtitle = "Pack Lab and Formulation Lab innovation tools — organised by section and capability.",
   compact = false,
   largeTitle = false,
+  topAction,
 }: DesireLabHeroProps) {
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[#001448] via-brand to-[#0057B8] text-white">
@@ -47,6 +51,9 @@ export function DesireLabHero({
           compact ? "min-h-[190px] pt-7 pb-5 sm:pt-8" : "min-h-[240px] pt-10 pb-6 sm:pt-12 sm:pb-8",
         )}
       >
+        {topAction ? (
+          <div className="absolute top-4 right-4 z-20 sm:top-6 sm:right-6">{topAction}</div>
+        ) : null}
         <HeroLogoMarquee compact={compact} fullBleed />
 
         <div

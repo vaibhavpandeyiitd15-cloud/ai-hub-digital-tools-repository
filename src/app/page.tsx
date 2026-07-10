@@ -6,7 +6,7 @@ import { labBranches, SITE_NAME, SITE_REGION } from "@/lib/content/desire-lab";
 export const metadata = {
   title: `${SITE_NAME} | Unilever`,
   description:
-    `Desire Lab — Consumer Focused and Science Focused innovation tools for Unilever teams in ${SITE_REGION}.`,
+    `Desire Lab — Pack Lab and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
 };
 
 export default function HomePage() {

@@ -26,7 +26,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Desire Lab | Unilever",
   description:
-    `Desire Lab — Consumer Focused and Science Focused innovation tools for Unilever teams in ${SITE_REGION}.`,
+    `Desire Lab — Pack Lab and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
 };
 
 export default async function RootLayout({

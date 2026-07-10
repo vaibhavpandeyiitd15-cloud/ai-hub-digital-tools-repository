@@ -62,7 +62,7 @@ export function ChatWidget() {
       id: "welcome",
       role: "assistant",
       content:
-        "Hi! I'm the Desire Lab assistant. Ask me about tools in the Consumer or Science labs — I'll cite the relevant tool pages.",
+        "Hi! I'm the Desire Lab assistant. Ask me about tools in Pack Lab or Formulation Lab — I'll cite the relevant tool pages.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -209,7 +209,7 @@ export function ChatWidget() {
               <p className="font-[family-name:var(--font-barlow)] font-semibold">
                 Desire Lab Assistant
               </p>
-              <p className="text-xs text-white/70">Consumer & science tools</p>
+              <p className="text-xs text-white/70">Pack & formulation tools</p>
             </div>
             <div className="flex gap-1">
               <button
