@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, MessageCircle } from "lucide-react";
 import { useBooking } from "@/components/booking/BookingProvider";
+import { useChat } from "@/components/chat/ChatProvider";
 
 export function SiteHeader() {
   const { openBooking } = useBooking();
+  const { openChat } = useChat();
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-brand/95 text-white shadow-lg backdrop-blur-md">
@@ -60,8 +62,9 @@ export function SiteHeader() {
           </button>
           <button
             type="button"
+            onClick={() => openChat()}
             className="rounded-full p-2 text-white/90 transition hover:bg-white/10 hover:text-white"
-            aria-label="AI assistant available via chat widget"
+            aria-label="Open Desire Lab assistant"
             title="Open Desire Lab assistant"
           >
             <MessageCircle className="h-5 w-5" />

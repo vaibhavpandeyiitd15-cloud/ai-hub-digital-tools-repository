@@ -1,4 +1,6 @@
 import { db, hasDatabase } from "@/lib/db";
+import { getLabPathForToolSlug } from "@/lib/content/desire-lab";
+import { packLabToolDefinitions } from "@/lib/content/pack-lab-tools";
 import { createEmbedding, isEmbeddingConfigured } from "@/lib/llm";
 
 export type ToolCitation = {
@@ -50,6 +52,29 @@ function keywordScore(text: string, query: string): number {
   return terms.reduce((score, term) => score + (haystack.includes(term) ? 1 : 0), 0);
 }
 
+function toolCatalogPath(slug: string): string {
+  return getLabPathForToolSlug(slug);
+}
+
+function buildStaticPackLabChunks(): ToolChunk[] {
+  return packLabToolDefinitions.map((tool) => ({
+    toolId: tool.slug,
+    slug: tool.slug,
+    name: tool.name,
+    pocName: tool.pocName ?? "TBD",
+    pocEmail: tool.pocEmail ?? "desirelab@unilever.com",
+    text: [
+      `Tool: ${tool.name}`,
+      `Catalog path: ${toolCatalogPath(tool.slug)}`,
+      `Section: ${tool.sectionSlug}`,
+      `Purpose: ${tool.purpose}`,
+      `Description: ${tool.description}`,
+      `Tags: ${tool.tags.join(", ")}`,
+      `POC: ${tool.pocName ?? "TBD"} (${tool.pocEmail ?? "desirelab@unilever.com"})`,
+    ].join("\n"),
+  }));
+}
+
 function buildChunkText(tool: {
   name: string;
   slug: string;
@@ -65,7 +90,7 @@ function buildChunkText(tool: {
 }): string {
   const lines = [
     `Tool: ${tool.name}`,
-    `Catalog path: /tools/${tool.slug}`,
+    `Catalog path: ${toolCatalogPath(tool.slug)}`,
     `Category: ${tool.category.name}`,
     `Purpose: ${tool.purpose}`,
     `Description: ${tool.description}`,
@@ -88,38 +113,51 @@ export async function getToolChunks(): Promise<ToolChunk[]> {
   }
 
   if (!hasDatabase()) {
-    return [];
+    const chunks = buildStaticPackLabChunks();
+    cache = { chunks, builtAt: Date.now() };
+    return chunks;
   }
 
-  const tools = await db.tool.findMany({
-    where: { status: { in: ["ACTIVE", "BETA"] } },
-    include: {
-      category: true,
-      trainingDocs: true,
-    },
-    orderBy: { name: "asc" },
-  });
+  try {
+    const tools = await db.tool.findMany({
+      where: { status: { in: ["ACTIVE", "BETA"] } },
+      include: {
+        category: true,
+        trainingDocs: true,
+      },
+      orderBy: { name: "asc" },
+    });
 
-  const chunks: ToolChunk[] = tools.map((tool) => ({
-    toolId: tool.id,
-    slug: tool.slug,
-    name: tool.name,
-    pocName: tool.pocName,
-    pocEmail: tool.pocEmail,
-    text: buildChunkText(tool),
-  }));
+    if (tools.length === 0) {
+      return buildStaticPackLabChunks();
+    }
 
-  if (isEmbeddingConfigured()) {
-    for (const chunk of chunks) {
-      const embedding = await createEmbedding(chunk.text);
-      if (embedding.length > 0) {
-        chunk.embedding = embedding;
+    const chunks: ToolChunk[] = tools.map((tool) => ({
+      toolId: tool.id,
+      slug: tool.slug,
+      name: tool.name,
+      pocName: tool.pocName,
+      pocEmail: tool.pocEmail,
+      text: buildChunkText(tool),
+    }));
+
+    if (isEmbeddingConfigured()) {
+      for (const chunk of chunks) {
+        const embedding = await createEmbedding(chunk.text);
+        if (embedding.length > 0) {
+          chunk.embedding = embedding;
+        }
       }
     }
-  }
 
-  cache = { chunks, builtAt: Date.now() };
-  return chunks;
+    cache = { chunks, builtAt: Date.now() };
+    return chunks;
+  } catch (error) {
+    console.error("Failed to load tool chunks from database:", error);
+    const chunks = buildStaticPackLabChunks();
+    cache = { chunks, builtAt: Date.now() };
+    return chunks;
+  }
 }
 
 export function invalidateToolChunkCache() {
@@ -165,7 +203,7 @@ export function chunksToCitations(chunks: ToolChunk[]): ToolCitation[] {
     citations.push({
       name: chunk.name,
       slug: chunk.slug,
-      path: `/tools/${chunk.slug}`,
+      path: toolCatalogPath(chunk.slug),
       pocName: chunk.pocName,
       pocEmail: chunk.pocEmail,
     });
@@ -183,5 +221,6 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
   }
 
   const primary = chunks[0]!;
-  return `Based on the AI Hub catalog, **${primary.name}** may be relevant to your question.\n\n${primary.text.split("\n").slice(2, 5).join("\n")}\n\nView full details at /tools/${primary.slug}. For more help, contact ${primary.pocName} (${primary.pocEmail}).\n\n*(LLM not configured — showing catalog search results. Set GROQ_API_KEY or Azure OpenAI vars for AI answers.)*`;
+  const path = toolCatalogPath(primary.slug);
+  return `Based on the Desire Lab catalog, **${primary.name}** may be relevant to your question.\n\n${primary.text.split("\n").slice(2, 5).join("\n")}\n\nView full details at ${path}. For more help, contact ${primary.pocName} (${primary.pocEmail}).\n\n*(LLM not configured — showing catalog search results. Set GROQ_API_KEY or Azure OpenAI vars for AI answers.)*`;
 }
