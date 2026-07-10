@@ -27,6 +27,7 @@ export type SectionCard = {
   description: string;
   href: string;
   categorySlugs?: string[];
+  toolSlugs?: string[];
 };
 
 export const PACK_LAB_WORKFLOW_HREF = "/labs/pack-lab/workflow";
@@ -56,6 +57,7 @@ export const packSections: SectionCard[] = [
     description: "Consumer and packaging intelligence — Convotrack and Vurvey.",
     href: "/labs/pack-lab/insight",
     categorySlugs: ["pack-insight"],
+    toolSlugs: ["convotrack", "vurvey"],
   },
   {
     slug: "screening",
@@ -63,6 +65,7 @@ export const packSections: SectionCard[] = [
     description: "Rapid screening and evaluation — Boltchat and PactInstant AI.",
     href: "/labs/pack-lab/screening",
     categorySlugs: ["pack-screening"],
+    toolSlugs: ["boltchat-ai", "pactinstant-ai"],
   },
   {
     slug: "prototyping",
@@ -70,6 +73,7 @@ export const packSections: SectionCard[] = [
     description: "3D prototyping and model generation — Kaedim.",
     href: "/labs/pack-lab/prototyping",
     categorySlugs: ["pack-prototyping"],
+    toolSlugs: ["kaedim"],
   },
   {
     slug: "simulation",
@@ -77,6 +81,7 @@ export const packSections: SectionCard[] = [
     description: "Structural and performance simulation — 3DX FEA simulator.",
     href: "/labs/pack-lab/simulation",
     categorySlugs: ["pack-simulation"],
+    toolSlugs: ["3dx-fea-simulator"],
   },
   {
     slug: "data-capture",
@@ -84,6 +89,7 @@ export const packSections: SectionCard[] = [
     description: "Electronic lab records and sample management — ELN and LIMS.",
     href: "/labs/pack-lab/data-capture",
     categorySlugs: ["pack-data-capture"],
+    toolSlugs: ["eln", "lims"],
   },
   {
     slug: "workflow-dashboard",
@@ -91,6 +97,7 @@ export const packSections: SectionCard[] = [
     description: "Packaging project management workflow and team dashboards.",
     href: "/labs/pack-lab/workflow-dashboard",
     categorySlugs: ["pack-workflow-dashboard"],
+    toolSlugs: ["packaging-project-workflow"],
   },
 ];
 
@@ -110,4 +117,10 @@ export function getLabPathForCategory(categorySlug: string): string {
   );
   if (packSection) return packSection.href;
   return "/labs/pack-lab";
+}
+
+export function getLabPathForToolSlug(toolSlug: string): string {
+  const section = packSections.find((item) => item.toolSlugs?.includes(toolSlug));
+  if (section) return `/labs/pack-lab/${section.slug}/${toolSlug}`;
+  return `/tools/${toolSlug}`;
 }

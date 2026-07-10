@@ -37,7 +37,9 @@ export default async function RootLayout({
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") ?? "";
   const isAdmin = pathname.startsWith("/admin");
-  const subtleBrandWorld = pathname.startsWith("/tools");
+  const subtleBrandWorld =
+    pathname.startsWith("/tools") ||
+    /^\/labs\/pack-lab\/[^/]+\/[^/]+$/.test(pathname);
 
   if (isAdmin) {
     return (

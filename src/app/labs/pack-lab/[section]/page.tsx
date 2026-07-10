@@ -7,8 +7,9 @@ import {
   breadcrumbs,
   getPackSection,
   SITE_NAME,
+  type PackSectionSlug,
 } from "@/lib/content/desire-lab";
-import { getToolsByCategorySlugs } from "@/lib/tools";
+import { getPackSectionTools } from "@/lib/tools";
 
 type PageProps = {
   params: Promise<{ section: string }>;
@@ -29,9 +30,7 @@ export default async function PackSectionPage({ params }: PageProps) {
   const config = getPackSection(section);
   if (!config) notFound();
 
-  const tools = config.categorySlugs
-    ? await getToolsByCategorySlugs(config.categorySlugs)
-    : [];
+  const tools = await getPackSectionTools(section as PackSectionSlug);
 
   return (
     <div>
@@ -50,22 +49,9 @@ export default async function PackSectionPage({ params }: PageProps) {
         />
 
         <ScrollReveal>
-          {tools.length > 0 ? (
-            <p className="mb-8 text-sm text-[var(--text-secondary)]">
-              {tools.length} tool{tools.length === 1 ? "" : "s"}
-            </p>
-          ) : (
-            <div className="mb-8 rounded-xl border border-dashed border-[var(--border)] bg-white px-6 py-8 text-center">
-              <p className="font-medium text-brand">More tools coming soon</p>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                This section is ready — add tools via{" "}
-                <a href="/admin/tools" className="text-brand hover:underline">
-                  Desire Lab CMS
-                </a>
-                .
-              </p>
-            </div>
-          )}
+          <p className="mb-8 text-sm text-[var(--text-secondary)]">
+            {tools.length} tool{tools.length === 1 ? "" : "s"}
+          </p>
         </ScrollReveal>
 
         <LabToolList tools={tools} />

@@ -1,50 +1,34 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
 import { Mail } from "lucide-react";
 import { ToolDetailActions } from "@/components/booking/ToolDetailActions";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
+import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { getLabPathForCategory, getLabPathForToolSlug } from "@/lib/content/desire-lab";
-import { getPackLabToolDefinition } from "@/lib/content/pack-lab-tools";
-import { getToolBySlug } from "@/lib/tools";
+import { breadcrumbs } from "@/lib/content/desire-lab";
+import type { PackLabToolDetail } from "@/lib/tools";
 
-type ToolPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function ToolPage({ params }: ToolPageProps) {
-  const { slug } = await params;
-
-  const packLabPath = getLabPathForToolSlug(slug);
-  if (packLabPath.startsWith("/labs/pack-lab/")) {
-    redirect(packLabPath);
-  }
-
-  const staticPackTool = getPackLabToolDefinition(slug);
-  if (staticPackTool) {
-    redirect(`/labs/pack-lab/${staticPackTool.sectionSlug}/${staticPackTool.slug}`);
-  }
-
-  const tool = await getToolBySlug(slug);
-
-  if (!tool) {
-    notFound();
-  }
-
+export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
   const hasToolUrl = Boolean(tool.toolUrl && tool.toolUrl !== "#");
+  const sectionHref = `/labs/pack-lab/${tool.sectionSlug}`;
 
   return (
     <div className="relative">
-      {/* Brand hero band */}
       <div className="border-b border-brand/10 bg-gradient-to-r from-brand to-brand-light px-6 py-10 text-white">
         <div className="mx-auto max-w-7xl">
+          <LabBreadcrumbs
+            items={breadcrumbs(
+              { label: "Pack Lab", href: "/labs/pack-lab" },
+              { label: tool.sectionName, href: sectionHref },
+              { label: tool.name },
+            )}
+          />
           <div className="mb-4 flex flex-wrap items-center gap-3">
             <StatusBadge status={tool.status} />
             <Link
-              href={getLabPathForCategory(tool.category.slug)}
+              href={sectionHref}
               className="rounded-full border border-white/30 bg-white/10 px-3 py-0.5 text-xs font-medium backdrop-blur-sm hover:bg-white/20"
             >
-              {tool.category.name}
+              {tool.sectionName}
             </Link>
           </div>
           <h1 className="font-[family-name:var(--font-barlow)] text-3xl font-bold sm:text-4xl">
@@ -104,9 +88,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                   {tool.pocName}
                 </p>
                 {tool.pocTeam ? (
-                  <p className="text-sm text-[var(--text-secondary)]">
-                    {tool.pocTeam}
-                  </p>
+                  <p className="text-sm text-[var(--text-secondary)]">{tool.pocTeam}</p>
                 ) : null}
                 <a
                   href={`mailto:${tool.pocEmail}`}

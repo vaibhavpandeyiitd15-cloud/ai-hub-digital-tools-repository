@@ -7,15 +7,24 @@ import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import type { ToolWithCategory } from "@/lib/tools";
 
-export function ToolCard({ tool, index = 0 }: { tool: ToolWithCategory; index?: number }) {
+export function ToolCard({
+  tool,
+  index = 0,
+  href,
+}: {
+  tool: ToolWithCategory;
+  index?: number;
+  href?: string;
+}) {
   const { openBooking } = useBooking();
+  const toolHref = href ?? `/tools/${tool.slug}`;
 
   return (
     <ScrollReveal delay={index * 80}>
       <article className="hub-card group relative flex flex-col overflow-hidden rounded-2xl transition duration-300 hover:-translate-y-1">
         <div className="absolute inset-x-0 top-[3px] h-0.5 bg-gradient-to-r from-u-mint via-brand-light to-u-coral opacity-0 transition group-hover:opacity-100" />
 
-        <Link href={`/tools/${tool.slug}`} className="flex flex-1 flex-col p-5">
+        <Link href={toolHref} className="flex flex-1 flex-col p-5">
           <div className="mb-3 flex items-start justify-between gap-2">
             <span className="rounded-full border border-brand/20 bg-brand/5 px-2.5 py-0.5 text-xs font-medium text-brand">
               {tool.category.name}
