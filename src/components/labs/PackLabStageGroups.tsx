@@ -19,38 +19,45 @@ export function PackLabStageGroups() {
         return (
           <div
             key={group.slug}
-            className="overflow-hidden rounded-2xl border bg-white/95 shadow-sm backdrop-blur-sm"
-            style={{ borderColor: `${color}40` }}
+            className="overflow-hidden rounded-2xl shadow-md"
+            style={{
+              border: `2px solid ${color}`,
+              background: `linear-gradient(135deg, ${color}38 0%, ${color}1f 45%, rgba(255,255,255,0.94) 100%)`,
+            }}
           >
             <button
               type="button"
               onClick={() => setOpenGroup(isOpen ? null : group.slug)}
-              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition"
+              className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition hover:brightness-[0.98]"
               style={{
                 background: isOpen
-                  ? `linear-gradient(135deg, ${color}18 0%, ${color}08 100%)`
-                  : `linear-gradient(135deg, ${color}12 0%, transparent 100%)`,
+                  ? `linear-gradient(135deg, ${color}55 0%, ${color}35 100%)`
+                  : `linear-gradient(135deg, ${color}48 0%, ${color}28 100%)`,
               }}
               aria-expanded={isOpen}
             >
               <div>
                 <p
-                  className="text-xs font-semibold uppercase tracking-wide"
-                  style={{ color }}
+                  className="text-xs font-bold uppercase tracking-wider text-white/90"
+                  style={{ textShadow: "0 1px 2px rgba(0,0,0,0.15)" }}
                 >
                   Phase {index + 1}
                 </p>
                 <h3
-                  className="font-[family-name:var(--font-barlow)] text-xl font-bold"
-                  style={{ color }}
+                  className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-white"
+                  style={{ textShadow: "0 1px 3px rgba(0,0,0,0.2)" }}
                 >
                   {group.name}
                 </h3>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{group.description}</p>
+                <p className="mt-1.5 max-w-2xl text-sm font-medium text-white/95">
+                  {group.description}
+                </p>
               </div>
               <ChevronDown
-                className={cn("h-5 w-5 shrink-0 transition", isOpen && "rotate-180")}
-                style={{ color }}
+                className={cn(
+                  "h-6 w-6 shrink-0 text-white transition",
+                  isOpen && "rotate-180",
+                )}
               />
             </button>
 
@@ -58,8 +65,8 @@ export function PackLabStageGroups() {
               <div
                 className="border-t px-6 py-5"
                 style={{
-                  borderColor: `${color}30`,
-                  background: `linear-gradient(180deg, ${color}06 0%, transparent 100%)`,
+                  borderColor: `${color}80`,
+                  background: `linear-gradient(180deg, ${color}22 0%, rgba(255,255,255,0.96) 100%)`,
                 }}
               >
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -71,37 +78,29 @@ export function PackLabStageGroups() {
                       <Link
                         key={stage.slug}
                         href={stage.href}
-                        className="group rounded-xl border bg-white/95 p-5 transition hover:-translate-y-0.5 hover:shadow-md"
+                        className="group rounded-xl border-2 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
                         style={{
-                          borderColor: `${color}35`,
-                          boxShadow: `0 0 0 0 ${color}`,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = color;
-                          e.currentTarget.style.boxShadow = `0 8px 24px ${color}25`;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = `${color}35`;
-                          e.currentTarget.style.boxShadow = `0 0 0 0 ${color}`;
+                          borderColor: color,
+                          background: `linear-gradient(160deg, ${color}18 0%, #ffffff 70%)`,
                         }}
                       >
                         <p
-                          className="text-xs font-semibold uppercase tracking-wide"
+                          className="text-xs font-bold uppercase tracking-wide"
                           style={{ color }}
                         >
                           Stage
                         </p>
                         <h4
-                          className="mt-1 font-[family-name:var(--font-barlow)] text-lg font-semibold"
+                          className="mt-1 font-[family-name:var(--font-barlow)] text-lg font-bold"
                           style={{ color }}
                         >
                           {stage.name}
                         </h4>
-                        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                        <p className="mt-2 text-sm font-medium leading-relaxed text-[#1a3352]">
                           {stage.description}
                         </p>
                         <span
-                          className="mt-4 inline-flex text-sm font-semibold"
+                          className="mt-4 inline-flex text-sm font-bold"
                           style={{ color }}
                         >
                           Browse tools →

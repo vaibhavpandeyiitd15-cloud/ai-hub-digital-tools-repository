@@ -38,12 +38,14 @@ export default function PackSpecificationsPage() {
         />
 
         <div className="relative mx-auto max-w-7xl px-6 py-12">
-        <LabBreadcrumbs
-          items={breadcrumbs(
-            { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
-            { label: title },
-          )}
-        />
+          <div className="mb-6 rounded-lg bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <LabBreadcrumbs
+              items={breadcrumbs(
+                { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
+                { label: title },
+              )}
+            />
+          </div>
 
         <ScrollReveal>
           <div

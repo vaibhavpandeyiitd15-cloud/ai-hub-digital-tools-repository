@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { LabToolList } from "@/components/labs/LabToolList";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
+import { PackagingLabIntroBlock } from "@/components/labs/PackagingLabIntroBlock";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { breadcrumbs, getPackSection, PACKAGING_LAB_NAME, SITE_NAME, type PackSectionSlug } from "@/lib/content/desire-lab";
 import { getPhaseColorForSection, PACKAGING_LAB_BG_IMAGE, PACKAGING_LAB_BG_OVERLAY_CLASS } from "@/lib/content/pack-lab-stages";
@@ -55,26 +56,33 @@ export default async function PackSectionPage({ params }: PageProps) {
         />
 
         <div className="relative mx-auto max-w-7xl px-6 py-12">
-        <LabBreadcrumbs
-          items={breadcrumbs(
-            { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
-            { label: config.name },
-          )}
-        />
+          <div className="mb-6 rounded-lg bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <LabBreadcrumbs
+              items={breadcrumbs(
+                { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
+                { label: config.name },
+              )}
+            />
+          </div>
 
         <ScrollReveal>
-          <p
-            className="mb-2 text-xs font-semibold uppercase tracking-wide"
-            style={phaseColor ? { color: phaseColor } : undefined}
-          >
-            Stage
-          </p>
-          <p className="mb-8 text-sm text-[var(--text-secondary)]">
-            {tools.length} tool{tools.length === 1 ? "" : "s"} in this stage
-          </p>
+          <PackagingLabIntroBlock accentColor={phaseColor}>
+            <span
+              className="mb-1 block text-xs font-bold uppercase tracking-wide"
+              style={phaseColor ? { color: phaseColor } : undefined}
+            >
+              Stage · {config.name}
+            </span>
+            {config.description}
+            <span className="mt-2 block text-sm text-[#334e68]">
+              {tools.length} tool{tools.length === 1 ? "" : "s"} available in this stage.
+            </span>
+          </PackagingLabIntroBlock>
         </ScrollReveal>
 
-        <LabToolList tools={tools} accentColor={phaseColor} />
+        <div className="mt-8">
+          <LabToolList tools={tools} accentColor={phaseColor} />
+        </div>
         </div>
       </section>
     </div>

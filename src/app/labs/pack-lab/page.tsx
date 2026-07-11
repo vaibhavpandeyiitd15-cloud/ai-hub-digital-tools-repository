@@ -1,4 +1,5 @@
 import { PackLabStageGroups } from "@/components/labs/PackLabStageGroups";
+import { PackagingLabIntroBlock } from "@/components/labs/PackagingLabIntroBlock";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -30,15 +31,14 @@ export default function PackLabPage() {
         />
 
         <div className="relative mx-auto max-w-7xl px-6 py-12">
-          <LabBreadcrumbs items={breadcrumbs({ label: PACKAGING_LAB_NAME })} />
+          <div className="mb-6 rounded-lg bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+            <LabBreadcrumbs items={breadcrumbs({ label: PACKAGING_LAB_NAME })} />
+          </div>
 
           <ScrollReveal>
-            <h2 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
-              Phases
-            </h2>
-            <p className="mt-2 text-[var(--text-secondary)]">
+            <PackagingLabIntroBlock title="Phases">
               Expand each phase to browse packaging tools and capabilities by stage.
-            </p>
+            </PackagingLabIntroBlock>
           </ScrollReveal>
 
           <div className="mt-8">

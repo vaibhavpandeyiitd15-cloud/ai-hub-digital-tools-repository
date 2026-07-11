@@ -63,7 +63,7 @@ export function ToolCard({
             {tool.name}
           </h3>
 
-          <p className="mb-4 line-clamp-2 flex-1 text-sm text-[var(--text-secondary)]">
+          <p className="mb-4 line-clamp-2 flex-1 text-sm font-medium text-[#334e68]">
             {tool.purpose}
           </p>
 
