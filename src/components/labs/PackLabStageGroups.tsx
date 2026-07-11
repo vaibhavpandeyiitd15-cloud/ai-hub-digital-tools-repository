@@ -36,7 +36,7 @@ export function PackLabStageGroups() {
                 <p className="text-xs font-bold uppercase tracking-wider text-white">
                   Phase {index + 1}
                 </p>
-                <h3 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
+                <h3 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-white">
                   {group.name}
                 </h3>
                 <p className="mt-1.5 max-w-2xl text-sm font-medium text-white">
