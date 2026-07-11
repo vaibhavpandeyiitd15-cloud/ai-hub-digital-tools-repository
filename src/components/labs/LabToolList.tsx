@@ -4,9 +4,11 @@ import type { PackSectionToolCard, ToolWithCategory } from "@/lib/tools";
 export function LabToolList({
   tools,
   emptyMessage,
+  accentColor,
 }: {
   tools: (ToolWithCategory | PackSectionToolCard)[];
   emptyMessage?: string;
+  accentColor?: string;
 }) {
   if (tools.length === 0) {
     return (
@@ -24,6 +26,7 @@ export function LabToolList({
           tool={tool}
           index={index}
           href={"href" in tool ? tool.href : undefined}
+          accentColor={accentColor}
         />
       ))}
     </div>

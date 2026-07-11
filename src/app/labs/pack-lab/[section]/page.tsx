@@ -4,6 +4,7 @@ import { LabToolList } from "@/components/labs/LabToolList";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { breadcrumbs, getPackSection, PACKAGING_LAB_NAME, SITE_NAME, type PackSectionSlug } from "@/lib/content/desire-lab";
+import { getPhaseColorForSection, PACKAGING_LAB_BG_IMAGE, PACKAGING_LAB_BG_OVERLAY_CLASS } from "@/lib/content/pack-lab-stages";
 import { getPackSectionTools } from "@/lib/tools";
 
 type PageProps = {
@@ -32,6 +33,7 @@ export default async function PackSectionPage({ params }: PageProps) {
   if (!config) notFound();
 
   const tools = await getPackSectionTools(section as PackSectionSlug);
+  const phaseColor = getPhaseColorForSection(section);
 
   return (
     <div>
@@ -41,7 +43,18 @@ export default async function PackSectionPage({ params }: PageProps) {
         subtitle={config.description}
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-12">
+      <section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${PACKAGING_LAB_BG_IMAGE})` }}
+          aria-hidden
+        />
+        <div
+          className={`pointer-events-none absolute inset-0 ${PACKAGING_LAB_BG_OVERLAY_CLASS}`}
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-7xl px-6 py-12">
         <LabBreadcrumbs
           items={breadcrumbs(
             { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
@@ -50,13 +63,19 @@ export default async function PackSectionPage({ params }: PageProps) {
         />
 
         <ScrollReveal>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand">Stage</p>
+          <p
+            className="mb-2 text-xs font-semibold uppercase tracking-wide"
+            style={phaseColor ? { color: phaseColor } : undefined}
+          >
+            Stage
+          </p>
           <p className="mb-8 text-sm text-[var(--text-secondary)]">
             {tools.length} tool{tools.length === 1 ? "" : "s"} in this stage
           </p>
         </ScrollReveal>
 
-        <LabToolList tools={tools} />
+        <LabToolList tools={tools} accentColor={phaseColor} />
+        </div>
       </section>
     </div>
   );
