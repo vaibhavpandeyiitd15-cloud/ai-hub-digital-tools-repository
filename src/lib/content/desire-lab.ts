@@ -120,7 +120,15 @@ export function getLabPathForCategory(categorySlug: string): string {
 }
 
 export function getLabPathForToolSlug(toolSlug: string): string {
+  if (toolSlug === "packaging-project-workflow") {
+    return PACK_LAB_WORKFLOW_HREF;
+  }
   const section = packSections.find((item) => item.toolSlugs?.includes(toolSlug));
   if (section) return `/labs/pack-lab/${section.slug}/${toolSlug}`;
   return `/tools/${toolSlug}`;
 }
+
+/** Sections shown on the Pack Lab hub (workflow is via Start a new project) */
+export const packLabBrowseSections = packSections.filter(
+  (section) => section.slug !== "workflow-dashboard",
+);

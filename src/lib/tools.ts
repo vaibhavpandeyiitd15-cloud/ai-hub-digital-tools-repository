@@ -1,11 +1,8 @@
 import type { LabType, ToolStatus } from "@prisma/client";
 import { db, hasDatabase } from "@/lib/db";
 import type { PackSectionSlug } from "@/lib/content/desire-lab";
-import { getPackSection } from "@/lib/content/desire-lab";
-import {
-  getPackLabToolDefinition,
-  getPackLabToolPath,
-} from "@/lib/content/pack-lab-tools";
+import { getPackSection, getLabPathForToolSlug } from "@/lib/content/desire-lab";
+import { getPackLabToolDefinition } from "@/lib/content/pack-lab-tools";
 
 export type ToolWithCategory = {
   id: string;
@@ -155,7 +152,7 @@ export async function getPackSectionTools(
   return section.toolSlugs.map((slug) => {
     const dbTool = dbBySlug.get(slug);
     const staticTool = getPackLabToolDefinition(slug);
-    const href = getPackLabToolPath(sectionSlug, slug);
+    const href = getLabPathForToolSlug(slug);
 
     if (dbTool) {
       return { ...dbTool, href };
@@ -227,7 +224,7 @@ export async function getPackLabToolDetail(
   if (!staticTool) return null;
 
   const dbTool = await getToolBySlug(toolSlug);
-  const href = getPackLabToolPath(sectionSlug, toolSlug);
+  const href = getLabPathForToolSlug(toolSlug);
   const now = new Date(0);
 
   if (dbTool) {

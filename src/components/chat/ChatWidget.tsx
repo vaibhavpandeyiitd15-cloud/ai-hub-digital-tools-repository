@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { MessageCircle, Minus, Send, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { MessageCircle, Minus, Send, Sparkles, X } from "lucide-react";
 import { useChat } from "@/components/chat/ChatProvider";
+import {
+  getChatPromptsForPath,
+  getChatWelcomeForPath,
+} from "@/lib/content/chat-prompts";
 import { cn } from "@/lib/utils";
 
 type ChatMessage = {
@@ -55,21 +60,33 @@ function AssistantContent({ content }: { content: string }) {
 }
 
 export function ChatWidget() {
+  const pathname = usePathname() ?? "/";
   const { isOpen, toggleChat, closeChat, pendingMessage, clearPendingMessage } =
     useChat();
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content:
-        "Hi! I'm the Desire Lab assistant. Ask me about tools in Pack Lab or Formulation Lab — I'll cite the relevant tool pages.",
-    },
-  ]);
+  const welcomeText = useMemo(() => getChatWelcomeForPath(pathname), [pathname]);
+  const suggestedPrompts = useMemo(() => getChatPromptsForPath(pathname), [pathname]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const showPromptLibrary =
+    isOpen &&
+    !isLoading &&
+    messages.filter((m) => m.role === "user").length === 0;
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: "welcome",
+        role: "assistant",
+        content: welcomeText,
+      },
+    ]);
+    setError(null);
+  }, [welcomeText, pathname]);
 
   useEffect(() => {
     if (isOpen && pendingMessage) {
@@ -274,6 +291,27 @@ export function ChatWidget() {
                 Thinking…
               </div>
             )}
+
+            {showPromptLibrary ? (
+              <div className="rounded-xl border border-dashed border-brand/20 bg-brand/5 p-3">
+                <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-brand">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Suggested prompts
+                </p>
+                <div className="flex flex-col gap-2">
+                  {suggestedPrompts.map((item) => (
+                    <button
+                      key={item.label}
+                      type="button"
+                      onClick={() => void sendMessage(item.prompt)}
+                      className="rounded-lg border border-[var(--border)] bg-white px-3 py-2 text-left text-xs text-[var(--text-primary)] transition hover:border-brand/30 hover:bg-brand/5"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           {error && (

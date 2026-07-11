@@ -4,6 +4,7 @@ import { Barlow, Inter } from "next/font/google";
 import { BookingProvider } from "@/components/booking/BookingProvider";
 import { ChatProvider } from "@/components/chat/ChatProvider";
 import { ChatWidget } from "@/components/chat/ChatWidget";
+import { PackLabFloatingProjectButton } from "@/components/labs/PackLabFloatingProjectButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
@@ -68,6 +69,7 @@ export default async function RootLayout({
               <PublicPageShell subtle={subtleBrandWorld}>{children}</PublicPageShell>
             </main>
             <SiteFooter />
+            <PackLabFloatingProjectButton />
             <ChatWidget />
           </ChatProvider>
         </BookingProvider>

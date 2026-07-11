@@ -1,15 +1,8 @@
-import Link from "next/link";
-import { Plus } from "lucide-react";
 import { HubCardGrid } from "@/components/labs/HubCardGrid";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import {
-  breadcrumbs,
-  PACK_LAB_WORKFLOW_HREF,
-  packSections,
-  SITE_NAME,
-} from "@/lib/content/desire-lab";
+import { breadcrumbs, packLabBrowseSections, SITE_NAME } from "@/lib/content/desire-lab";
 
 export const metadata = {
   title: `Pack Lab | ${SITE_NAME}`,
@@ -21,16 +14,7 @@ export default function PackLabPage() {
       <DesireLabHero
         eyebrow="Pack Lab"
         title="Pack Lab"
-        subtitle="Packaging innovation — insight, screening, prototyping, simulation, data capture, and project workflow."
-        topAction={
-          <Link
-            href={PACK_LAB_WORKFLOW_HREF}
-            className="inline-flex items-center gap-2 rounded-lg border border-white/25 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
-          >
-            <Plus className="h-4 w-4" />
-            Start a new project
-          </Link>
-        }
+        subtitle="Packaging innovation — insight, screening, prototyping, simulation, and data capture."
       />
 
       <section className="mx-auto max-w-7xl px-6 py-12">
@@ -47,7 +31,7 @@ export default function PackLabPage() {
 
         <div className="mt-8">
           <HubCardGrid
-            items={packSections.map((section) => ({
+            items={packLabBrowseSections.map((section) => ({
               title: section.name,
               description: section.description,
               href: section.href,

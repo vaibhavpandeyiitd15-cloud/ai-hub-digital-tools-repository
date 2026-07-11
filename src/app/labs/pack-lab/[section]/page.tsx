@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { LabToolList } from "@/components/labs/LabToolList";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
@@ -27,6 +27,9 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function PackSectionPage({ params }: PageProps) {
   const { section } = await params;
+  if (section === "workflow-dashboard") {
+    redirect("/labs/pack-lab/workflow");
+  }
   const config = getPackSection(section);
   if (!config) notFound();
 

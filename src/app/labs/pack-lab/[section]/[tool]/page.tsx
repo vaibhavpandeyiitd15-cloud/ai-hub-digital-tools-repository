@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { PackLabToolPageContent } from "@/components/labs/PackLabToolPageContent";
 import type { PackSectionSlug } from "@/lib/content/desire-lab";
 import { getPackSection, SITE_NAME } from "@/lib/content/desire-lab";
@@ -27,6 +27,9 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function PackLabToolPage({ params }: PageProps) {
   const { section, tool } = await params;
+  if (section === "workflow-dashboard") {
+    redirect("/labs/pack-lab/workflow");
+  }
   const sectionConfig = getPackSection(section);
   if (!sectionConfig) notFound();
 
