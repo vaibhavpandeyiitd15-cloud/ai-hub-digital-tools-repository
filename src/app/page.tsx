@@ -1,12 +1,12 @@
 import { HubCardGrid } from "@/components/labs/HubCardGrid";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { labBranches, SITE_NAME, SITE_REGION } from "@/lib/content/desire-lab";
+import { labBranches, PACKAGING_LAB_NAME, SITE_NAME, SITE_REGION } from "@/lib/content/desire-lab";
 
 export const metadata = {
   title: `${SITE_NAME} | Unilever`,
   description:
-    `Desire Lab — Pack Lab and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
+    `Desire Lab — ${PACKAGING_LAB_NAME} and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
 };
 
 export default function HomePage() {

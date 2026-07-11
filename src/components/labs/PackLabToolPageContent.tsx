@@ -4,7 +4,7 @@ import { ToolDetailActions } from "@/components/booking/ToolDetailActions";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { breadcrumbs } from "@/lib/content/desire-lab";
+import { breadcrumbs, PACKAGING_LAB_NAME } from "@/lib/content/desire-lab";
 import type { PackLabToolDetail } from "@/lib/tools";
 
 export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
@@ -17,7 +17,7 @@ export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
         <div className="mx-auto max-w-7xl">
           <LabBreadcrumbs
             items={breadcrumbs(
-              { label: "Pack Lab", href: "/labs/pack-lab" },
+              { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
               { label: tool.sectionName, href: sectionHref },
               { label: tool.name },
             )}
@@ -28,7 +28,7 @@ export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
               href={sectionHref}
               className="rounded-full border border-white/30 bg-white/10 px-3 py-0.5 text-xs font-medium backdrop-blur-sm hover:bg-white/20"
             >
-              {tool.sectionName}
+              {tool.sectionName} stage
             </Link>
           </div>
           <h1 className="font-[family-name:var(--font-barlow)] text-3xl font-bold sm:text-4xl">
@@ -101,43 +101,31 @@ export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
             </ScrollReveal>
 
             <ScrollReveal delay={200}>
-              {tool.trainingDocs.length > 0 ? (
-                <div className="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-md">
-                  <h2 className="font-[family-name:var(--font-barlow)] text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                    Training docs
-                  </h2>
-                  <ul className="mt-3 space-y-2">
-                    {tool.trainingDocs.map((doc) => (
-                      <li key={doc.id}>
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-brand hover:underline"
-                        >
-                          {doc.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white p-6 text-sm text-[var(--text-secondary)]">
-                  No training docs yet — request a session below to get started.
-                </div>
-              )}
+              <div className="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-md">
+                <h2 className="font-[family-name:var(--font-barlow)] text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+                  Training
+                </h2>
+                <a
+                  href={tool.trainingMaterialsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex text-sm font-semibold text-brand hover:underline"
+                >
+                  Training material
+                </a>
+                <p className="mt-2 text-xs text-[var(--text-secondary)]">
+                  Opens SharePoint with guides and resources for this tool.
+                </p>
+              </div>
             </ScrollReveal>
 
             <ScrollReveal delay={280}>
               <ToolDetailActions
                 tool={{
-                  id: tool.id,
                   name: tool.name,
-                  slug: tool.slug,
-                  pocName: tool.pocName,
-                  pocEmail: tool.pocEmail,
                   toolUrl: tool.toolUrl,
                   hasToolUrl,
+                  trainingMaterialsUrl: tool.trainingMaterialsUrl,
                 }}
               />
             </ScrollReveal>

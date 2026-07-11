@@ -41,7 +41,7 @@ export function SiteHeader() {
             href="/labs/pack-lab"
             className="text-sm font-medium text-white/90 transition hover:text-white"
           >
-            Pack Lab
+            Packaging Lab
           </Link>
           <Link
             href="/labs/formulation-lab"
@@ -58,7 +58,7 @@ export function SiteHeader() {
             className="hidden items-center gap-2 rounded-lg border border-white/25 bg-white/10 px-3 py-1.5 text-sm font-medium transition hover:bg-white/20 sm:inline-flex"
           >
             <Calendar className="h-4 w-4" />
-            Request a training
+            Look for training slots
           </button>
           <button
             type="button"

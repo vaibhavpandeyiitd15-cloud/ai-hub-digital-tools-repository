@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
-import { ArrowRight, Calendar } from "lucide-react";
-import { useBooking } from "@/components/booking/BookingProvider";
+import { ArrowRight } from "lucide-react";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import type { ToolWithCategory } from "@/lib/tools";
@@ -16,7 +13,6 @@ export function ToolCard({
   index?: number;
   href?: string;
 }) {
-  const { openBooking } = useBooking();
   const toolHref = href ?? `/tools/${tool.slug}`;
 
   return (
@@ -50,26 +46,6 @@ export function ToolCard({
             <ArrowRight className="h-4 w-4 text-brand opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
           </div>
         </Link>
-
-        <div className="border-t border-[var(--border)] bg-surface/50 px-5 py-3">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              openBooking({
-                id: tool.id,
-                name: tool.name,
-                slug: tool.slug,
-                pocName: tool.pocName,
-                pocEmail: tool.pocEmail,
-              });
-            }}
-            className="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-xs font-semibold text-brand transition hover:bg-brand/10"
-          >
-            <Calendar className="h-3.5 w-3.5" />
-            Request a training
-          </button>
-        </div>
       </article>
     </ScrollReveal>
   );

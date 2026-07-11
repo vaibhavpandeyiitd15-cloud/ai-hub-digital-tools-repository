@@ -88,7 +88,7 @@ function buildStaticPackLabChunks(): ToolChunk[] {
         pocName: "Desire Lab",
         pocEmail: "desirelab@unilever.com",
         text: [
-          `Pack Lab section: ${section.name}`,
+          `Packaging Lab stage: ${section.name}`,
           `Catalog path: ${section.href}`,
           `Description: ${section.description}`,
           isSpecifications
@@ -260,7 +260,7 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
 
   if (isSpecificationsQuery) {
     return [
-      "The **Specifications** section in Pack Lab is for writing packaging specifications in **Active Workspace**.",
+      "The **Specifications** stage in Packaging Lab is for writing packaging specifications in **Active Workspace**.",
       "",
       "1. Open /labs/pack-lab/specifications",
       "2. Click **Go to Active Workspace** to launch Active Workspace in a new tab",

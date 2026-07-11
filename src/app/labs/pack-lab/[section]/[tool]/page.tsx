@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { PackLabToolPageContent } from "@/components/labs/PackLabToolPageContent";
 import type { PackSectionSlug } from "@/lib/content/desire-lab";
-import { getPackSection, SITE_NAME } from "@/lib/content/desire-lab";
+import { getPackSection, PACKAGING_LAB_NAME, SITE_NAME } from "@/lib/content/desire-lab";
 import { packLabToolStaticParams } from "@/lib/content/pack-lab-tools";
 import { getPackLabToolDetail } from "@/lib/tools";
 
@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: detail
-      ? `${detail.name} | ${sectionConfig?.name ?? "Pack Lab"} | ${SITE_NAME}`
-      : `Pack Lab | ${SITE_NAME}`,
+      ? `${detail.name} | ${sectionConfig?.name ?? PACKAGING_LAB_NAME} | ${SITE_NAME}`
+      : `${PACKAGING_LAB_NAME} | ${SITE_NAME}`,
   };
 }
 

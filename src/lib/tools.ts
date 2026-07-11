@@ -2,7 +2,7 @@ import type { LabType, ToolStatus } from "@prisma/client";
 import { db, hasDatabase } from "@/lib/db";
 import type { PackSectionSlug } from "@/lib/content/desire-lab";
 import { getPackSection, getLabPathForToolSlug } from "@/lib/content/desire-lab";
-import { getPackLabToolDefinition } from "@/lib/content/pack-lab-tools";
+import { getPackLabToolDefinition, getTrainingMaterialsUrl } from "@/lib/content/pack-lab-tools";
 
 export type ToolWithCategory = {
   id: string;
@@ -210,6 +210,7 @@ export type PackLabToolDetail = {
   sectionName: string;
   href: string;
   id: string;
+  trainingMaterialsUrl: string;
   trainingDocs: { id: string; title: string; url: string }[];
 };
 
@@ -245,6 +246,8 @@ export async function getPackLabToolDetail(
       sectionSlug,
       sectionName: section.name,
       href,
+      trainingMaterialsUrl:
+        staticTool.trainingMaterialsUrl ?? getTrainingMaterialsUrl(staticTool.slug),
       trainingDocs: dbTool.trainingDocs,
     };
   }
@@ -266,6 +269,8 @@ export async function getPackLabToolDetail(
     sectionSlug,
     sectionName: section.name,
     href,
+    trainingMaterialsUrl:
+      staticTool.trainingMaterialsUrl ?? getTrainingMaterialsUrl(staticTool.slug),
     trainingDocs: [],
   };
 }

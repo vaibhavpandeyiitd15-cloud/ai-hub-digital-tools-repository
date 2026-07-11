@@ -5,7 +5,7 @@ import { ToolDetailActions } from "@/components/booking/ToolDetailActions";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { getLabPathForCategory, getLabPathForToolSlug } from "@/lib/content/desire-lab";
-import { getPackLabToolDefinition } from "@/lib/content/pack-lab-tools";
+import { getPackLabToolDefinition, getTrainingMaterialsUrl } from "@/lib/content/pack-lab-tools";
 import { getToolBySlug } from "@/lib/tools";
 
 type ToolPageProps = {
@@ -119,43 +119,28 @@ export default async function ToolPage({ params }: ToolPageProps) {
             </ScrollReveal>
 
             <ScrollReveal delay={200}>
-              {tool.trainingDocs.length > 0 ? (
-                <div className="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-md">
-                  <h2 className="font-[family-name:var(--font-barlow)] text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
-                    Training docs
-                  </h2>
-                  <ul className="mt-3 space-y-2">
-                    {tool.trainingDocs.map((doc) => (
-                      <li key={doc.id}>
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-brand hover:underline"
-                        >
-                          {doc.title}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white p-6 text-sm text-[var(--text-secondary)]">
-                  No training docs yet — request a session below to get started.
-                </div>
-              )}
+              <div className="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-md">
+                <h2 className="font-[family-name:var(--font-barlow)] text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
+                  Training
+                </h2>
+                <a
+                  href={getTrainingMaterialsUrl(tool.slug)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex text-sm font-semibold text-brand hover:underline"
+                >
+                  Training material
+                </a>
+              </div>
             </ScrollReveal>
 
             <ScrollReveal delay={280}>
               <ToolDetailActions
                 tool={{
-                  id: tool.id,
                   name: tool.name,
-                  slug: tool.slug,
-                  pocName: tool.pocName,
-                  pocEmail: tool.pocEmail,
                   toolUrl: tool.toolUrl,
                   hasToolUrl,
+                  trainingMaterialsUrl: getTrainingMaterialsUrl(tool.slug),
                 }}
               />
             </ScrollReveal>

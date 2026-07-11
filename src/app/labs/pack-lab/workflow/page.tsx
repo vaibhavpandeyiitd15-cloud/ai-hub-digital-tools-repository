@@ -4,11 +4,11 @@ import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { LabToolList } from "@/components/labs/LabToolList";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { breadcrumbs, SITE_NAME } from "@/lib/content/desire-lab";
+import { breadcrumbs, PACKAGING_LAB_NAME, SITE_NAME } from "@/lib/content/desire-lab";
 import { getPackSectionTools } from "@/lib/tools";
 
 export const metadata = {
-  title: `Project workflow | Pack Lab | ${SITE_NAME}`,
+  title: `Project workflow | ${PACKAGING_LAB_NAME} | ${SITE_NAME}`,
 };
 
 const workflowSteps = [
@@ -50,15 +50,15 @@ export default async function PackLabWorkflowPage() {
   return (
     <div>
       <DesireLabHero
-        eyebrow="Pack Lab"
+        eyebrow={PACKAGING_LAB_NAME}
         title="Packaging project workflow"
-        subtitle="Start a new packaging project and follow the end-to-end workflow from brief to handoff."
+        subtitle="Create a new workflow and follow the end-to-end journey from brief to handoff."
       />
 
       <section className="mx-auto max-w-7xl px-6 py-12">
         <LabBreadcrumbs
           items={breadcrumbs(
-            { label: "Pack Lab", href: "/labs/pack-lab" },
+            { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
             { label: "Project workflow" },
           )}
         />
@@ -67,11 +67,11 @@ export default async function PackLabWorkflowPage() {
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="font-[family-name:var(--font-barlow)] text-2xl font-bold text-brand">
-                Start a new project
+                Create a new workflow
               </h2>
               <p className="mt-2 max-w-2xl text-[var(--text-secondary)]">
-                Use this workflow to structure packaging innovation projects across Pack Lab
-                sections — from insight through prototyping, simulation, and delivery.
+                Use this workflow to structure packaging innovation projects across Packaging Lab
+                stages — from insight through prototyping, simulation, and delivery.
               </p>
             </div>
             <Link
@@ -79,7 +79,7 @@ export default async function PackLabWorkflowPage() {
               className="inline-flex items-center gap-2 text-sm font-medium text-brand hover:underline"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Pack Lab
+              Back to {PACKAGING_LAB_NAME}
             </Link>
           </div>
         </ScrollReveal>

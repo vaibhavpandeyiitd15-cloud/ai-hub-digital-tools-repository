@@ -32,9 +32,9 @@ const contexts: PromptContext[] = [
     id: "pack-lab-insight",
     match: (p) => p === "/labs/pack-lab/insight" || p.startsWith("/labs/pack-lab/insight/"),
     prompts: [
-      { label: "Insight tools", prompt: "Which Pack Lab insight tools are available and what are they for?" },
+      { label: "Insight tools", prompt: "Which Packaging Lab insight tools are available and what are they for?" },
       { label: "Convotrack vs Vurvey", prompt: "When should I use Convotrack versus Vurvey?" },
-      { label: "Start a project", prompt: "How do I start a new packaging project in Pack Lab?" },
+      { label: "Create a workflow", prompt: "How do I create a new packaging workflow in Packaging Lab?" },
     ],
   },
   {
@@ -59,7 +59,7 @@ const contexts: PromptContext[] = [
     id: "pack-lab-screening",
     match: (p) => p === "/labs/pack-lab/screening" || p.startsWith("/labs/pack-lab/screening/"),
     prompts: [
-      { label: "Screening tools", prompt: "Which Pack Lab screening tools should I use first?" },
+      { label: "Screening tools", prompt: "Which Packaging Lab screening tools should I use first?" },
       { label: "Early concepts", prompt: "How do I screen early packaging concepts quickly?" },
       { label: "Boltchat vs PactInstant", prompt: "Compare Boltchat and PactInstant AI for my project." },
     ],
@@ -70,14 +70,14 @@ const contexts: PromptContext[] = [
     prompts: [
       { label: "What is Kaedim?", prompt: "What is Kaedim and how do I turn pack images into 3D models?" },
       { label: "Export formats", prompt: "What file formats does Kaedim export for packaging CAD?" },
-      { label: "Workflow fit", prompt: "Where does Kaedim fit in the Pack Lab prototyping workflow?" },
+      { label: "Workflow fit", prompt: "Where does Kaedim fit in the Packaging Lab prototyping workflow?" },
     ],
   },
   {
     id: "pack-lab-prototyping",
     match: (p) => p === "/labs/pack-lab/prototyping" || p.startsWith("/labs/pack-lab/prototyping/"),
     prompts: [
-      { label: "Prototyping tools", prompt: "What prototyping tools are in Pack Lab?" },
+      { label: "Prototyping tools", prompt: "What prototyping tools are in Packaging Lab?" },
       { label: "Image to 3D", prompt: "How can I prototype packaging from reference images?" },
       { label: "After screening", prompt: "What should I do after screening before simulation?" },
     ],
@@ -95,7 +95,7 @@ const contexts: PromptContext[] = [
     id: "pack-lab-simulation",
     match: (p) => p === "/labs/pack-lab/simulation" || p.startsWith("/labs/pack-lab/simulation/"),
     prompts: [
-      { label: "Simulation tools", prompt: "What simulation capabilities exist in Pack Lab?" },
+      { label: "Simulation tools", prompt: "What simulation capabilities exist in Packaging Lab?" },
       { label: "Structural performance", prompt: "How do I validate pack structural performance virtually?" },
       { label: "Prototype to simulate", prompt: "How do I move from Kaedim prototypes to simulation?" },
     ],
@@ -104,7 +104,7 @@ const contexts: PromptContext[] = [
     id: "pack-lab-data-capture",
     match: (p) => p === "/labs/pack-lab/data-capture" || p.startsWith("/labs/pack-lab/data-capture/"),
     prompts: [
-      { label: "ELN vs LIMS", prompt: "What is the difference between ELN and LIMS in Pack Lab?" },
+      { label: "ELN vs LIMS", prompt: "What is the difference between ELN and LIMS in Packaging Lab?" },
       { label: "Experiment logging", prompt: "How should packaging teams capture lab experiments digitally?" },
       { label: "Sample tracking", prompt: "How does LIMS support packaging sample and QC tracking?" },
     ],
@@ -114,7 +114,7 @@ const contexts: PromptContext[] = [
     match: (p) => p === "/labs/pack-lab/specifications" || p.startsWith("/labs/pack-lab/specifications/"),
     prompts: [
       { label: "Write a spec", prompt: "How do I access Active Workspace to write a packaging specification?" },
-      { label: "Specifications section", prompt: "What is the Pack Lab Specifications section for?" },
+      { label: "Specifications stage", prompt: "What is the Packaging Lab Specifications stage for?" },
       { label: "Active Workspace", prompt: "Where does the Specifications section redirect me?" },
     ],
   },
@@ -122,7 +122,7 @@ const contexts: PromptContext[] = [
     id: "pack-lab-workflow",
     match: (p) => p === "/labs/pack-lab/workflow" || p.startsWith("/labs/pack-lab/workflow"),
     prompts: [
-      { label: "Project steps", prompt: "Walk me through the Pack Lab packaging project workflow." },
+      { label: "Project steps", prompt: "Walk me through the Packaging Lab packaging project workflow." },
       { label: "Tools per stage", prompt: "Which tools should I use at each stage of a packaging project?" },
       { label: "Dashboard tool", prompt: "Tell me about the packaging project management workflow tool." },
     ],
@@ -131,9 +131,9 @@ const contexts: PromptContext[] = [
     id: "pack-lab",
     match: (p) => p === "/labs/pack-lab" || p.startsWith("/labs/pack-lab/"),
     prompts: [
-      { label: "Start a project", prompt: "How do I start a new packaging project in Pack Lab?" },
-      { label: "All sections", prompt: "What are the Pack Lab sections and which tools are in each?" },
-      { label: "Insight to delivery", prompt: "What is the end-to-end Pack Lab journey from insight to handoff?" },
+      { label: "Create a workflow", prompt: "How do I create a new packaging workflow in Packaging Lab?" },
+      { label: "All stages", prompt: "What are the Packaging Lab stages and which tools are in each?" },
+      { label: "Insight to delivery", prompt: "What is the end-to-end Packaging Lab journey from insight to handoff?" },
     ],
   },
   {
@@ -141,8 +141,8 @@ const contexts: PromptContext[] = [
     match: (p) => p.startsWith("/labs/formulation-lab"),
     prompts: [
       { label: "Coming soon", prompt: "What will Formulation Lab include when it launches?" },
-      { label: "Pack vs formulation", prompt: "What is the difference between Pack Lab and Formulation Lab?" },
-      { label: "Pack Lab tools", prompt: "Which Pack Lab tools are available now for packaging work?" },
+      { label: "Pack vs formulation", prompt: "What is the difference between Packaging Lab and Formulation Lab?" },
+      { label: "Packaging Lab tools", prompt: "Which Packaging Lab tools are available now for packaging work?" },
     ],
   },
   {
@@ -150,7 +150,7 @@ const contexts: PromptContext[] = [
     match: (p) => p === "/about" || p.startsWith("/about/"),
     prompts: [
       { label: "Desire Lab journey", prompt: "How did Desire Lab evolve from AI Hub 2.0?" },
-      { label: "Pack Lab structure", prompt: "How is Pack Lab organised today?" },
+      { label: "Packaging Lab structure", prompt: "How is Packaging Lab organised today?" },
       { label: "Available tools", prompt: "What tools are currently available in Desire Lab?" },
     ],
   },
@@ -158,17 +158,17 @@ const contexts: PromptContext[] = [
     id: "home",
     match: (p) => p === "/",
     prompts: [
-      { label: "Choose a lab", prompt: "Should I use Pack Lab or Formulation Lab for my work?" },
-      { label: "Pack Lab overview", prompt: "Give me an overview of Pack Lab sections and tools." },
+      { label: "Choose a lab", prompt: "Should I use Packaging Lab or Formulation Lab for my work?" },
+      { label: "Packaging Lab overview", prompt: "Give me an overview of Packaging Lab sections and tools." },
       { label: "Request training", prompt: "How do I request training for a Desire Lab tool?" },
     ],
   },
 ];
 
 const defaultPrompts: ChatPrompt[] = [
-  { label: "Pack Lab tools", prompt: "What tools are available in Pack Lab?" },
+  { label: "Packaging Lab tools", prompt: "What tools are available in Packaging Lab?" },
   { label: "Find a tool", prompt: "Help me find the right tool for packaging consumer insight." },
-  { label: "Training request", prompt: "How do I book a training session for a tool?" },
+      { label: "Training slots", prompt: "How do I look for available training slots?" },
 ];
 
 export function getChatPromptsForPath(pathname: string): ChatPrompt[] {
@@ -190,13 +190,13 @@ export function getChatWelcomeForPath(pathname: string): string {
     return "Hi! I can help you navigate the packaging project workflow and recommend tools for each stage.";
   }
   if (normalized.startsWith("/labs/pack-lab")) {
-    return "Hi! Ask me about Pack Lab tools, sections, or how to start a new packaging project.";
+    return "Hi! Ask me about Packaging Lab tools, stages, or how to create a new workflow.";
   }
   if (normalized.startsWith("/labs/formulation-lab")) {
-    return "Hi! Formulation Lab is coming soon — I can still help with Pack Lab tools and the Desire Lab catalog.";
+    return "Hi! Formulation Lab is coming soon — I can still help with Packaging Lab tools and the Desire Lab catalog.";
   }
   if (normalized === "/about") {
     return "Hi! Ask me about Desire Lab's journey from AI Hub 2.0 or the current lab structure.";
   }
-  return "Hi! I'm the Desire Lab assistant. Ask me about tools in Pack Lab or Formulation Lab — I'll cite the relevant tool pages.";
+  return "Hi! I'm the Desire Lab assistant. Ask me about tools in Packaging Lab or Formulation Lab — I'll cite the relevant tool pages.";
 }

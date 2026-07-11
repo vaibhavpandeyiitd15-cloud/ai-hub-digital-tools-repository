@@ -19,7 +19,7 @@ type DesireLabHeroProps = {
 export function DesireLabHero({
   eyebrow,
   title = "Desire Lab",
-  subtitle = "Pack Lab and Formulation Lab innovation tools — organised by section and capability.",
+  subtitle = "Packaging Lab and Formulation Lab innovation tools — organised by stage and capability.",
   compact = false,
   largeTitle = false,
   topAction,

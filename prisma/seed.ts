@@ -4,49 +4,49 @@ import { createPgAdapter } from "../src/lib/pg-adapter";
 
 const categories = [
   {
-    name: "Pack Lab — Insight",
+    name: "Packaging Lab — Insight",
     slug: "pack-insight",
     description: "Consumer and packaging intelligence",
     lab: "PACK" as const,
     sortOrder: 1,
   },
   {
-    name: "Pack Lab — Screening",
+    name: "Packaging Lab — Screening",
     slug: "pack-screening",
     description: "Rapid packaging screening and evaluation",
     lab: "PACK" as const,
     sortOrder: 2,
   },
   {
-    name: "Pack Lab — Prototyping",
+    name: "Packaging Lab — Prototyping",
     slug: "pack-prototyping",
     description: "3D prototyping and model generation",
     lab: "PACK" as const,
     sortOrder: 3,
   },
   {
-    name: "Pack Lab — Simulation",
+    name: "Packaging Lab — Simulation",
     slug: "pack-simulation",
     description: "Structural and performance simulation",
     lab: "PACK" as const,
     sortOrder: 4,
   },
   {
-    name: "Pack Lab — Data capture",
+    name: "Packaging Lab — Data capture",
     slug: "pack-data-capture",
     description: "Electronic lab records and sample management",
     lab: "PACK" as const,
     sortOrder: 5,
   },
   {
-    name: "Pack Lab — Specifications",
+    name: "Packaging Lab — Specifications",
     slug: "pack-specifications",
     description: "Packaging specification authoring in Active Workspace",
     lab: "PACK" as const,
     sortOrder: 6,
   },
   {
-    name: "Pack Lab — Workflow & dashboard",
+    name: "Packaging Lab — Workflow & dashboard",
     slug: "pack-workflow-dashboard",
     description: "Packaging project management workflow",
     lab: "PACK" as const,
@@ -143,7 +143,7 @@ async function main() {
 
   await prisma.$disconnect();
   console.log(
-    `Seed complete: ${categories.length} categories, ${tools.length} tools (Pack Lab)`,
+    `Seed complete: ${categories.length} categories, ${tools.length} tools (Packaging Lab)`,
   );
 }
 

@@ -23,11 +23,11 @@ export function PackLabFloatingProjectButton() {
         "fixed top-20 right-4 z-50 flex items-center gap-2 rounded-full bg-u-coral px-4 py-3 text-sm font-semibold text-white shadow-lg transition",
         "hover:scale-105 hover:bg-u-coral/90 hover:shadow-xl sm:right-6",
       )}
-      aria-label="Start a new packaging project"
+      aria-label="Create a new workflow"
     >
       <Plus className="h-5 w-5 shrink-0" />
-      <span className="hidden sm:inline">Start a new project</span>
-      <span className="sm:hidden">New project</span>
+      <span className="hidden sm:inline">Create a new workflow</span>
+      <span className="sm:hidden">New workflow</span>
     </Link>
   );
 }

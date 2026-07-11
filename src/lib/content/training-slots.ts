@@ -18,18 +18,31 @@ const OFFERED_WEEKDAYS = [1, 2, 3, 4, 5];
 
 const WEEKS_AHEAD = 4;
 
+/** Training slots open from 1 August 2026 */
+const TRAINING_SLOTS_START = new Date(2026, 7, 1);
+
 function formatDateKey(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function buildSlotId(date: string, time: string): string {
   return `${date}T${time}`;
 }
 
+export function getTrainingSlotsAnchorDate(fromDate = new Date()): Date {
+  const anchor = new Date(TRAINING_SLOTS_START);
+  anchor.setHours(0, 0, 0, 0);
+  const today = new Date(fromDate);
+  today.setHours(0, 0, 0, 0);
+  return today > anchor ? today : anchor;
+}
+
 export function generateTrainingSlots(fromDate = new Date()): TrainingSlot[] {
   const slots: TrainingSlot[] = [];
-  const start = new Date(fromDate);
-  start.setHours(0, 0, 0, 0);
+  const start = getTrainingSlotsAnchorDate(fromDate);
 
   const end = new Date(start);
   end.setDate(end.getDate() + WEEKS_AHEAD * 7);

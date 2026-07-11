@@ -1,5 +1,13 @@
 import type { PackSectionSlug } from "@/lib/content/desire-lab";
 
+const SHAREPOINT_TRAINING_BASE =
+  process.env.NEXT_PUBLIC_SHAREPOINT_TRAINING_BASE?.trim() ||
+  "https://unilever.sharepoint.com/sites/DesireLab-PackagingLab/Shared%20Documents/Training";
+
+export function getTrainingMaterialsUrl(toolSlug: string): string {
+  return `${SHAREPOINT_TRAINING_BASE}/${toolSlug}`;
+}
+
 export type PackLabToolDefinition = {
   slug: string;
   sectionSlug: PackSectionSlug;
@@ -8,6 +16,7 @@ export type PackLabToolDefinition = {
   description: string;
   tags: string[];
   toolUrl?: string;
+  trainingMaterialsUrl?: string;
   pocName?: string;
   pocEmail?: string;
 };
@@ -97,7 +106,7 @@ export const packLabToolDefinitions: PackLabToolDefinition[] = [
     name: "Packaging project management workflow",
     purpose: "End-to-end packaging project tracking, milestones, and team dashboards",
     description:
-      "The Packaging project management workflow coordinates Pack Lab projects from brief through insight, screening, prototyping, simulation, and handoff. Teams track milestones, link tools and deliverables, monitor progress on shared dashboards, and manage handoffs to scale-up — giving packaging innovation leads a single view of active projects across Mumbai and Bangalore hubs.",
+      "The Packaging project management workflow coordinates Packaging Lab projects from brief through insight, screening, prototyping, simulation, and handoff. Teams track milestones, link tools and deliverables, monitor progress on shared dashboards, and manage handoffs to scale-up — giving packaging innovation leads a single view of active projects across Mumbai and Bangalore hubs.",
     tags: ["workflow", "dashboard", "project-management", "packaging"],
   },
 ];
@@ -118,7 +127,12 @@ export function getPackLabToolSlugsForSection(sectionSlug: PackSectionSlug): str
 }
 
 export function getPackLabToolDefinition(slug: string): PackLabToolDefinition | undefined {
-  return toolBySlug.get(slug);
+  const tool = toolBySlug.get(slug);
+  if (!tool) return undefined;
+  return {
+    ...tool,
+    trainingMaterialsUrl: tool.trainingMaterialsUrl ?? getTrainingMaterialsUrl(slug),
+  };
 }
 
 export function getPackLabToolPath(sectionSlug: PackSectionSlug, toolSlug: string): string {

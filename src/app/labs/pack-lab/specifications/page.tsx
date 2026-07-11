@@ -4,6 +4,7 @@ import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import {
   breadcrumbs,
+  PACKAGING_LAB_NAME,
   SITE_NAME,
 } from "@/lib/content/desire-lab";
 import {
@@ -12,7 +13,7 @@ import {
 } from "@/lib/content/pack-specifications";
 
 export const metadata = {
-  title: `Specifications | Pack Lab | ${SITE_NAME}`,
+  title: `Specifications | ${PACKAGING_LAB_NAME} | ${SITE_NAME}`,
 };
 
 export default function PackSpecificationsPage() {
@@ -21,12 +22,12 @@ export default function PackSpecificationsPage() {
 
   return (
     <div>
-      <DesireLabHero eyebrow="Pack Lab" title={title} subtitle={description} />
+      <DesireLabHero eyebrow={PACKAGING_LAB_NAME} title={title} subtitle={description} />
 
       <section className="mx-auto max-w-7xl px-6 py-12">
         <LabBreadcrumbs
           items={breadcrumbs(
-            { label: "Pack Lab", href: "/labs/pack-lab" },
+            { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
             { label: title },
           )}
         />

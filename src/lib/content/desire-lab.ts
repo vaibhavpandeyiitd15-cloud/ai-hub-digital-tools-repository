@@ -1,5 +1,8 @@
 export const SITE_NAME = "Desire Lab";
 
+/** User-facing name for the packaging innovation lab */
+export const PACKAGING_LAB_NAME = "Packaging Lab";
+
 /** Shown in metadata and assistant context — both India hubs */
 export const SITE_REGION = "Mumbai and Bangalore";
 
@@ -36,7 +39,7 @@ export const PACK_LAB_WORKFLOW_HREF = "/labs/pack-lab/workflow";
 export const labBranches: LabBranch[] = [
   {
     slug: "pack-lab",
-    name: "Pack Lab",
+    name: PACKAGING_LAB_NAME,
     description:
       "Packaging innovation — from consumer insight and screening through prototyping, simulation, and project workflow.",
     available: true,
@@ -136,7 +139,7 @@ export function getLabPathForToolSlug(toolSlug: string): string {
   return `/tools/${toolSlug}`;
 }
 
-/** Sections shown on the Pack Lab hub (workflow is via Start a new project) */
-export const packLabBrowseSections = packSections.filter(
+/** Stages shown on the Packaging Lab hub (workflow is via Create a new workflow) */
+export const packLabBrowseStages = packSections.filter(
   (section) => section.slug !== "workflow-dashboard",
 );

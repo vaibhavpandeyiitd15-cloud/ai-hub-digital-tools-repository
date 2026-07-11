@@ -2,7 +2,7 @@ import { HubCardGrid } from "@/components/labs/HubCardGrid";
 import { LabBreadcrumbs } from "@/components/labs/LabBreadcrumbs";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { breadcrumbs, SITE_NAME } from "@/lib/content/desire-lab";
+import { breadcrumbs, PACKAGING_LAB_NAME, SITE_NAME } from "@/lib/content/desire-lab";
 
 export const metadata = {
   title: `Formulation Lab | ${SITE_NAME}`,
@@ -25,7 +25,7 @@ export default function FormulationLabPage() {
             Coming soon
           </h2>
           <p className="mt-2 text-[var(--text-secondary)]">
-            Formulation Lab sections and tools are being prepared. Pack Lab is available now.
+            Formulation Lab sections and tools are being prepared. {PACKAGING_LAB_NAME} is available now.
           </p>
         </ScrollReveal>
 

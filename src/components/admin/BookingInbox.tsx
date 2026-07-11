@@ -1,12 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { useActionState } from "react";
-import type { Booking, BookingStatus } from "@prisma/client";
+import type { BookingStatus } from "@prisma/client";
 import { updateBookingStatusAction } from "@/lib/actions/bookings";
-
-type BookingRow = Booking & {
-  tool: { id: string; name: string; slug: string; pocName: string };
-};
+import type { CollatedBookingSlot } from "@/lib/admin-data";
 
 const statusLabels: Record<BookingStatus, string> = {
   PENDING: "Pending",
@@ -60,7 +58,122 @@ function BookingStatusForm({
   );
 }
 
-export function BookingInbox({ bookings }: { bookings: BookingRow[] }) {
+export function BookingSlotCollatedView({ slots }: { slots: CollatedBookingSlot[] }) {
+  const [openKey, setOpenKey] = useState<string | null>(null);
+
+  if (slots.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-[var(--border)] bg-white px-6 py-12 text-center">
+        <p className="text-[var(--text-secondary)]">No training slot requests yet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {slots.map((slot) => {
+        const isOpen = openKey === slot.key;
+        const slotLabel = `${slot.preferredDate.toLocaleDateString("en-GB", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })} · ${slot.preferredTime} · ${slot.durationMinutes} min`;
+
+        return (
+          <div
+            key={slot.key}
+            className="overflow-hidden rounded-xl border border-[var(--border)] bg-white"
+          >
+            <button
+              type="button"
+              onClick={() => setOpenKey(isOpen ? null : slot.key)}
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left hover:bg-surface/50"
+              aria-expanded={isOpen}
+            >
+              <div>
+                <p className="font-medium text-brand">{slot.toolName}</p>
+                <p className="text-sm text-[var(--text-secondary)]">{slotLabel}</p>
+                <p className="text-xs text-[var(--text-secondary)]">POC: {slot.pocName}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-brand">{slot.requestCount}</p>
+                <p className="text-xs text-[var(--text-secondary)]">
+                  request{slot.requestCount === 1 ? "" : "s"}
+                  {slot.pendingCount > 0 ? ` · ${slot.pendingCount} pending` : ""}
+                </p>
+              </div>
+            </button>
+
+            {isOpen ? (
+              <div className="border-t border-[var(--border)] bg-surface/30">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[720px] text-left text-sm">
+                    <thead className="border-b border-[var(--border)] text-xs uppercase tracking-wide text-[var(--text-secondary)]">
+                      <tr>
+                        <th className="px-4 py-3 font-semibold">Requested</th>
+                        <th className="px-4 py-3 font-semibold">Requester</th>
+                        <th className="px-4 py-3 font-semibold">Subject</th>
+                        <th className="px-4 py-3 font-semibold">Status</th>
+                        <th className="px-4 py-3 font-semibold">Update</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[var(--border)]">
+                      {slot.bookings.map((booking) => (
+                        <tr key={booking.id} className="bg-white">
+                          <td className="px-4 py-3 text-[var(--text-secondary)]">
+                            {booking.createdAt.toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </td>
+                          <td className="px-4 py-3">
+                            <p>{booking.requesterName}</p>
+                            <a
+                              href={`mailto:${booking.requesterEmail}`}
+                              className="text-xs text-brand hover:underline"
+                            >
+                              {booking.requesterEmail}
+                            </a>
+                          </td>
+                          <td className="px-4 py-3 text-[var(--text-secondary)]">
+                            <p>{booking.subject}</p>
+                            {booking.message ? (
+                              <p className="mt-1 max-w-xs truncate text-xs" title={booking.message}>
+                                {booking.message}
+                              </p>
+                            ) : null}
+                          </td>
+                          <td className="px-4 py-3">
+                            <StatusBadge status={booking.status} />
+                          </td>
+                          <td className="px-4 py-3">
+                            <BookingStatusForm
+                              bookingId={booking.id}
+                              currentStatus={booking.status}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Flat list view for individual booking rows */
+export function BookingInbox({
+  bookings,
+}: {
+  bookings: CollatedBookingSlot["bookings"];
+}) {
   if (bookings.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-[var(--border)] bg-white px-6 py-12 text-center">
@@ -109,22 +222,14 @@ export function BookingInbox({ bookings }: { bookings: BookingRow[] }) {
                   </a>
                 </td>
                 <td className="px-4 py-3 text-[var(--text-secondary)]">
-                  {booking.preferredDate.toLocaleDateString("en-GB")} ·{" "}
-                  {booking.preferredTime} · {booking.durationMinutes} min
-                  {booking.message && (
-                    <p className="mt-1 max-w-xs truncate text-xs" title={booking.message}>
-                      {booking.message}
-                    </p>
-                  )}
+                  {booking.preferredDate.toLocaleDateString("en-GB")} · {booking.preferredTime} ·{" "}
+                  {booking.durationMinutes} min
                 </td>
                 <td className="px-4 py-3">
                   <StatusBadge status={booking.status} />
                 </td>
                 <td className="px-4 py-3">
-                  <BookingStatusForm
-                    bookingId={booking.id}
-                    currentStatus={booking.status}
-                  />
+                  <BookingStatusForm bookingId={booking.id} currentStatus={booking.status} />
                 </td>
               </tr>
             ))}

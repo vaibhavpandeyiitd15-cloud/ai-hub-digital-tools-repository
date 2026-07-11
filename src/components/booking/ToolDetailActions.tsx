@@ -1,15 +1,13 @@
 "use client";
 
-import { Calendar, MessageCircle } from "lucide-react";
-import { useBooking, type BookingTool } from "@/components/booking/BookingProvider";
+import { ExternalLink, MessageCircle } from "lucide-react";
 import { useChat } from "@/components/chat/ChatProvider";
 
 export function ToolDetailActions({
   tool,
 }: {
-  tool: BookingTool & { toolUrl: string; hasToolUrl: boolean; name: string };
+  tool: { toolUrl: string; hasToolUrl: boolean; name: string; trainingMaterialsUrl: string };
 }) {
-  const { openBooking } = useBooking();
   const { openChat } = useChat();
 
   return (
@@ -28,14 +26,15 @@ export function ToolDetailActions({
           Tool link coming soon
         </span>
       )}
-      <button
-        type="button"
-        onClick={() => openBooking(tool)}
+      <a
+        href={tool.trainingMaterialsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="btn-outline inline-flex items-center justify-center gap-2"
       >
-        <Calendar className="h-4 w-4" />
-        Request a training
-      </button>
+        <ExternalLink className="h-4 w-4" />
+        Training material
+      </a>
       <button
         type="button"
         onClick={() => openChat(`What is ${tool.name} and when should I use it?`)}

@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { PublicPageShell } from "@/components/layout/PublicPageShell";
 import { getActiveTools } from "@/lib/tools";
-import { SITE_REGION } from "@/lib/content/desire-lab";
+import { PACKAGING_LAB_NAME, SITE_REGION } from "@/lib/content/desire-lab";
 import "./globals.css";
 
 const barlow = Barlow({
@@ -27,7 +27,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Desire Lab | Unilever",
   description:
-    `Desire Lab — Pack Lab and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
+    `Desire Lab — ${PACKAGING_LAB_NAME} and Formulation Lab innovation tools for Unilever teams in ${SITE_REGION}.`,
 };
 
 export default async function RootLayout({

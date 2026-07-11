@@ -131,10 +131,10 @@ export function BookingModal({
             </div>
             <div>
               <h2 id="booking-title" className="font-[family-name:var(--font-barlow)] text-lg font-semibold">
-                Request a training session
+                Look for training slots
               </h2>
               <p className="text-xs text-white/80">
-                Choose a predefined slot that suits your availability
+                Choose an available slot from August onwards
               </p>
             </div>
           </div>
@@ -178,8 +178,8 @@ export function BookingModal({
                   Available training slots
                 </label>
                 <p className="mb-4 text-xs text-[var(--text-secondary)]">
-                  Select one date and time. Slots are offered on weekdays over the
-                  next four weeks.
+                  Select one date and time. Slots run on weekdays from August over the next
+                  four weeks.
                 </p>
 
                 <div className="max-h-[420px] space-y-4 overflow-y-auto pr-1">
