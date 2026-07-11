@@ -55,3 +55,14 @@ export const PACKAGING_LAB_BG_IMAGE = "/assets/packaging-lab-bg.jpg";
 
 /** Light scrim — lower opacity = more visible lab photo */
 export const PACKAGING_LAB_BG_OVERLAY_CLASS = "bg-white/50";
+
+/** Phase surfaces: 25% transparency (75% opacity) */
+export const PACK_PHASE_SURFACE_ALPHA = 0.75;
+
+export function hexToRgba(hex: string, alpha: number): string {
+  const normalized = hex.replace("#", "");
+  const r = parseInt(normalized.slice(0, 2), 16);
+  const g = parseInt(normalized.slice(2, 4), 16);
+  const b = parseInt(normalized.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
