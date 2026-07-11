@@ -39,11 +39,18 @@ const categories = [
     sortOrder: 5,
   },
   {
+    name: "Pack Lab — Specifications",
+    slug: "pack-specifications",
+    description: "Packaging specification authoring in Active Workspace",
+    lab: "PACK" as const,
+    sortOrder: 6,
+  },
+  {
     name: "Pack Lab — Workflow & dashboard",
     slug: "pack-workflow-dashboard",
     description: "Packaging project management workflow",
     lab: "PACK" as const,
-    sortOrder: 6,
+    sortOrder: 7,
   },
 ] as const;
 
@@ -53,6 +60,7 @@ const categorySlugBySection = {
   prototyping: "pack-prototyping",
   simulation: "pack-simulation",
   "data-capture": "pack-data-capture",
+  specifications: "pack-specifications",
   "workflow-dashboard": "pack-workflow-dashboard",
 } as const;
 

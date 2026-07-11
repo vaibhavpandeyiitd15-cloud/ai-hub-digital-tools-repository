@@ -11,6 +11,7 @@ export type PackSectionSlug =
   | "prototyping"
   | "simulation"
   | "data-capture"
+  | "specifications"
   | "workflow-dashboard";
 
 export type LabBranch = {
@@ -90,6 +91,13 @@ export const packSections: SectionCard[] = [
     href: "/labs/pack-lab/data-capture",
     categorySlugs: ["pack-data-capture"],
     toolSlugs: ["eln", "lims"],
+  },
+  {
+    slug: "specifications",
+    name: "Specifications",
+    description: "Access Active Workspace to write your packaging specification.",
+    href: "/labs/pack-lab/specifications",
+    categorySlugs: ["pack-specifications"],
   },
   {
     slug: "workflow-dashboard",

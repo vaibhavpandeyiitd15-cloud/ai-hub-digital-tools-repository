@@ -1,6 +1,7 @@
 import { db, hasDatabase } from "@/lib/db";
-import { getLabPathForToolSlug } from "@/lib/content/desire-lab";
+import { getLabPathForToolSlug, packSections } from "@/lib/content/desire-lab";
 import { packLabToolDefinitions } from "@/lib/content/pack-lab-tools";
+import { packSpecificationsContent } from "@/lib/content/pack-specifications";
 import { createEmbedding, isEmbeddingConfigured } from "@/lib/llm";
 
 export type ToolCitation = {
@@ -53,11 +54,13 @@ function keywordScore(text: string, query: string): number {
 }
 
 function toolCatalogPath(slug: string): string {
+  const section = packSections.find((s) => s.slug === slug);
+  if (section) return section.href;
   return getLabPathForToolSlug(slug);
 }
 
 function buildStaticPackLabChunks(): ToolChunk[] {
-  return packLabToolDefinitions.map((tool) => ({
+  const toolChunks = packLabToolDefinitions.map((tool) => ({
     toolId: tool.slug,
     slug: tool.slug,
     name: tool.name,
@@ -73,6 +76,35 @@ function buildStaticPackLabChunks(): ToolChunk[] {
       `POC: ${tool.pocName ?? "TBD"} (${tool.pocEmail ?? "desirelab@unilever.com"})`,
     ].join("\n"),
   }));
+
+  const sectionChunks = packSections
+    .filter((section) => !section.toolSlugs?.length)
+    .map((section) => {
+      const isSpecifications = section.slug === "specifications";
+      return {
+        toolId: section.slug,
+        slug: section.slug,
+        name: section.name,
+        pocName: "Desire Lab",
+        pocEmail: "desirelab@unilever.com",
+        text: [
+          `Pack Lab section: ${section.name}`,
+          `Catalog path: ${section.href}`,
+          `Description: ${section.description}`,
+          isSpecifications
+            ? `Purpose: ${packSpecificationsContent.message} Active Workspace is the PLM system for packaging specification authoring.`
+            : `Purpose: ${section.description}`,
+          isSpecifications
+            ? "How to access: Open /labs/pack-lab/specifications and click Go to Active Workspace."
+            : "",
+          "Tags: pack lab, section, specifications, active workspace",
+        ]
+          .filter(Boolean)
+          .join("\n"),
+      };
+    });
+
+  return [...toolChunks, ...sectionChunks];
 }
 
 function buildChunkText(tool: {
@@ -220,7 +252,26 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
     return "I don't have any tool information loaded yet. Please browse the catalog or contact the AI Hub team.";
   }
 
+  const normalizedQuery = query.toLowerCase();
+  const isSpecificationsQuery =
+    normalizedQuery.includes("specification") ||
+    normalizedQuery.includes("active workspace") ||
+    normalizedQuery.includes("activeworkspace");
+
+  if (isSpecificationsQuery) {
+    return [
+      "The **Specifications** section in Pack Lab is for writing packaging specifications in **Active Workspace**.",
+      "",
+      "1. Open /labs/pack-lab/specifications",
+      "2. Click **Go to Active Workspace** to launch Active Workspace in a new tab",
+      "",
+      "Active Workspace is Unilever's PLM environment for packaging specification authoring.",
+      "Contact desirelab@unilever.com if you need access.",
+    ].join("\n");
+  }
+
   const primary = chunks[0]!;
   const path = toolCatalogPath(primary.slug);
-  return `Based on the Desire Lab catalog, **${primary.name}** may be relevant to your question.\n\n${primary.text.split("\n").slice(2, 5).join("\n")}\n\nView full details at ${path}. For more help, contact ${primary.pocName} (${primary.pocEmail}).\n\n*(LLM not configured — showing catalog search results. Set GROQ_API_KEY or Azure OpenAI vars for AI answers.)*`;
+  const details = primary.text.split("\n").slice(2, 5).join("\n");
+  return `Based on the Desire Lab catalog, **${primary.name}** may be relevant to your question.\n\n${details}\n\nView full details at ${path}. For more help, contact ${primary.pocName} (${primary.pocEmail}).`;
 }

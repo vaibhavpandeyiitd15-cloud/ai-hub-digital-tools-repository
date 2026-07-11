@@ -121,90 +121,110 @@ export function ChatWidget() {
       .map((m) => ({ role: m.role, content: m.content }));
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "text/event-stream",
-        },
-        body: JSON.stringify({ message: trimmed, history }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Request failed");
-      }
-
-      const contentType = response.headers.get("content-type") ?? "";
-
-      if (contentType.includes("text/event-stream") && response.body) {
-        const assistantId = `assistant-${Date.now()}`;
-        setMessages((prev) => [
-          ...prev,
-          { id: assistantId, role: "assistant", content: "", citations: [] },
-        ]);
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = "";
-        let citations: Citation[] = [];
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const { events, rest } = parseSseEvents(buffer);
-          buffer = rest;
-
-          for (const evt of events) {
-            if (evt.event === "citations") {
-              citations = JSON.parse(evt.data) as Citation[];
-            } else if (evt.event === "token") {
-              const { content } = JSON.parse(evt.data) as { content: string };
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, content: m.content + content } : m,
-                ),
-              );
-            } else if (evt.event === "error") {
-              const { message } = JSON.parse(evt.data) as { message: string };
-              setError(message);
-            }
-          }
-        }
-
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId
-              ? {
-                  ...m,
-                  citations: citations.map((c) => ({ name: c.name, path: c.path })),
-                }
-              : m,
-          ),
-        );
-      } else {
-        const json = (await response.json()) as {
-          answer: string;
-          citations?: Citation[];
-          notice?: string;
-        };
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `assistant-${Date.now()}`,
-            role: "assistant",
-            content: json.answer,
-            citations: json.citations?.map((c) => ({ name: c.name, path: c.path })),
-          },
-        ]);
-        if (json.notice) {
-          setError(`Using catalog search mode (${json.notice})`);
-        }
-      }
+      await requestChat(trimmed, history, true);
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function requestChat(
+    trimmed: string,
+    history: Array<{ role: "user" | "assistant"; content: string }>,
+    preferStream: boolean,
+  ) {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(preferStream ? { Accept: "text/event-stream" } : {}),
+      },
+      body: JSON.stringify({ message: trimmed, history }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+
+    const contentType = response.headers.get("content-type") ?? "";
+
+    if (contentType.includes("text/event-stream") && response.body) {
+      const assistantId = `assistant-${Date.now()}`;
+      setMessages((prev) => [
+        ...prev,
+        { id: assistantId, role: "assistant", content: "", citations: [] },
+      ]);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let citations: Citation[] = [];
+      let streamError: string | null = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const { events, rest } = parseSseEvents(buffer);
+        buffer = rest;
+
+        for (const evt of events) {
+          if (evt.event === "citations") {
+            citations = JSON.parse(evt.data) as Citation[];
+          } else if (evt.event === "token") {
+            const { content } = JSON.parse(evt.data) as { content: string };
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === assistantId ? { ...m, content: m.content + content } : m,
+              ),
+            );
+          } else if (evt.event === "error") {
+            const { message } = JSON.parse(evt.data) as { message: string };
+            streamError = message;
+          }
+        }
+      }
+
+      if (streamError) {
+        setMessages((prev) => prev.filter((m) => m.id !== assistantId));
+        if (preferStream) {
+          await requestChat(trimmed, history, false);
+          return;
+        }
+        throw new Error(streamError);
+      }
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId
+            ? {
+                ...m,
+                citations: citations.map((c) => ({ name: c.name, path: c.path })),
+              }
+            : m,
+        ),
+      );
+      return;
+    }
+
+    const json = (await response.json()) as {
+      answer: string;
+      citations?: Citation[];
+      notice?: string;
+      mode?: string;
+    };
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: json.answer,
+        citations: json.citations?.map((c) => ({ name: c.name, path: c.path })),
+      },
+    ]);
+    if (json.mode === "fallback" && json.notice) {
+      setError(json.notice);
     }
   }
 

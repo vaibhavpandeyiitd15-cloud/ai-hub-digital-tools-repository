@@ -106,34 +106,38 @@ export async function POST(request: Request) {
     const wantsStream = accept.includes("text/event-stream");
 
     if (wantsStream) {
-      const llmStream = await streamChatCompletion(messages);
-      const encoder = new TextEncoder();
-      const stream = new ReadableStream({
-        async start(controller) {
-          try {
-            await pipeOpenAIStream(llmStream, citations, controller, encoder);
-            controller.close();
-          } catch (error) {
-            console.error("Chat stream error:", error);
-            controller.enqueue(
-              encoder.encode(
-                sseEvent("error", {
-                  message: "Failed to generate response. Please try again.",
-                }),
-              ),
-            );
-            controller.close();
-          }
-        },
-      });
+      try {
+        const llmStream = await streamChatCompletion(messages);
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+          async start(controller) {
+            try {
+              await pipeOpenAIStream(llmStream, citations, controller, encoder);
+              controller.close();
+            } catch (error) {
+              console.error("Chat stream error:", error);
+              controller.enqueue(
+                encoder.encode(
+                  sseEvent("error", {
+                    message: "Failed to generate response. Please try again.",
+                  }),
+                ),
+              );
+              controller.close();
+            }
+          },
+        });
 
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/event-stream",
-          "Cache-Control": "no-cache, no-transform",
-          Connection: "keep-alive",
-        },
-      });
+        return new Response(stream, {
+          headers: {
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache, no-transform",
+            Connection: "keep-alive",
+          },
+        });
+      } catch (streamError) {
+        console.warn("Chat stream unavailable, retrying without stream:", streamError);
+      }
     }
 
     const answer = await createChatCompletion(messages);

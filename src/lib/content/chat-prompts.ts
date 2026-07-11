@@ -110,6 +110,15 @@ const contexts: PromptContext[] = [
     ],
   },
   {
+    id: "pack-lab-specifications",
+    match: (p) => p === "/labs/pack-lab/specifications" || p.startsWith("/labs/pack-lab/specifications/"),
+    prompts: [
+      { label: "Write a spec", prompt: "How do I access Active Workspace to write a packaging specification?" },
+      { label: "Specifications section", prompt: "What is the Pack Lab Specifications section for?" },
+      { label: "Active Workspace", prompt: "Where does the Specifications section redirect me?" },
+    ],
+  },
+  {
     id: "pack-lab-workflow",
     match: (p) => p === "/labs/pack-lab/workflow" || p.startsWith("/labs/pack-lab/workflow"),
     prompts: [
@@ -174,6 +183,9 @@ export function getChatPromptsForPath(pathname: string): ChatPrompt[] {
 
 export function getChatWelcomeForPath(pathname: string): string {
   const normalized = pathname.split("?")[0] ?? pathname;
+  if (normalized.startsWith("/labs/pack-lab/specifications")) {
+    return "Hi! I can help you access Active Workspace to write packaging specifications.";
+  }
   if (normalized.startsWith("/labs/pack-lab/workflow")) {
     return "Hi! I can help you navigate the packaging project workflow and recommend tools for each stage.";
   }

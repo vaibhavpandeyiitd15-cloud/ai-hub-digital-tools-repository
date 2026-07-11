@@ -30,6 +30,9 @@ export default async function PackSectionPage({ params }: PageProps) {
   if (section === "workflow-dashboard") {
     redirect("/labs/pack-lab/workflow");
   }
+  if (section === "specifications") {
+    redirect("/labs/pack-lab/specifications");
+  }
   const config = getPackSection(section);
   if (!config) notFound();
 
