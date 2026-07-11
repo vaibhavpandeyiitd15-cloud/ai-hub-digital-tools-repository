@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { StatusBadge } from "@/components/catalog/StatusBadge";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import type { ToolWithCategory } from "@/lib/tools";
+import { getToolUserCount } from "@/lib/content/tool-user-count";
 
 export function ToolCard({
   tool,
@@ -16,6 +17,7 @@ export function ToolCard({
   accentColor?: string;
 }) {
   const toolHref = href ?? `/tools/${tool.slug}`;
+  const userCount = getToolUserCount(tool.slug);
 
   return (
     <ScrollReveal delay={index * 80}>
@@ -68,10 +70,16 @@ export function ToolCard({
           </p>
 
           <div className="flex items-center justify-between border-t border-[var(--border)] pt-3 text-sm">
-            <span className="text-[var(--text-secondary)]">
-              POC:{" "}
-              <span className="font-medium text-[var(--text-primary)]">{tool.pocName}</span>
-            </span>
+            <div className="flex flex-col gap-1">
+              <span className="text-[var(--text-secondary)]">
+                POC:{" "}
+                <span className="font-medium text-[var(--text-primary)]">{tool.pocName}</span>
+              </span>
+              <span className="text-xs text-[var(--text-secondary)]">
+                No. of users:{" "}
+                <span className="font-semibold text-[var(--text-primary)]">{userCount}</span>
+              </span>
+            </div>
             <ArrowRight
               className={
                 accentColor

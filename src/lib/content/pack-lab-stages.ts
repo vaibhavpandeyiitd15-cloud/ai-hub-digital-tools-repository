@@ -54,7 +54,7 @@ export function getPhaseColorForSection(sectionSlug: string): string | undefined
 export const PACKAGING_LAB_BG_IMAGE = "/assets/packaging-lab-bg.jpg";
 
 /** Light scrim — lower opacity = more visible lab photo */
-export const PACKAGING_LAB_BG_OVERLAY_CLASS = "bg-white/50";
+export const PACKAGING_LAB_BG_OVERLAY_CLASS = "bg-white/35";
 
 /** Phase surfaces: 25% transparency (75% opacity) */
 export const PACK_PHASE_SURFACE_ALPHA = 0.75;

@@ -16,6 +16,7 @@ export function PackLabToolPageContent({ tool }: { tool: PackLabToolDetail }) {
       <div className="border-b border-brand/10 bg-gradient-to-r from-brand to-brand-light px-6 py-10 text-white">
         <div className="mx-auto max-w-7xl">
           <LabBreadcrumbs
+            variant="hero"
             items={breadcrumbs(
               { label: PACKAGING_LAB_NAME, href: "/labs/pack-lab" },
               { label: tool.sectionName, href: sectionHref },

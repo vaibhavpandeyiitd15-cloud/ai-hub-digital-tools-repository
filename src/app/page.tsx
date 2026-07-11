@@ -2,6 +2,7 @@ import { HubCardGrid } from "@/components/labs/HubCardGrid";
 import { DesireLabHero } from "@/components/home/DesireLabHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { labBranches, PACKAGING_LAB_NAME, SITE_NAME, SITE_REGION } from "@/lib/content/desire-lab";
+import { PACKAGING_LAB_BG_IMAGE, PACKAGING_LAB_BG_OVERLAY_CLASS } from "@/lib/content/pack-lab-stages";
 
 export const metadata = {
   title: `${SITE_NAME} | Unilever`,
@@ -18,7 +19,18 @@ export default function HomePage() {
         subtitle="Choose a lab to explore innovation tools."
       />
 
-      <section className="mx-auto max-w-7xl px-6 py-10 sm:py-14">
+      <section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${PACKAGING_LAB_BG_IMAGE})` }}
+          aria-hidden
+        />
+        <div
+          className={`pointer-events-none absolute inset-0 ${PACKAGING_LAB_BG_OVERLAY_CLASS}`}
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-7xl px-6 py-10 sm:py-14">
         <ScrollReveal>
           <p className="text-center text-sm font-medium uppercase tracking-widest text-u-mint">
             Every U does good
@@ -40,6 +52,7 @@ export default function HomePage() {
               badge: lab.available ? "Available" : undefined,
             }))}
           />
+        </div>
         </div>
       </section>
     </div>
