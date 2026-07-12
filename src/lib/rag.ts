@@ -1,7 +1,17 @@
 import { db, hasDatabase } from "@/lib/db";
-import { getLabPathForToolSlug, packSections } from "@/lib/content/desire-lab";
-import { packLabToolDefinitions } from "@/lib/content/pack-lab-tools";
+import {
+  getLabPathForToolSlug,
+  getPackSection,
+  PACKAGING_LAB_NAME,
+  PACK_LAB_WORKFLOW_HREF,
+  packSections,
+} from "@/lib/content/desire-lab";
+import {
+  getPackLabToolDefinition,
+  packLabToolDefinitions,
+} from "@/lib/content/pack-lab-tools";
 import { packSpecificationsContent } from "@/lib/content/pack-specifications";
+import { getPhaseSlugForSection, packStageGroups } from "@/lib/content/pack-lab-stages";
 import { createEmbedding, isEmbeddingConfigured } from "@/lib/llm";
 
 export type ToolCitation = {
@@ -29,6 +39,8 @@ type ChunkCache = {
 
 const CACHE_TTL_MS = 5 * 60 * 1000;
 let cache: ChunkCache | null = null;
+
+const PACK_TOOL_SLUGS = new Set(packLabToolDefinitions.map((tool) => tool.slug));
 
 function cosineSimilarity(a: number[], b: number[]): number {
   let dot = 0;
@@ -59,28 +71,103 @@ function toolCatalogPath(slug: string): string {
   return getLabPathForToolSlug(slug);
 }
 
-function buildStaticPackLabChunks(): ToolChunk[] {
-  const toolChunks = packLabToolDefinitions.map((tool) => ({
-    toolId: tool.slug,
-    slug: tool.slug,
-    name: tool.name,
-    pocName: tool.pocName ?? "TBD",
-    pocEmail: tool.pocEmail ?? "desirelab@unilever.com",
-    text: [
-      `Tool: ${tool.name}`,
-      `Catalog path: ${toolCatalogPath(tool.slug)}`,
-      `Section: ${tool.sectionSlug}`,
-      `Purpose: ${tool.purpose}`,
-      `Description: ${tool.description}`,
-      `Tags: ${tool.tags.join(", ")}`,
-      `POC: ${tool.pocName ?? "TBD"} (${tool.pocEmail ?? "desirelab@unilever.com"})`,
-    ].join("\n"),
-  }));
+function phaseLabelForSection(sectionSlug: string): string {
+  const phaseSlug = getPhaseSlugForSection(sectionSlug as Parameters<typeof getPhaseSlugForSection>[0]);
+  const phase = packStageGroups.find((group) => group.slug === phaseSlug);
+  return phase ? `Phase: ${phase.name}` : "";
+}
 
-  const sectionChunks = packSections
-    .filter((section) => !section.toolSlugs?.length)
+function buildPackagingLabOverviewChunk(): ToolChunk {
+  const phaseLines = packStageGroups.map((phase, index) => {
+    const stageDetails = phase.stageSlugs
+      .map((stageSlug) => {
+        const stage = getPackSection(stageSlug);
+        const toolNames = packLabToolDefinitions
+          .filter((tool) => tool.sectionSlug === stageSlug)
+          .map((tool) => tool.name)
+          .join(", ");
+        const toolsSuffix = toolNames ? ` — tools: ${toolNames}` : "";
+        return `${stage?.name} (${stage?.href})${toolsSuffix}`;
+      })
+      .join("; ");
+    return `Phase ${index + 1} ${phase.name}: ${stageDetails}`;
+  });
+
+  return {
+    toolId: "packaging-lab-overview",
+    slug: "packaging-lab",
+    name: PACKAGING_LAB_NAME,
+    pocName: "Desire Lab",
+    pocEmail: "desirelab@unilever.com",
+    text: [
+      `Lab: ${PACKAGING_LAB_NAME}`,
+      "Catalog path: /labs/pack-lab",
+      "Desire Lab organises packaging innovation into Packaging Lab (live) and Formulation Lab (coming soon).",
+      "Packaging Lab uses three phases, each with stages:",
+      ...phaseLines,
+      `Workflow: Create a new workflow at ${PACK_LAB_WORKFLOW_HREF}`,
+      "Do NOT refer users to legacy AI Hub tool paths (/tools/...) or Consumer/Science lab names — use Packaging Lab paths only.",
+    ].join("\n"),
+  };
+}
+
+function buildPackLabToolChunk(
+  staticTool: (typeof packLabToolDefinitions)[number],
+  dbTool?: {
+    name: string;
+    purpose: string;
+    description: string;
+    tags: string[];
+    pocName: string;
+    pocEmail: string;
+    pocTeam: string | null;
+    prerequisites: string | null;
+    category: { name: string };
+    trainingDocs: Array<{ title: string; type: string }>;
+  },
+): ToolChunk {
+  const section = getPackSection(staticTool.sectionSlug);
+  const phaseLine = phaseLabelForSection(staticTool.sectionSlug);
+  const catalogPath = getLabPathForToolSlug(staticTool.slug);
+
+  const lines = [
+    `Tool: ${dbTool?.name ?? staticTool.name}`,
+    `Lab: ${PACKAGING_LAB_NAME}`,
+    phaseLine,
+    `Stage: ${section?.name ?? staticTool.sectionSlug} (${staticTool.sectionSlug})`,
+    `Catalog path: ${catalogPath}`,
+    `Purpose: ${dbTool?.purpose ?? staticTool.purpose}`,
+    `Description: ${dbTool?.description ?? staticTool.description}`,
+    `Tags: ${(dbTool?.tags ?? staticTool.tags).join(", ")}`,
+    `POC: ${dbTool?.pocName ?? staticTool.pocName ?? "TBD"} (${dbTool?.pocEmail ?? staticTool.pocEmail ?? "desirelab@unilever.com"})`,
+  ];
+
+  if (dbTool?.pocTeam) lines.push(`POC team: ${dbTool.pocTeam}`);
+  if (dbTool?.prerequisites) lines.push(`Prerequisites: ${dbTool.prerequisites}`);
+  if (dbTool?.trainingDocs.length) {
+    lines.push(
+      `Training: look for training slots in the header; training material on SharePoint for this tool`,
+    );
+  }
+
+  return {
+    toolId: staticTool.slug,
+    slug: staticTool.slug,
+    name: dbTool?.name ?? staticTool.name,
+    pocName: dbTool?.pocName ?? staticTool.pocName ?? "TBD",
+    pocEmail: dbTool?.pocEmail ?? staticTool.pocEmail ?? "desirelab@unilever.com",
+    text: lines.join("\n"),
+  };
+}
+
+function buildStageChunks(): ToolChunk[] {
+  return packSections
+    .filter((section) => !section.toolSlugs?.length || section.slug === "specifications")
+    .filter((section) => section.slug !== "workflow-dashboard")
     .map((section) => {
       const isSpecifications = section.slug === "specifications";
+      const phaseLine = phaseLabelForSection(section.slug);
+
       return {
         toolId: section.slug,
         slug: section.slug,
@@ -88,55 +175,121 @@ function buildStaticPackLabChunks(): ToolChunk[] {
         pocName: "Desire Lab",
         pocEmail: "desirelab@unilever.com",
         text: [
-          `Packaging Lab stage: ${section.name}`,
+          `Lab: ${PACKAGING_LAB_NAME}`,
+          phaseLine,
+          `Stage: ${section.name}`,
           `Catalog path: ${section.href}`,
           `Description: ${section.description}`,
           isSpecifications
-            ? `Purpose: ${packSpecificationsContent.message} Active Workspace is the PLM system for packaging specification authoring.`
+            ? `Purpose: ${packSpecificationsContent.message} Use Active Workspace via /labs/pack-lab/specifications.`
             : `Purpose: ${section.description}`,
-          isSpecifications
-            ? "How to access: Open /labs/pack-lab/specifications and click Go to Active Workspace."
-            : "",
-          "Tags: pack lab, section, specifications, active workspace",
         ]
           .filter(Boolean)
           .join("\n"),
       };
     });
-
-  return [...toolChunks, ...sectionChunks];
 }
 
-function buildChunkText(tool: {
-  name: string;
-  slug: string;
-  purpose: string;
-  description: string;
-  tags: string[];
-  pocName: string;
-  pocEmail: string;
-  pocTeam: string | null;
-  prerequisites: string | null;
-  category: { name: string };
-  trainingDocs: Array<{ title: string; type: string }>;
-}): string {
-  const lines = [
-    `Tool: ${tool.name}`,
-    `Catalog path: ${toolCatalogPath(tool.slug)}`,
-    `Category: ${tool.category.name}`,
-    `Purpose: ${tool.purpose}`,
-    `Description: ${tool.description}`,
-    `Tags: ${tool.tags.join(", ") || "none"}`,
-    `POC: ${tool.pocName} (${tool.pocEmail})`,
+function buildWorkflowChunk(): ToolChunk {
+  const workflowTool = getPackLabToolDefinition("packaging-project-workflow");
+  return {
+    toolId: "packaging-workflow",
+    slug: "packaging-project-workflow",
+    name: "Packaging project workflow",
+    pocName: "Desire Lab",
+    pocEmail: "desirelab@unilever.com",
+    text: [
+      `Lab: ${PACKAGING_LAB_NAME}`,
+      "Feature: Create a new workflow",
+      `Catalog path: ${PACK_LAB_WORKFLOW_HREF}`,
+      `Purpose: ${workflowTool?.purpose ?? "End-to-end packaging project tracking"}`,
+      `Description: ${workflowTool?.description ?? "Project workflow across Explore, Validate, and Execute phases."}`,
+      "Use the Create a new workflow button on Packaging Lab pages to start a project.",
+    ].join("\n"),
+  };
+}
+
+function buildStaticPackLabChunks(): ToolChunk[] {
+  return [
+    buildPackagingLabOverviewChunk(),
+    ...packLabToolDefinitions.map((tool) => buildPackLabToolChunk(tool)),
+    ...buildStageChunks(),
+    buildWorkflowChunk(),
   ];
-  if (tool.pocTeam) lines.push(`POC team: ${tool.pocTeam}`);
-  if (tool.prerequisites) lines.push(`Prerequisites: ${tool.prerequisites}`);
-  if (tool.trainingDocs.length > 0) {
-    lines.push(
-      `Training resources: ${tool.trainingDocs.map((d) => `${d.title} (${d.type})`).join("; ")}`,
-    );
+}
+
+async function loadDbPackToolOverrides(): Promise<
+  Map<
+    string,
+    {
+      name: string;
+      purpose: string;
+      description: string;
+      tags: string[];
+      pocName: string;
+      pocEmail: string;
+      pocTeam: string | null;
+      prerequisites: string | null;
+      category: { name: string };
+      trainingDocs: Array<{ title: string; type: string }>;
+    }
+  >
+> {
+  const map = new Map<
+    string,
+    {
+      name: string;
+      purpose: string;
+      description: string;
+      tags: string[];
+      pocName: string;
+      pocEmail: string;
+      pocTeam: string | null;
+      prerequisites: string | null;
+      category: { name: string };
+      trainingDocs: Array<{ title: string; type: string }>;
+    }
+  >();
+
+  if (!hasDatabase()) return map;
+
+  try {
+    const tools = await db.tool.findMany({
+      where: {
+        status: { in: ["ACTIVE", "BETA"] },
+        slug: { in: [...PACK_TOOL_SLUGS] },
+        category: { lab: "PACK" },
+      },
+      include: {
+        category: true,
+        trainingDocs: true,
+      },
+    });
+
+    for (const tool of tools) {
+      if (!PACK_TOOL_SLUGS.has(tool.slug)) continue;
+      map.set(tool.slug, tool);
+    }
+  } catch (error) {
+    console.error("Failed to load pack lab tools for RAG:", error);
   }
-  return lines.join("\n");
+
+  return map;
+}
+
+function mergePackLabChunks(
+  dbOverrides: Awaited<ReturnType<typeof loadDbPackToolOverrides>>,
+): ToolChunk[] {
+  const toolChunks = packLabToolDefinitions.map((staticTool) =>
+    buildPackLabToolChunk(staticTool, dbOverrides.get(staticTool.slug)),
+  );
+
+  return [
+    buildPackagingLabOverviewChunk(),
+    ...toolChunks,
+    ...buildStageChunks(),
+    buildWorkflowChunk(),
+  ];
 }
 
 export async function getToolChunks(): Promise<ToolChunk[]> {
@@ -144,52 +297,24 @@ export async function getToolChunks(): Promise<ToolChunk[]> {
     return cache.chunks;
   }
 
-  if (!hasDatabase()) {
-    const chunks = buildStaticPackLabChunks();
-    cache = { chunks, builtAt: Date.now() };
-    return chunks;
-  }
+  const dbOverrides = await loadDbPackToolOverrides();
+  const chunks = mergePackLabChunks(dbOverrides);
 
-  try {
-    const tools = await db.tool.findMany({
-      where: { status: { in: ["ACTIVE", "BETA"] } },
-      include: {
-        category: true,
-        trainingDocs: true,
-      },
-      orderBy: { name: "asc" },
-    });
-
-    if (tools.length === 0) {
-      return buildStaticPackLabChunks();
-    }
-
-    const chunks: ToolChunk[] = tools.map((tool) => ({
-      toolId: tool.id,
-      slug: tool.slug,
-      name: tool.name,
-      pocName: tool.pocName,
-      pocEmail: tool.pocEmail,
-      text: buildChunkText(tool),
-    }));
-
-    if (isEmbeddingConfigured()) {
-      for (const chunk of chunks) {
+  if (isEmbeddingConfigured()) {
+    for (const chunk of chunks) {
+      try {
         const embedding = await createEmbedding(chunk.text);
         if (embedding.length > 0) {
           chunk.embedding = embedding;
         }
+      } catch (error) {
+        console.warn("Embedding failed for chunk:", chunk.slug, error);
       }
     }
-
-    cache = { chunks, builtAt: Date.now() };
-    return chunks;
-  } catch (error) {
-    console.error("Failed to load tool chunks from database:", error);
-    const chunks = buildStaticPackLabChunks();
-    cache = { chunks, builtAt: Date.now() };
-    return chunks;
   }
+
+  cache = { chunks, builtAt: Date.now() };
+  return chunks;
 }
 
 export function invalidateToolChunkCache() {
@@ -203,27 +328,50 @@ export async function retrieveRelevantChunks(
   const chunks = await getToolChunks();
   if (chunks.length === 0) return [];
 
+  const normalizedQuery = query.toLowerCase();
+  const wantsOverview =
+    normalizedQuery.includes("packaging lab") ||
+    normalizedQuery.includes("phase") ||
+    normalizedQuery.includes("stage") ||
+    normalizedQuery.includes("workflow") ||
+    normalizedQuery.includes("structure") ||
+    normalizedQuery.includes("all tools");
+
   if (isEmbeddingConfigured()) {
     const queryEmbedding = await createEmbedding(query);
     if (queryEmbedding.length > 0) {
-      return [...chunks]
+      const ranked = [...chunks]
         .map((chunk) => ({
           chunk,
           score: chunk.embedding
             ? cosineSimilarity(chunk.embedding, queryEmbedding)
             : keywordScore(chunk.text, query),
         }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, topK)
-        .map((item) => item.chunk);
+        .sort((a, b) => b.score - a.score);
+
+      if (wantsOverview && ranked[0]?.chunk.slug !== "packaging-lab") {
+        const overview = chunks.find((c) => c.slug === "packaging-lab");
+        if (overview) {
+          return [overview, ...ranked.slice(0, topK - 1).map((r) => r.chunk)];
+        }
+      }
+
+      return ranked.slice(0, topK).map((item) => item.chunk);
     }
   }
 
-  return [...chunks]
+  const ranked = [...chunks]
     .map((chunk) => ({ chunk, score: keywordScore(chunk.text, query) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, topK)
-    .map((item) => item.chunk);
+    .sort((a, b) => b.score - a.score);
+
+  if (wantsOverview) {
+    const overview = chunks.find((c) => c.slug === "packaging-lab");
+    if (overview) {
+      return [overview, ...ranked.slice(0, topK - 1).map((r) => r.chunk)];
+    }
+  }
+
+  return ranked.slice(0, topK).map((item) => item.chunk);
 }
 
 export function chunksToCitations(chunks: ToolChunk[]): ToolCitation[] {
@@ -249,7 +397,7 @@ export function buildContextBlock(chunks: ToolChunk[]): string {
 
 export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string {
   if (chunks.length === 0) {
-    return "I don't have any tool information loaded yet. Please browse the catalog or contact the AI Hub team.";
+    return "I don't have any tool information loaded yet. Please browse the Packaging Lab catalog at /labs/pack-lab or contact desirelab@unilever.com.";
   }
 
   const normalizedQuery = query.toLowerCase();
@@ -258,6 +406,28 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
     normalizedQuery.includes("active workspace") ||
     normalizedQuery.includes("activeworkspace");
 
+  const isStructureQuery =
+    normalizedQuery.includes("packaging lab") ||
+    normalizedQuery.includes("phase") ||
+    normalizedQuery.includes("stage") ||
+    normalizedQuery.includes("all tools") ||
+    normalizedQuery.includes("workflow");
+
+  if (isStructureQuery) {
+    const overview = chunks.find((c) => c.slug === "packaging-lab");
+    if (overview) {
+      return [
+        `**${PACKAGING_LAB_NAME}** is organised in three phases — **Explore**, **Validate**, and **Execute**:`,
+        "",
+        "- **Explore** — Insight (Convotrack, Vurvey), Screening (Boltchat, PactInstant AI)",
+        "- **Validate** — Prototyping (Kaedim), Simulation (3DX FEA Simulator)",
+        "- **Execute** — Data capture (ELN, LIMS), Specifications (Active Workspace)",
+        "",
+        "Browse phases at /labs/pack-lab. Create a new workflow at /labs/pack-lab/workflow.",
+      ].join("\n");
+    }
+  }
+
   if (isSpecificationsQuery) {
     return [
       "The **Specifications** stage in Packaging Lab is for writing packaging specifications in **Active Workspace**.",
@@ -265,13 +435,12 @@ export function buildFallbackAnswer(query: string, chunks: ToolChunk[]): string 
       "1. Open /labs/pack-lab/specifications",
       "2. Click **Go to Active Workspace** to launch Active Workspace in a new tab",
       "",
-      "Active Workspace is Unilever's PLM environment for packaging specification authoring.",
       "Contact desirelab@unilever.com if you need access.",
     ].join("\n");
   }
 
   const primary = chunks[0]!;
   const path = toolCatalogPath(primary.slug);
-  const details = primary.text.split("\n").slice(2, 5).join("\n");
+  const details = primary.text.split("\n").slice(2, 6).join("\n");
   return `Based on the Desire Lab catalog, **${primary.name}** may be relevant to your question.\n\n${details}\n\nView full details at ${path}. For more help, contact ${primary.pocName} (${primary.pocEmail}).`;
 }

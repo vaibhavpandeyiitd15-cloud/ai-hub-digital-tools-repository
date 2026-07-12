@@ -43,11 +43,13 @@ function parseSseEvents(buffer: string): { events: Array<{ event: string; data: 
 }
 
 function AssistantContent({ content }: { content: string }) {
-  const parts = content.split(/(\/(?:tools\/[a-z0-9-]+|labs\/pack-lab\/[a-z0-9-]+\/[a-z0-9-]+))/g);
+  const pathPattern =
+    /(\/(?:labs\/pack-lab(?:\/[a-z0-9-]+(?:\/[a-z0-9-]+)?)?|tools\/[a-z0-9-]+))/g;
+  const parts = content.split(pathPattern);
   return (
     <p className="whitespace-pre-wrap text-sm leading-relaxed">
       {parts.map((part, i) =>
-        part.startsWith("/tools/") || part.startsWith("/labs/pack-lab/") ? (
+        part.startsWith("/tools/") || part.startsWith("/labs/pack-lab") ? (
           <Link key={i} href={part} className="font-medium text-brand hover:underline">
             {part}
           </Link>

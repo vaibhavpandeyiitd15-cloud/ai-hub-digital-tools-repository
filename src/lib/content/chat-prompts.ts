@@ -16,7 +16,7 @@ const contexts: PromptContext[] = [
     prompts: [
       { label: "What is Convotrack?", prompt: "What is Convotrack and when should I use it for packaging insight?" },
       { label: "Video social trends", prompt: "How can Convotrack help me find packaging trends from social video?" },
-      { label: "Request training", prompt: "How do I request training for Convotrack?" },
+      { label: "Training slots", prompt: "How do I look for training slots for Convotrack?" },
     ],
   },
   {
