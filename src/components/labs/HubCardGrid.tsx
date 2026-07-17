@@ -31,11 +31,12 @@ export function HubCardGrid({
       {items.map((item, index) => (
         <ScrollReveal key={item.href} delay={index * 80}>
           {item.available === false ? (
-            <div
+            <Link
+              href={item.href}
               className={cn(
-                "hub-card relative flex h-full flex-col rounded-2xl opacity-80",
+                "hub-card relative flex h-full flex-col rounded-2xl bg-white opacity-95",
                 featured ? "min-h-[240px] p-8 sm:min-h-[280px] sm:p-10" : "p-6",
-                "border-dashed border-[var(--border)] bg-white/50",
+                "border-dashed border-[var(--border)]",
               )}
             >
               <div className="mb-3 flex items-center justify-between">
@@ -65,12 +66,21 @@ export function HubCardGrid({
               >
                 {item.description}
               </p>
-            </div>
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 font-semibold text-[var(--text-secondary)]",
+                  featured ? "mt-6 text-base" : "mt-4 text-sm",
+                )}
+              >
+                View status
+                <ArrowRight className={featured ? "h-5 w-5" : "h-4 w-4"} />
+              </span>
+            </Link>
           ) : (
             <Link
               href={item.href}
               className={cn(
-                "hub-card group flex h-full flex-col rounded-2xl transition hover:-translate-y-1",
+                "hub-card group flex h-full flex-col rounded-2xl bg-white transition hover:-translate-y-1",
                 featured ? "min-h-[240px] p-8 sm:min-h-[280px] sm:p-10" : "p-6 hover:shadow-lg",
               )}
             >

@@ -31,6 +31,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
     notFound();
   }
 
+  const purpose = tool.purpose?.trim() || "";
+  const description = tool.description?.trim() || "";
   const hasToolUrl = Boolean(tool.toolUrl && tool.toolUrl !== "#");
 
   return (
@@ -50,7 +52,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <h1 className="font-[family-name:var(--font-barlow)] text-3xl font-bold sm:text-4xl">
             {tool.name}
           </h1>
-          <p className="mt-2 max-w-2xl text-lg text-white/85">{tool.purpose}</p>
+          <p className="mt-2 max-w-2xl text-lg text-white/85">{purpose}</p>
         </div>
       </div>
 
@@ -62,7 +64,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                 About this tool
               </h2>
               <p className="mt-2 leading-relaxed text-[var(--text-primary)]">
-                {tool.description}
+                {description || "Description will be added soon."}
               </p>
             </div>
 

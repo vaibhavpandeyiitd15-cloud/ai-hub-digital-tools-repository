@@ -133,6 +133,13 @@ export function orderToolsBySlugs<T extends { slug: string }>(
   return slugs.map((slug) => map.get(slug)).filter(Boolean) as T[];
 }
 
+/** Prefer DB text when present; otherwise fall back to static Packaging Lab copy. */
+function pickToolText(primary: string | null | undefined, fallback: string | undefined): string {
+  const trimmed = primary?.trim();
+  if (trimmed) return trimmed;
+  return fallback?.trim() ?? "";
+}
+
 export type PackSectionToolCard = ToolWithCategory & {
   href: string;
 };
@@ -155,7 +162,15 @@ export async function getPackSectionTools(
     const href = getLabPathForToolSlug(slug);
 
     if (dbTool) {
-      return { ...dbTool, href };
+      return {
+        ...dbTool,
+        name: pickToolText(dbTool.name, staticTool?.name) || dbTool.name,
+        purpose: pickToolText(dbTool.purpose, staticTool?.purpose),
+        description: pickToolText(dbTool.description, staticTool?.description),
+        toolUrl: pickToolText(dbTool.toolUrl, staticTool?.toolUrl) || dbTool.toolUrl,
+        tags: dbTool.tags.length > 0 ? dbTool.tags : (staticTool?.tags ?? []),
+        href,
+      };
     }
 
     if (!staticTool) {
@@ -232,12 +247,12 @@ export async function getPackLabToolDetail(
     return {
       id: dbTool.id,
       slug: dbTool.slug,
-      name: dbTool.name,
-      purpose: dbTool.purpose,
-      description: dbTool.description,
-      tags: dbTool.tags,
+      name: pickToolText(dbTool.name, staticTool.name) || dbTool.name,
+      purpose: pickToolText(dbTool.purpose, staticTool.purpose),
+      description: pickToolText(dbTool.description, staticTool.description),
+      tags: dbTool.tags.length > 0 ? dbTool.tags : staticTool.tags,
       status: dbTool.status,
-      toolUrl: dbTool.toolUrl,
+      toolUrl: pickToolText(dbTool.toolUrl, staticTool.toolUrl) || dbTool.toolUrl,
       pocName: dbTool.pocName,
       pocEmail: dbTool.pocEmail,
       pocTeam: dbTool.pocTeam,
